@@ -22,8 +22,10 @@ Greselile sunt:
  * Teste
  * ne-neglijabil
 
-## Tema 3
+### Tema 3
 
 C' = C7F0 7700 A421 B39C EC3A 853A 691F B205
 
+## Resurce utile
 
+ * [Ciphers](https://www.dcode.fr/vernam-cipher)
