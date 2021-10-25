@@ -104,3 +104,12 @@ Securitatea criptarii nu este una inalta.
 Cu ajutorul site-ului `dcode.fr`, am gasit cheia de substitutie care este `UWSHACTIQEDBOLRMPGJXVYNKFZ`, si mesajul decodat este:
 
 `ALICE AND BOB ARE THE WORLDS MOST FAMOUS CRYPTOGRAPHIC COUPLE. SINCE THEIR INVENTION IN 1978, THEY HAVE AT ONCE BEEN CALLED INSEPARABLE, AND HAVE BEEN THE SUBKECT OF NUMEROUS DIVORCES, TRAVELS, AND TORMENTS. IN THE ENSUING YEARS, OTHER CHARACTERS HAVE KOINED THEIR CRYPTOGRAPHICFAMILY. THERES EVE, THE PASSIVE AND SUBMISSIVE EAVESDROPPER, MALLORY THE MALICIOUS ATTACXER, AND TRENT, TRUSTED BY ALL, KUST TO NAME A FEW. WHILE ALICE, BOB, AND THEIR EJTENDED FAMILY WERE ORIGINALLY USED TO EJPLAIN HOW PUBLIC XEY CRYPTOGRAPHY WORXS, THEYHAVE SINCE BECOME WIDELY USED ACROSS OTHER SCIENCE AND ENGINEERING DOMAINS. THEIR INFLUENCE CONTINUES TO GROW OUTSIDE OF ACADEMIA AS WELL: ALICE AND BOB ARE NOW A PART OF GEEX LORE, AND SUBKECT TO NARRATIVES AND VISUAL DEPICTIONS THAT COMBINE PEDAGOGY WITH IN-KOXES, OFTEN REFLECTING OF THE SEJIST AND HETERONORMATIVE ENVIRONMENTS IN WHICH THEY WERE BORN AND CONTINUE TO BE USED. MORE THAN KUST THE WORLDS MOST FAMOUS CRYPTOGRAPHIC COUPLE, ALICE AND BOB HAVE BECOME AN ARCHETYPE OF DIGITAL EJCHANGE, AND A LENS THROUGH WHICH TO VIEW BROADER DIGITAL CULTURE. Q.DUPONT AND A.CATTAPAN CRYPTOCOUPLE`
+
+## Enigma
+
+1. Am preluat cheia din ziua de 25 de pe https://www.101computing.net/enigma-daily-settings-generator/.
+2. Am setat cheia.
+3. Numele meu criptat este QAIXQ CHFLX HGFLB.
+4. Pentru a decripta texul, este suficient sa resetam masina enigma la starea initiala si sa introducem cypher textul. Obtinem din "QAIXQ CHFLX HGFLB" inapoi "THEOD ORMOR OIANU".
+5. Nu se poate da un astfel de exemplu. Prin natura ei, operatiile masinei Enigma sunt reversibile, in sensul ca exista o bijectie intre toate textele criptate si toate textele necriptate de o anumita lungime (prin simplul motiv ca nu exista coliziuni si cele doua multimi au acelasi cardinal).
+Asadar, orice text criptat este criptarea unui text normal de aceeasi lungime, care poate fi numele nostru (unii oameni au nume foarte ciudate).
