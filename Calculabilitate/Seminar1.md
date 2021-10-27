@@ -48,6 +48,10 @@ Tranzitiile:
  * Am dat de `Blank`:
 	`(q5, Blank) -> (q6, Blank, L)`
 
+#### Complexitatea
+
+Complexitatea masinii turing este `O(N * Lungime)`.
+
 ### Masina turing pentru `w wRev w` (`w` + `w` reversed + `w`)
 
 #### Idee
