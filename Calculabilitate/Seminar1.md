@@ -24,7 +24,7 @@ Tranzitiile:
 	`(q1, a) -> (q2, A, R)`
  * Inaintam pana dam de un b:
 	`(q2, a) -> (q2, a, R)`
-	`(q2, B) -> (a2, B, R)`
+	`(q2, B) -> (q2, B, R)`
  * Luam un b:
 	`(q2, b) -> (q3, B, R)`
  * Inaintam pana dam de un c:
@@ -63,8 +63,10 @@ Observam ca dupa ce am facut aceasta schimbare, problema devine una triviala, pe
 #### Solutie
 
 * Pasii pentru a converti `a`, `b` si `c` in `a1-3`, `b1-3` si `c1-3`:
+
 	Pentru a imparti in `w`, `wT` si `w`, vrem practic sa impartim in 3 parti egale inputul.
 	Pentru a face asta, pentru fiecare litera, marcam intr-o culoare primele doua aparitii nemarcate si cu alta culoare ultima apartitie nemarcata.
+
 	Astfel, obtinem impartirea in `w wT` si `w`. Procedam similar pentru a colora diferit primele doua bucati.
 	1. Inlocuim `[a b c]^3N` in `[a0 b0 c0]^2N [a3 b3 c3]^N`.
 		* Mergem la dreapta cat timp avem o litera de forma `X0`.
@@ -95,6 +97,7 @@ Observam ca dupa ce am facut aceasta schimbare, problema devine una triviala, pe
 		* Daca nu am dat de `Blank`, refuzam cuvantul.
 		* Mergem la stanga pana la inceputul benzii.
 * Pasii pentru a verifica ca primele doua bucati (`w` si `wT`) sunt corecte.
+
 	Pentru a face asta, vom inlocui simultan din ambele cuvinte pe `X1/2` cu `X1/2'`.
 	4. Inlocuim cuvintele.
 		* Mergem la dreapta pana dam de un caracter care sa nu fie de tipul `X1'`.
@@ -114,6 +117,7 @@ Observam ca dupa ce am facut aceasta schimbare, problema devine una triviala, pe
 			* Mergem o pozitie la dreapta.
 		* Mergem in stanga pana la inceputul benzi.
 * Pasii pentru a verifica ca ultimele doua bucati (`wT` si `w`) sunt corecte.
+
 	Procedam ca la pasii precedenti.
 	6. Centram acul de citire la inceputul lui `wT`.
 		* Cat timp avem un `X1'`, mergem la dreapta.
