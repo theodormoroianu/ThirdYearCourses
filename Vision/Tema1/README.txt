@@ -13,6 +13,13 @@ scikit_learn==0.22.1
 skimage==0.0
 tensorflow==2.1.0
 
+
+Module folosite:
+opencv-python==4.5.4.58
+numpy
+tesseract (pytesseract + tesseract on Linux)
+
+
 2. how to run each task and where to look for the output file.
 
 Example:
