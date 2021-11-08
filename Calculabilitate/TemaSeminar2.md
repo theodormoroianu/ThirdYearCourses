@@ -22,10 +22,11 @@ Tranzitii:
     * `(Q0, 1) -> (Q1, a, middle)`.
  * Inlocuim pentru fiecare `a` cate un `1`.
     * `(Q1, a) -> (Q2, c, right)`.
-    * `(Q2, b) -> (Q2, c, right)`.
+    * `(Q2, a) -> (Q2, a, right)`.
+	* `(Q2, b) -> (Q2, b, right)`.
     * `(Q2, 1) -> (Q3, b, left)`.
     * `(Q3, b) -> (Q3, b, left)`.
-    * `(Q3, a) -> (A3, a, left)`.
+    * `(Q3, a) -> (Q3, a, left)`.
     * `(Q3, c) -> (Q1, c, right)`.
  * Inlocuim toti `b` si `c` cu `a`.
     * `(Q1, b) -> (Q4, b, right)`.
@@ -34,5 +35,12 @@ Tranzitii:
     * `(Q4, Blank) -> (Q6, Blank, left)`.
     * `(Q5, b) -> (Q5, a, left)`.
     * `(Q5, c) -> (Q5, a, left)`.
- * Verificam incepem din nou algoritmul.
+ * Incepem din nou algoritmul (de-a inlocui atati de 1 cati a).
     * `(Q5, Blank) -> (Q1, Blank, right)`.
+
+
+## Complexitate
+
+Daca sunt `N` de 1 pe banda, programul are o complexitate de:
+`C(N) = 2 + 4 + 8 + ... + 2^(log2(N))`.
+Complexitatea este asadar `O(N)`.
