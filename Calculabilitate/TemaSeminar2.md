@@ -19,11 +19,13 @@ Starea finala: `Q6`.
 Tranzitii:
 
  * Punem un `a` pe banda.
-    * `(Q0, 1) -> (Q1, a, middle)`.
+    * `(Q0, 1) -> (Q7, a, right)`.
+    * `(Q7, Blank) -> (Q6, Blank, left)`.
+    * `(Q7, 1) -> (Q1, 1, left)`.
  * Inlocuim pentru fiecare `a` cate un `1`.
     * `(Q1, a) -> (Q2, c, right)`.
     * `(Q2, a) -> (Q2, a, right)`.
-	* `(Q2, b) -> (Q2, b, right)`.
+    * `(Q2, b) -> (Q2, b, right)`.
     * `(Q2, 1) -> (Q3, b, left)`.
     * `(Q3, b) -> (Q3, b, left)`.
     * `(Q3, a) -> (Q3, a, left)`.
@@ -42,5 +44,5 @@ Tranzitii:
 ## Complexitate
 
 Daca sunt `N` de 1 pe banda, programul are o complexitate de:
-`C(N) = 2 + 4 + 8 + ... + 2^(log2(N))`.
-Complexitatea este asadar `O(N)`.
+`C(N) = 2^2 + 4^2 + 8^2 + ... + 2^(log2(N))^2`.
+Complexitatea este asadar `O(N^2)`.

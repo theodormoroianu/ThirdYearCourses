@@ -11,7 +11,7 @@ import src.constants as constants
 
 SQUARE_DIM = constants.SQUARE_DIM
 
-def _apply_preprocessing(img: np.ndarray) -> np.ndarray:
+def _make_wb(img: np.ndarray) -> np.ndarray:
     image = cv.cvtColor(img,cv.COLOR_BGR2GRAY)
     image_m_blur = cv.medianBlur(image, 5)
     image_g_blur = cv.GaussianBlur(image_m_blur, (0, 0), 11) 
@@ -28,34 +28,12 @@ def _apply_preprocessing(img: np.ndarray) -> np.ndarray:
         constants.show_image("sharpened",image_sharpened)    
         constants.show_image("threshold of blur",thresh)
     
+    return thresh
+
+def _apply_preprocessing(img: np.ndarray) -> np.ndarray:
+    thresh = _make_wb(img)
     edges =  cv.Canny(thresh ,150,400)
-    # gray: np.ndarray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
-
-    # gray_m_blur = cv.medianBlur(gray, 11)
-    # gray_g_blur = cv.GaussianBlur(gray_m_blur, (0, 0), 11) 
-    # sharpened = cv.addWeighted(gray_m_blur, 1.2, gray_g_blur, -0.8, 0)
-
-    # final = sharpened
-
-    # # final = sharpened + 255 / 2 - sharpened.mean()
-    # # final[final > 255] = 255
-    # # final[final < 0] = 0
-    # # final = final.astype(np.uint8)
-
-    # if constants.DEBUG:
-    #     constants.show_image("Initial image", gray)
-    #     constants.show_image("Median blur", gray_m_blur)
-    #     constants.show_image("Gaussian Blur blur", gray_g_blur)
-    #     constants.show_image("Sharpened", sharpened)
-    #     constants.show_image("before threshold", final)
-
-    # #apply threshold
-    # threshold = cv.threshold(gray, 60, 255, cv.THRESH_BINARY)[1]
-
-    # if constants.DEBUG:
-    #     constants.show_image("after threshold", threshold)
     
-    # return threshold
     return edges
 
 def _find_corners(edges: np.ndarray) -> List[List[Tuple[int, int]]]:
