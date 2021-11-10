@@ -3,7 +3,7 @@
 """
 
 import src.constants as constants
-import pytesseract as ts
+# import pytesseract as ts
 import numpy as np
 import cv2 as cv
 import matplotlib.pyplot as plt
@@ -19,8 +19,9 @@ def recognize_digit(digit: np.ndarray) -> int:
     # if constants.DEBUG:
     #     constants.show_image("Digit", image)
 
-    predicted = ts.image_to_string(image, config="--psm 10")
-
+    # predicted = ts.image_to_string(image, config="--psm 10")
+    predicted = ''
+    
     try:
         if len(predicted) < 1:
             raise Exception()
