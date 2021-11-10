@@ -1,3 +1,5 @@
+https://www.pyimagesearch.com/2020/08/10/opencv-sudoku-solver-and-ocr/
+
 Your project should include a README file containing the following information:
 
 1. the libraries required to run the project including the full version of each library

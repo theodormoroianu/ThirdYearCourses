@@ -21,13 +21,20 @@ def distance(im1, im2):
 CUT = 0.998
 
 # Checks the colors
-def checker(im):
+def colored_checker(im):
     sq = s_e.extract_square_from_image(im)
 
     small_sq = u_s.extract_unit_squares(sq)
 
+
     for i in range(9):
         for j in range(9):
+            s = small_sq[i][j].copy()
+            s = cv.cvtColor(s,cv.COLOR_BGR2GRAY)
+            s = cv.resize(s, dsize=(28, 28))
+            _, s = cv.threshold(s, 100, 255, cv.THRESH_BINARY)
+            cv.imwrite(f"img{i}{j}.jpg", s)
+
             small_sq[i][j] = small_sq[i][j].astype(np.float32)
             normalize(small_sq[i][j])
 
@@ -52,3 +59,29 @@ def checker(im):
 
     plt.imshow(color)
     plt.show()
+
+# Checks the colors
+def grayscale_check(im):
+    sq = s_e.extract_square_from_image(im)
+
+    small_sq = u_s.extract_unit_squares(sq, O=0)
+
+    D = small_sq[0][0].shape[0]
+    WHERE = D // 4
+
+    def match_vert(sq1: np.ndarray, sq2: np.ndarray) -> np.float32:
+        if constants.DEBUG:
+            sq1_copy = sq1.copy()
+            sq1_copy[:WHERE, WHERE] *= 0
+            sq2_copy = sq2.copy()
+            sq2_copy[D-WHERE:, WHERE] *= 0
+
+            constants.show_image("sq1", sq1_copy)
+            constants.show_image("sq2", sq2_copy)        
+
+        return sq1[:WHERE, WHERE].sum() + sq2[D-WHERE:, WHERE].sum()
+
+    for i in range(1, 9):
+        for j in range(9):
+            cost = match_vert(small_sq[i][j], small_sq[i - 1][j])
+            print(f"({i-1},{j})-({i},{j}): {cost}")
