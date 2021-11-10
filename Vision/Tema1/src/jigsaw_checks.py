@@ -20,6 +20,7 @@ def distance(im1, im2):
 
 CUT = 0.998
 
+# Checks the colors
 def checker(im):
     sq = s_e.extract_square_from_image(im)
 
