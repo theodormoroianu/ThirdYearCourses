@@ -132,7 +132,7 @@ salt = 'fsociety'
 users = dict()
 
 def hash(password: str):
-    return hashlib.sha256(password + salt)
+    return hashlib.sha256((password + salt).encode('utf-8')).digest()
 
 def add_user(user: str, password: str):
     password = hash(password)
@@ -162,3 +162,6 @@ def authenticate(user: str, password: str) -> bool:
     if user not in users or users[user] != password:
         return False
     return True
+
+
+# %%
