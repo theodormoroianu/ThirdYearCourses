@@ -20,8 +20,8 @@ def extract_edges(square: np.ndarray) -> Tuple[List[List[np.ndarray]], List[List
     kernel = np.ones((10, 10))
     square = cv.erode(square, kernel)
     
-    # plt.imshow(square)
-    # plt.show()
+    plt.imshow(square)
+    plt.show()
 
     D = square.shape[0] // 9
     OFFSET = D // 3
