@@ -42,7 +42,7 @@ class UnionFind:
 
     def compute_classes(self):
         classes = [-1 for i in range(81)]
-        cnt = -1
+        cnt = 0
 
         mat = [[-1 for i in range(9)] for j in range(9)]
 

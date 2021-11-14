@@ -78,7 +78,7 @@ def fit_model():
 
     model = larger_model()
     print("Training model...")
-    model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=10, batch_size=10,callbacks=[tensorboard_callback])
+    model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=20, batch_size=10,callbacks=[tensorboard_callback])
     # Final evaluation of the model
     scores = model.evaluate(X_test, y_test, verbose=0)
 
@@ -102,5 +102,8 @@ def recognize_digit(digit: np.ndarray) -> int:
     image = image.reshape((1, 28, 28, 1))
 
     preds = model.predict(image)
+
+    if constants.DEBUG_DIGITS:
+        constants.show_image(str(np.argmax(preds)), image[0])
 
     return np.argmax(preds[0])

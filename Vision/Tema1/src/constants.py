@@ -20,3 +20,6 @@ SQUARE_DIM = 1008
 
 # Margin to loose on small squares
 OFFSET_MARGIN = 15
+
+# Show each digit
+DEBUG_DIGITS = False
