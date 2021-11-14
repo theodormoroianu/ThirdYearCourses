@@ -21,17 +21,26 @@ import cv2 as cv
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 
-X = []
-y = []
-for i in range(10):
-    for d in os.listdir("assets/{}".format(i)):
-        t_img = cv2.imread("assets/{}".format(i)+"/"+d)
-        t_img = cv2.cvtColor(t_img,cv2.COLOR_BGR2GRAY)
-        X.append(t_img)
-        y.append(i)
+def extract_from_dir(dir: str):
+    X = []
+    y = []
+    for i in range(10):
+        for d in os.listdir(dir + "{}".format(i)):
+            t_img = cv2.imread(dir + "{}".format(i)+"/"+d)
+            t_img = cv2.cvtColor(t_img,cv2.COLOR_BGR2GRAY)
+            X.append(t_img)
+            y.append(i)
 
-X = np.array(X)
-y = np.array(y)
+    X = np.array(X)
+    y = np.array(y)
+
+    return X, y
+
+X1, y1 = extract_from_dir("assets/")
+X2, y2 = extract_from_dir("data/")
+
+X = np.concatenate([X1, X2])
+y = np.concatenate([y1, y2])
 
 X_train,X_test, y_train, y_test = train_test_split(X,y,test_size = 0.20, random_state= 21)
 
@@ -85,6 +94,16 @@ def fit_model():
     print("Large CNN Error: %.2f%%" % (100-scores[1]*100))
 
 
+def preprocess_digit(digit: np.ndarray) -> np.ndarray:
+
+    image = cv.cvtColor(digit, cv.COLOR_BGR2GRAY)
+    _, image = cv.threshold(image, 100, 255, cv.THRESH_BINARY)
+
+    image = 255 - image
+    image = cv.resize(image, (28, 28))
+
+    return image
+
 def recognize_digit(digit: np.ndarray) -> int:
     """
         Initialize the digit recognition
@@ -93,11 +112,7 @@ def recognize_digit(digit: np.ndarray) -> int:
 
     fit_model()
 
-    image = cv.cvtColor(digit, cv.COLOR_BGR2GRAY)
-    _, image = cv.threshold(image, 100, 255, cv.THRESH_BINARY)
-
-    image = 255 - image
-    image = cv.resize(image, (28, 28))
+    image = preprocess_digit(digit)
 
     image = image.reshape((1, 28, 28, 1))
 
