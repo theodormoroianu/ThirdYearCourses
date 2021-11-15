@@ -114,7 +114,10 @@ def generate_train_data():
 
         a = img.copy()
         a *= 0
-        a[3:, 4:] = img[:-3, :-4]
+        dx = random.randint(1, 6)
+        dy = random.randint(1, 6)
+        
+        a[dx:, dy:] = img[:-dx, :-dy]
         ans.append(a)
 
         b = img.copy()
@@ -126,7 +129,11 @@ def generate_train_data():
 
         ans.append(b)
 
-        c = img.copy()
+        c = img.copy().astype(np.float32)
+        power = random.randint(700, 1300) / 1000
+        c[c > 255] = 255
+        c = (c * power).astype(np.uint8)
+        ans.append(c)
 
         return ans
 

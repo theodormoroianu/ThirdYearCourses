@@ -1,4 +1,42 @@
-https://www.pyimagesearch.com/2020/08/10/opencv-sudoku-solver-and-ocr/
+# Proiect Vision
+
+## Dependinte
+
+Proiectul are urmatoarele dependinte:
+
+    TODO: Add version
+ * numpy
+ * opencv-python
+ * tensorflow
+ * scikit-learn
+
+## Resurse folosite
+
+Am folosit multe resurse pentru acest proiect.
+
+Resursele folosite sunt:
+
+ * https://www.kaggle.com/kshitijdhama/printed-digits-dataset/version/10 - am luat datele de antrenare si structura retelei.
+ * https://www.pyimagesearch.com/2014/08/25/4-point-opencv-getperspective-transform-example/ - am luat codul folosit pentru schimbarea de perspectiva.
+
+
+## Cum se ruleaza proiectul
+
+Este suficient sa deschidem `project.ipynb` si sa executam prima celula.
+
+## Ce date de antrenare folosesc in retea
+
+Pentru a obtine mai multe date de antrenare, am "reciclat" o mare parte (15/20 respectiv 30/40) din cifrele din datele date.
+In plus de acestea, am mai folosit si datele obtinute de pe Kaggle.
+
+
+
+
+
+
+
+
+ * https://www.pyimagesearch.com/2020/08/10/opencv-sudoku-solver-and-ocr/
 
 Your project should include a README file containing the following information:
 

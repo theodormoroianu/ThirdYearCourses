@@ -23,3 +23,6 @@ OFFSET_MARGIN = 15
 
 # Show each digit
 DEBUG_DIGITS = False
+
+# Check if answer is ok
+CHECK_ANSWER = True

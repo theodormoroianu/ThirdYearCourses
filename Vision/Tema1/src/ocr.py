@@ -97,7 +97,7 @@ def fit_model():
 def preprocess_digit(digit: np.ndarray) -> np.ndarray:
 
     image = cv.cvtColor(digit, cv.COLOR_BGR2GRAY)
-    _, image = cv.threshold(image, 100, 255, cv.THRESH_BINARY)
+    # _, image = cv.threshold(image, 100, 255, cv.THRESH_BINARY)
 
     image = 255 - image
     image = cv.resize(image, (28, 28))
@@ -113,10 +113,15 @@ def recognize_digit(digit: np.ndarray) -> int:
     fit_model()
 
     image = preprocess_digit(digit)
+    # plt.imshow(image)
+    # plt.show()
 
     image = image.reshape((1, 28, 28, 1))
+    image = image.astype(np.float32) / 255
 
     preds = model.predict(image)
+
+    # print(preds)
 
     if constants.DEBUG_DIGITS:
         constants.show_image(str(np.argmax(preds)), image[0])
