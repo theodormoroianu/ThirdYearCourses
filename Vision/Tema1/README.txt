@@ -9,6 +9,8 @@ Proiectul are urmatoarele dependinte:
  * opencv-python
  * tensorflow
  * scikit-learn
+ * pyyaml
+ * h5py
 
 ## Resurse folosite
 
@@ -22,12 +24,19 @@ Resursele folosite sunt:
 
 ## Cum se ruleaza proiectul
 
-Este suficient sa deschidem `project.ipynb` si sa executam prima celula.
-
+Pasii pentru a executa proiectul sunt:
+ * Sa ne asiguram ca datele de antrenare se gasesc in folderul `antrenare`.
+ * Sa deschidem `project.ipynb` si sa modificam corect path-ul cu datele de testare si output-path.
+ * Sa executam celulele.
+ 
 ## Ce date de antrenare folosesc in retea
 
 Pentru a obtine mai multe date de antrenare, am "reciclat" o mare parte (15/20 respectiv 30/40) din cifrele din datele date.
 In plus de acestea, am mai folosit si datele obtinute de pe Kaggle.
+
+## Mentinui
+
+ * Am facut proiectul pe linux. Este posibil ca path-urile sa nu mearga corect pe Windows.
 
 
 
