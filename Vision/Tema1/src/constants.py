@@ -26,3 +26,11 @@ DEBUG_DIGITS = False
 
 # Check if answer is ok
 CHECK_ANSWER = True
+
+
+INPUT_PATH = "antrenare/" # "evaluare/fake_test/"
+OUTPUT_PATH = "evaluare/fisiere_solutie/Theodor_Moroianu/"
+CLASIC = "clasic/"
+JIGSAW = "jigsaw/"
+TRAIN_DATA = "data/"
+TRAIN_INPUT_PATH = "antrenare/"

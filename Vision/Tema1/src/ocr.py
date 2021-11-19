@@ -20,6 +20,10 @@ import numpy as np
 import cv2 as cv
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
+import src.data_generator as data_gen
+
+MODEL_PATH = "model/"
+MODEL_NAME = "model.bin"
 
 def extract_from_dir(dir: str):
     X = []
@@ -36,29 +40,10 @@ def extract_from_dir(dir: str):
 
     return X, y
 
-X1, y1 = extract_from_dir("assets/")
-X2, y2 = extract_from_dir("data/")
-
-X = np.concatenate([X1, X2])
-y = np.concatenate([y1, y2])
-
-X_train,X_test, y_train, y_test = train_test_split(X,y,test_size = 0.20, random_state= 21)
-
-X_train = X_train.reshape((X_train.shape[0], 28, 28, 1)).astype('float32')
-X_test = X_test.reshape((X_test.shape[0], 28, 28, 1)).astype('float32')
-# normalize inputs from 0-255 to 0-1
-X_train = X_train / 255
-X_test = X_test / 255
-# one hot encode outputs
-y_train = to_categorical(y_train)
-y_test = to_categorical(y_test)
-num_classes = y_test.shape[1]
-
-
+# define model
 def larger_model():
     # create model
-	model = keras.Sequential(
-    [
+	model = keras.Sequential([
         Conv2D(30, (5, 5), input_shape=(28, 28, 1), activation='relu'),
         MaxPooling2D(),
         Conv2D(15, (3, 3), activation='relu'),
@@ -67,7 +52,7 @@ def larger_model():
         Flatten(),
         Dense(128, activation='relu'),
         Dense(50, activation='relu'),
-        Dense(num_classes, activation='softmax')
+        Dense(10, activation='softmax')
     ])
     
 
@@ -75,27 +60,83 @@ def larger_model():
 	model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 	return model
 
+# For avoiding to train on module load
 model = None
-log_dir = "logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-tensorboard_callback = keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
 
+# # For tensordoard. Don't really need this but oh well
+# log_dir = "logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+# tensorboard_callback = keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
 
 def fit_model():
+    """ from 0-255
+        Trains model.
+        If model exists already, just returns.
+    """
     global model
     if model is not None:
         return
 
     model = larger_model()
+    
+    try:
+        model.load_weights(MODEL_PATH + MODEL_NAME)
+        print("Loaded model from disk...")
+        return
+        
+    except:
+        print("Model not found on disk.")
+
+    print("Generating training data...")
+    data_gen.generate_train_data()
+
+
+    X1, y1 = extract_from_dir("assets/")
+    X2, y2 = extract_from_dir("data/")
+
+    # take from both dataset from kaggle and dataset from found digits.
+    X = np.concatenate([X1, X2])
+    y = np.concatenate([y1, y2])
+
+    # Split to validation + train
+    X_train, X_test, y_train, y_test = train_test_split(X,y,test_size = 0.20, random_state= 21)
+
+    X_train = X_train.reshape((X_train.shape[0], 28, 28, 1)).astype('float32')
+    X_test = X_test.reshape((X_test.shape[0], 28, 28, 1)).astype('float32')
+
+    # normalize
+    X_train = X_train / 255.0
+    X_test = X_test / 255.0
+
+    # one-hot encode
+    y_train = to_categorical(y_train)
+    y_test = to_categorical(y_test)
+
     print("Training model...")
-    model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=20, batch_size=10,callbacks=[tensorboard_callback])
+    model.fit(
+        X_train,
+        y_train,
+        validation_data=(X_test, y_test),
+        epochs=20,
+        batch_size=10,
+        # callbacks=[tensorboard_callback]
+    )
+
     # Final evaluation of the model
     scores = model.evaluate(X_test, y_test, verbose=0)
 
-    print("Large CNN Error: %.2f%%" % (100-scores[1]*100))
+    print("Validation error: %.2f%%" % (100-scores[1]*100))
+
+    if not os.path.exists(MODEL_PATH):
+        os.makedirs(MODEL_PATH)
+
+    model.save_weights(MODEL_PATH + MODEL_NAME)
+
 
 
 def preprocess_digit(digit: np.ndarray) -> np.ndarray:
-
+    """
+        Converts a single digit to grayscale, scales it to (28x28), turns white to black.
+    """
     image = cv.cvtColor(digit, cv.COLOR_BGR2GRAY)
     # _, image = cv.threshold(image, 100, 255, cv.THRESH_BINARY)
 
@@ -106,7 +147,7 @@ def preprocess_digit(digit: np.ndarray) -> np.ndarray:
 
 def recognize_digit(digit: np.ndarray) -> int:
     """
-        Initialize the digit recognition
+        Returns the class (0-9) of a single digit
     """
     global model
 

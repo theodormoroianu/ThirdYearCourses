@@ -26,6 +26,30 @@ Greselile sunt:
 
 C' = C7F0 7700 A421 B39C EC3A 853A 691F B205
 
+## Tema 4
+
+DG
+
+## Tema 5
+
+1. bloc
+2. fluide
+3. xor
+4. criptat
+5. computationala
+6. timp
+7. confidentialitatii 
+8. fixa
+9. one
+10. way
+11. x
+12. PPT
+13. neglijabila
+14. slaba
+15. coliziuni
+
+
 ## Resurce utile
+
 
  * [Ciphers](https://www.dcode.fr/vernam-cipher)
