@@ -48,6 +48,26 @@ DG
 14. slaba
 15. coliziuni
 
+## Tema 6
+
+1. B, D
+2. B, C
+3. A, B, C
+
+## Tema 7
+
+1. m\_b
+2. (IV, c)
+3. c=F\_k(m\_b xor IV)
+4. n
+5. (0^n, c)
+6. c=F\_k(m)
+7. m=F\_k^{-1}(c)
+8. m=fk^{-1}(c)=m...
+9. mb=mxorIV
+10. m\_o sau m\_1
+11. m\_b=m\_0
+12. m\_b=m\_1
 
 ## Resurce utile
 

@@ -2,11 +2,17 @@
     Module with various contants.
 """
 
+import matplotlib.pyplot as plt
 import cv2 as cv
 
 def show_image(title, image):
     im = image.copy()
     im = cv.resize(im, dsize=(500, 500))
+
+    plt.imshow(im)
+    plt.show()
+
+    return
 
     cv.imshow(title, im)
     cv.waitKey(0)

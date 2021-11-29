@@ -22,6 +22,9 @@ def process_classic(image: np.ndarray) -> List[List[int]]:
 
     digits = [[ocr.recognize_digit(small_sq[i][j]) for j in range(9)] for i in range(9)]
 
+    if constants.DEBUG:
+        print(np.array(digits))
+
     return digits
 
 def process_jigsaw(image: np.ndarray) -> Tuple[List[List[int]], List[List[int]]]:
@@ -40,6 +43,9 @@ def process_jigsaw(image: np.ndarray) -> Tuple[List[List[int]], List[List[int]]]
 
     digits = [[ocr.recognize_digit(small_sq[i][j]) for j in range(9)] for i in range(9)]
 
+    if constants.DEBUG:
+        print(np.array(digits))
+        
     l = u_sq_extractor.adjancy_by_edge_strength(square)
 
     unionfind = uf.UnionFind()
