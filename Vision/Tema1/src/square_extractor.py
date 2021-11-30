@@ -96,7 +96,7 @@ def _find_corners(edges: np.ndarray) -> List[List[Tuple[int, int]]]:
 def _4_points_transform(img: np.ndarray, points: List[List[Tuple[int, int]]]) -> np.ndarray:
     """
         Computes 4-point transform.
-        Taken from [hehe](https://www.pyimagesearch.com/2014/08/25/4-point-opencv-getperspective-transform-example/).
+        Taken from [here](https://www.pyimagesearch.com/2014/08/25/4-point-opencv-getperspective-transform-example/).
     """
     tl = points[0][0]
     tr = points[0][1]

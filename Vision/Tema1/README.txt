@@ -2,7 +2,7 @@
 
 ## Dependencies
 
-The required dependencies are the latest versions of:
+The required dependencies are the latest versions (but probably any recent one will work) of:
  * numpy
  * opencv-python
  * tensorflow

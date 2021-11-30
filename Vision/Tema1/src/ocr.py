@@ -41,6 +41,7 @@ def extract_from_dir(dir: str):
     return X, y
 
 # define model
+# motel is taken from https://www.kaggle.com/kshitijdhama/printed-digits-dataset/version/10
 def larger_model():
     # create model
 	model = keras.Sequential([
