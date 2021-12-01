@@ -1,9 +1,9 @@
-ooxxoooxo
-ooooxxooo
-xxoxoxooo
-xoooxooxo
-oxxooooxx
-xxxooooxo
-ooxoxooox
+oxxoooxoo
+oxxxoxooo
+xoooxoxoo
+oooxxxooo
 ooooooxoo
-xxooxoxox
+ooooxxoxx
+oxoxooxxx
+ooxoxoooo
+xxooxooox

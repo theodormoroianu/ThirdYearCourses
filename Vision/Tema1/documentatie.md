@@ -60,6 +60,49 @@ Pentru a extrage bordura jigsaw, am urmatoarea abordare:
      * Nu necesita sa clasificam muchiile ca subtiri sau groase, este suficient sa putem suficient de bine sa le ordonam.
      * Chiar daca ordonarea nu este corecta, cu o probabilitate foarte mare zonele o sa fie delimitate corect.
 
+## Rezolvarea Sudoku Clasic
+
+Codul care rezolva sudoku-ul clasic este urmatorul:
+
+```Python
+def process_classic(image: np.ndarray) -> List[List[int]]:
+   # extragem patratul
+   square = sq_extractor.extract_square_from_image(image)
+   # extragem digiturile
+   small_sq = u_sq_extractor.extract_unit_squares(square)
+   # efectuam OCR
+   digits = [[ocr.recognize_digit(small_sq[i][j]) for j in range(9)] for i in range(9)]
+   return digits
+```
+
+## Rezolvarea Jigsaw
+
+Codul care rezolva jigsaw este urmatorul:
+
+```Python
+def process_jigsaw(image: np.ndarray) -> Tuple[List[List[int]], List[List[int]]]:
+   # extragem patratul
+   square = sq_extractor.extract_square_from_image(image)
+   # extragem digiturile
+   small_sq = u_sq_extractor.extract_unit_squares(square)
+   # facem OCR
+   digits = [[ocr.recognize_digit(small_sq[i][j]) for j in range(9)] for i in range(9)]
+
+   # extragem adiacenta intre patratele, ordonata dupa grosime
+   l = u_sq_extractor.adjancy_by_edge_strength(square)
+
+   # unim in functie de grosime
+   unionfind = uf.UnionFind()
+   for (x1, y1), (x2, y2) in l:
+      id1 = unionfind.to_id(x1, y1)
+      id2 = unionfind.to_id(x2, y2)
+      unionfind.join(id1, id2)
+
+   # obtinem culoarea fiecarei zone
+   rez = unionfind.compute_classes()
+
+   return digits, rez
+```
 
 ## Implementare
 

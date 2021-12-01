@@ -119,7 +119,7 @@ def evaluate_results_task2(predictions_path,ground_truth_path,verbose = 0):
 verbose = 0
 
 #change this on your machine
-predictions_path_root = "evaluare\\fisiere_solutie\\Theodor_Moroianu\\"
+predictions_path_root = "evaluare\\fisiere_solutie\\Moroianu_Theodor_334\\"
 ground_truth_path_root = "antrenare\\"
 
 #task1
