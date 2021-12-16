@@ -3,8 +3,8 @@
 using namespace std;
 int main()
 {
- 	char input[7];
  	char pass[7] = "fmiSSI";
+ 	char input[7];
  	int passLen = strlen(pass);
  	cout<<"Introduceti parola: ";
  	cin>>input;
