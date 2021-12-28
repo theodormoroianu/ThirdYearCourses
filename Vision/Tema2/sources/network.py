@@ -2,6 +2,7 @@
     Module able to recognize digits
 """
 
+import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras.datasets import mnist
 from tensorflow.keras.models import Sequential
@@ -30,10 +31,12 @@ MODEL_NAME = "model.bin"
 def larger_model():
     # create model
 	model = keras.Sequential([
-        Conv2D(30, (5, 5), input_shape=(constants.SIZE_FACE_MODEL, constants.SIZE_FACE_MODEL, 3), activation='relu'),
-        Conv2D(60, (5, 5), activation='relu'),
+        Conv2D(32, (5, 5), input_shape=(constants.SIZE_FACE_MODEL, constants.SIZE_FACE_MODEL, 3), activation='relu'),
+        Conv2D(64, (5, 5), activation='relu'),
         MaxPooling2D(),
-        Conv2D(15, (3, 3), activation='relu'),
+        Conv2D(128, (5, 5), activation='relu'),
+        MaxPooling2D(),
+        Conv2D(128, (3, 3), activation='relu'),
         MaxPooling2D(),
         Dropout(0.2),
         Flatten(),
@@ -42,7 +45,6 @@ def larger_model():
         Dense(6, activation='softmax')
     ])
     
-
     # Compile model
 	model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 	return model
@@ -56,7 +58,7 @@ def fit_model():
         If model exists already, just returns.
     """
     global model
-    if model is not None and False:
+    if model is not None:
         return
 
     model = larger_model()
@@ -85,6 +87,7 @@ def fit_model():
 
     # one-hot encode
     y_train = to_categorical(y_train)
+    y_test_raw = y_test
     y_test = to_categorical(y_test)
 
     print("Training model...")
@@ -95,33 +98,40 @@ def fit_model():
         X_train,
         y_train,
         validation_data=(X_test, y_test),
-        epochs=20,
-        batch_size=10,
+        epochs=5,
+        batch_size=50,
         
         # callbacks=[tensorboard_callback]
     )
-
-    # Final evaluation of the model
-    scores = model.evaluate(X_test, y_test, verbose=0)
-
-    print("Validation error: %.2f%%" % (100-scores[1]*100))
 
     if not os.path.exists(MODEL_PATH):
         os.makedirs(MODEL_PATH)
 
     model.save_weights(MODEL_PATH + MODEL_NAME)
 
+    # Final evaluation of the model
+    scores = model.evaluate(X_test, y_test, verbose=0)
+
+    predictions = np.argmax(model.predict(X_test), axis=1)
+    confusion_matrix = tf.math.confusion_matrix(y_test_raw, predictions)
+
+    print("Confusion matrix:")
+    print(confusion_matrix)
+
+    print("Validation error: %.2f%%" % (100-scores[1]*100))
+
+
 
 
 def preprocess_image(image: np.ndarray) -> np.ndarray:
     image = cv.resize(image, (constants.SIZE_FACE_MODEL, constants.SIZE_FACE_MODEL))
-    image /= 255.0
+    image = image / 255.0
 
     return image
 
 def recognize_image(image: np.ndarray) -> int:
     """
-        Returns the class (0-9) of a single digit
+        Returns the class of an image
     """
     global model
 
@@ -129,8 +139,7 @@ def recognize_image(image: np.ndarray) -> int:
 
     image = preprocess_image(image)
 
-    image = image.reshape((1, constants.SIM_LABEL_ORDER, constants.SIZE_FACE_MODEL))
-    image = image.astype(np.float32) / 255
+    image = image.reshape((1, constants.SIZE_FACE_MODEL, constants.SIZE_FACE_MODEL, 3))
 
     preds = model.predict(image)
 
