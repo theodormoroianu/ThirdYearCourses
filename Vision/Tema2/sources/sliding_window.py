@@ -13,6 +13,7 @@ import sources.network as network
 import sources.constants as constants
 import cv2 as cv
 import matplotlib.pyplot as plt
+import sources.project_utils as project_utils
 
 def find_best_sliding_window_face(image: np.ndarray, type: int):
     
@@ -98,4 +99,6 @@ def find_faces(img: np.ndarray) -> List[Tuple[
         window_dim = window_dim * constants.SLIDING_WINDOW_RESCALE_FACTOR
         window_dim = int(window_dim)
 
+    # print("Got here!", flush=True)
+    windows = project_utils.non_max_suppression(windows)
     return windows

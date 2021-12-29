@@ -34,7 +34,7 @@ def larger_model():
         Conv2D(32, (5, 5), input_shape=(constants.SIZE_FACE_MODEL, constants.SIZE_FACE_MODEL, 3), activation='relu'),
         Conv2D(64, (5, 5), activation='relu'),
         MaxPooling2D(),
-        Conv2D(128, (5, 5), activation='relu'),
+        Conv2D(128, (3, 3), activation='relu'),
         MaxPooling2D(),
         Conv2D(128, (3, 3), activation='relu'),
         MaxPooling2D(),
@@ -98,7 +98,7 @@ def fit_model():
         X_train,
         y_train,
         validation_data=(X_test, y_test),
-        epochs=5,
+        epochs=10,
         batch_size=50,
         
         # callbacks=[tensorboard_callback]

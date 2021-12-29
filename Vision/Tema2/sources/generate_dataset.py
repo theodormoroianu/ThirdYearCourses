@@ -28,6 +28,11 @@ def _extract_face_subimage(imgpath: str, xmin, ymin, xmax, ymax, name: str) -> n
     dx = xmax - xmin
     dy = ymax - ymin
 
+    # im2 = img.copy()
+    # cv.rectangle(im2, (xmin, ymin), (xmax, ymax), color=(255, 0, 0), thickness=3)
+    # plt.imshow(im2)
+    # plt.show()
+
     if name is not None:
         constants.face_heigth_width_ratio[name].append(dx / dy)
 
@@ -110,7 +115,7 @@ def _generate_negative_samples() -> List[np.ndarray]:
         # with any rectangle smaller than MAXIMAL_INTERSECTION_OVER_REUNION_NEGATIVE_SAMPLE
         nr_samples_retrieved = 0
         while nr_samples_retrieved < constants.NR_NEGATIVE_SAMPLES_PER_IMAGE:
-            dim_sample = random.randint(30, min(X_MAX, Y_MAX))
+            dim_sample = random.randint(constants.MINIMAL_WINDOWS_PIXEL_SIZE, min(X_MAX, Y_MAX))
             xmin = random.randint(0, X_MAX - dim_sample)
             ymin = random.randint(0, Y_MAX - dim_sample)
             xmax = xmin + dim_sample - 1
@@ -160,6 +165,7 @@ def load_dataset() -> List[np.ndarray]:
 
             face_subimage = _extract_face_subimage(filename, xmin, ymin, xmax, ymax, name)
             dataset[constants.SIM_LABEL_ORDER[face_name]].append(face_subimage)
+            dataset[constants.SIM_LABEL_ORDER[face_name]].append(face_subimage[:,::-1,:])
             _image_path_rectangles[filename].append(((xmin, ymin), (xmax, ymax)))
 
     # generate negative samples

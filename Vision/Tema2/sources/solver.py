@@ -78,6 +78,8 @@ def solve(folder_path, output_path):
     for img in tqdm(images):
         windows = sliding_window.find_faces(img[1])
         for window in windows:
+            if window[-1] < 0.5:
+                continue
             faces_detected.append((img[0], window))
 
     print_task_1(faces_detected, output_path)

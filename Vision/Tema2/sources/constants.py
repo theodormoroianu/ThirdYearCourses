@@ -23,15 +23,18 @@ face_heigth_width_ratio = {
 SIZE_FACE_MODEL = 64
 
 # nr of negative samples per input image
-NR_NEGATIVE_SAMPLES_PER_IMAGE = 4
+NR_NEGATIVE_SAMPLES_PER_IMAGE = 10
 # maximal intersection over reunion for negative sample
-MAXIMAL_INTERSECTION_OVER_REUNION_NEGATIVE_SAMPLE = 0.2
+MAXIMAL_INTERSECTION_OVER_REUNION_NEGATIVE_SAMPLE = 0.5
 
 # minimal size of considered windows
 MINIMAL_WINDOWS_PIXEL_SIZE = 64
 
 # What to multiply windows by
-SLIDING_WINDOW_RESCALE_FACTOR = 0.91
+SLIDING_WINDOW_RESCALE_FACTOR = 0.9
 
 # stride when performing a sliding window (multiply by the window size in pixels to get actual stride)
 SLIDING_WINDOW_STRIDE = 0.2
+
+# remove a window if a more confident one has a better probability
+NON_MAX_SUPPRESSION_THRESHOLD = 0.3

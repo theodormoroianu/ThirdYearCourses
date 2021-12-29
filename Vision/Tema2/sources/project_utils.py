@@ -1,6 +1,6 @@
 
-from typing import Tuple
-
+from typing import List, Tuple
+import sources.constants as constants
 
 def rect_area(rect: Tuple[Tuple[int, int], Tuple[int, int]]) -> int:
     """
@@ -28,3 +28,24 @@ def intersection_over_reunion(rect1, rect2) -> float:
     reunion = rect_area(rect1) + rect_area(rect2) - intersection
 
     return intersection / reunion
+
+def non_max_suppression(windows: List[Tuple[Tuple, int, float, float]]):
+    """
+    Removes all windows with a smaller precision.
+    """
+    good_windows = []
+    
+    windows.sort(key=lambda x: -x[-1])
+
+    for window in windows:
+        ok = True
+        for good_window in good_windows:
+            inter_over_reun = intersection_over_reunion(window[0], good_window[0])
+            if inter_over_reun > constants.NON_MAX_SUPPRESSION_THRESHOLD:
+                ok = False
+                break
+
+        if ok:
+            good_windows.append(window)
+
+    return good_windows

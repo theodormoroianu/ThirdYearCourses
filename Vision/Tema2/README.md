@@ -15,3 +15,7 @@ Tasks:
 
 Indentificare:
 sliding window peste tot ce e galben
+
+TODO:
+ * Adjust window size based on input
+ * Remove non-maximal windows
