@@ -55,3 +55,47 @@ def find_best_sliding_window_face(image: np.ndarray, type: int):
 
         plt.imshow(img)
         plt.show()
+
+
+def find_faces(img: np.ndarray) -> List[Tuple[
+                                    Tuple[Tuple[int, int],
+                                          Tuple[int, int]], int, float, float]]:
+
+    """
+    Returns the detected faces from the image.
+    Each item contains:
+        - The bounding box
+        - The class of the face
+        - The probability it is of the selected class
+        - The probability it is NOT a negative sample (sum of all classes)
+    """
+    
+    windows = []
+
+    window_dim = min(img.shape[0], img.shape[1])
+
+    while window_dim >= constants.MINIMAL_WINDOWS_PIXEL_SIZE:
+        stride = int(window_dim * constants.SLIDING_WINDOW_STRIDE)
+
+        for ymin in range(0, img.shape[0] - window_dim + 1, stride):
+            for xmin in range(0, img.shape[1] - window_dim + 1, stride):
+                sliding_window = img[ymin:ymin+window_dim, xmin:xmin+window_dim, :]
+                labels = network.recognize_image(sliding_window)[0]
+                
+                probability_face = 1. - labels[-1]
+                face_class = np.argmax(labels[:-1])
+                probability_class = labels[face_class]
+
+                windows.append((
+                    ((xmin, ymin), (xmin+window_dim-1, ymin+window_dim-1)),
+                    face_class,
+                    probability_class,
+                    probability_face
+                ))
+
+        # rescale sliding window
+        # print("Scale:", window_dim)
+        window_dim = window_dim * constants.SLIDING_WINDOW_RESCALE_FACTOR
+        window_dim = int(window_dim)
+
+    return windows
