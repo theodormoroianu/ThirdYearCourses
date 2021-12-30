@@ -38,19 +38,31 @@ def print_task_1(faces_detected, output_path):
 
 def print_task_2(faces_detected, output_path):
     # TODO:
-    bounding_boxes = []
-    filenames = []
-    probabilities = []
+    bounding_boxes = [[], [], [], []]
+    filenames = [[], [], [], []]
+    probabilities = [[], [], [], []]
 
-    for filename, (box, _, _, prob) in faces_detected:
-        # TODO: Check the bounding box format
-        filenames.append(filename)
-        probabilities.append(prob)
-        bounding_boxes.append([box[0][0], box[0][1], box[1][0], box[1][1]])
+    for filename, (box, type, prob_type, prob_not_a_face) in faces_detected:
+        # TODO: Maybe add to other classes as well?
+        if type > 3:
+            continue
+        filenames[type].append(filename)
+        probabilities[type].append(prob_type)
+        bounding_boxes[type].append([box[0][0], box[0][1], box[1][0], box[1][1]])
 
-    np.save(output_path + "task1/detections_all_faces.npy", bounding_boxes)
-    np.save(output_path + "task1/file_names_all_faces.npy", filenames)
-    np.save(output_path + "task1/scores_all_faces.npy", probabilities)
+    for i in range(4):
+        np.save(
+            output_path + "task2/detections_" + constants.SIM_NAMES[i] + ".npy",
+            np.array(bounding_boxes[i])
+        )
+        np.save(
+            output_path + "task2/file_names_" + constants.SIM_NAMES[i] + ".npy",
+            np.array(filenames[i])
+        )
+        np.save(
+            output_path + "task2/scores_" + constants.SIM_NAMES[i] + ".npy",
+            np.array(probabilities[i])
+        )
 
 
 
@@ -83,6 +95,7 @@ def solve(folder_path, output_path):
             faces_detected.append((img[0], window))
 
     print_task_1(faces_detected, output_path)
+    print_task_2(faces_detected, output_path)
 
 
 if __name__ == "__main__":

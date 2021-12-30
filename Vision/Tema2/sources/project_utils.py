@@ -48,4 +48,5 @@ def non_max_suppression(windows: List[Tuple[Tuple, int, float, float]]):
         if ok:
             good_windows.append(window)
 
+    # TODO: Rescale windows depending on class
     return good_windows

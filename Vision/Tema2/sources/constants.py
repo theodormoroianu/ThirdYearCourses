@@ -20,15 +20,15 @@ face_heigth_width_ratio = {
 }
 
 # size in px of the face used for recognition
-SIZE_FACE_MODEL = 64
+SIZE_FACE_MODEL = 32
 
 # nr of negative samples per input image
 NR_NEGATIVE_SAMPLES_PER_IMAGE = 10
 # maximal intersection over reunion for negative sample
-MAXIMAL_INTERSECTION_OVER_REUNION_NEGATIVE_SAMPLE = 0.5
+MAXIMAL_INTERSECTION_OVER_REUNION_NEGATIVE_SAMPLE = 0.6
 
 # minimal size of considered windows
-MINIMAL_WINDOWS_PIXEL_SIZE = 64
+MINIMAL_WINDOWS_PIXEL_SIZE = 32
 
 # What to multiply windows by
 SLIDING_WINDOW_RESCALE_FACTOR = 0.9
@@ -37,4 +37,4 @@ SLIDING_WINDOW_RESCALE_FACTOR = 0.9
 SLIDING_WINDOW_STRIDE = 0.2
 
 # remove a window if a more confident one has a better probability
-NON_MAX_SUPPRESSION_THRESHOLD = 0.3
+NON_MAX_SUPPRESSION_THRESHOLD = 0.4

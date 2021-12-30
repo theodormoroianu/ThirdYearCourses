@@ -139,7 +139,7 @@ def _generate_negative_samples() -> List[np.ndarray]:
 
     return negative_samples
 
-def load_dataset() -> List[np.ndarray]:
+def generate_dataset() -> List[np.ndarray]:
     """
     Generates a dataset in the "data" folder
     
@@ -165,7 +165,6 @@ def load_dataset() -> List[np.ndarray]:
 
             face_subimage = _extract_face_subimage(filename, xmin, ymin, xmax, ymax, name)
             dataset[constants.SIM_LABEL_ORDER[face_name]].append(face_subimage)
-            dataset[constants.SIM_LABEL_ORDER[face_name]].append(face_subimage[:,::-1,:])
             _image_path_rectangles[filename].append(((xmin, ymin), (xmax, ymax)))
 
     # generate negative samples
@@ -178,18 +177,26 @@ def load_dataset() -> List[np.ndarray]:
     dataset = [np.stack(i) if len(i) != 0 else [] for i in dataset]
     return dataset
 
-def generate_dataset() -> Tuple[np.ndarray, np.ndarray]:
+def _data_augment(img):
+    return [img, img[:, ::-1, :], img*0.9, img*1.1]
+
+def load_dataset() -> Tuple[np.ndarray, np.ndarray]:
     """
     Returns the data in a standard format: Images on X, labels on Y 
     """
-    dataset = load_dataset()
     x = []
     y = []
 
-    for label, imgs in enumerate(dataset):
-        for img in imgs:
-            x.append(img)
-            y.append(label)
+    for type in range(6):
+        for filename in os.listdir("network_dataset/" + str(type) + "/"):
+            im = plt.imread("network_dataset/" + str(type) + "/" + filename)
+            if im.shape[0] != constants.SIZE_FACE_MODEL:
+                im = cv.resize(im, (constants.SIZE_FACE_MODEL, constants.SIZE_FACE_MODEL))
+            
+            images = _data_augment(im)
+            for img in images:
+                x.append(img)
+                y.append(type)
 
     x = np.array(x)
     y = np.array(y)

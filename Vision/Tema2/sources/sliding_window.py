@@ -83,8 +83,10 @@ def find_faces(img: np.ndarray) -> List[Tuple[
                 sliding_window = img[ymin:ymin+window_dim, xmin:xmin+window_dim, :]
                 labels = network.recognize_image(sliding_window)[0]
                 
-                probability_face = 1. - labels[-1]
-                face_class = np.argmax(labels[:-1])
+                # for now consider unknown as not a face
+                # TODO:
+                probability_face = 1. - labels[-1] - labels[-2]
+                face_class = np.argmax(labels[:-2])
                 probability_class = labels[face_class]
 
                 windows.append((

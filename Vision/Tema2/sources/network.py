@@ -73,7 +73,7 @@ def fit_model():
 
     print("Generating training data...")
     
-    X, y = generate_dataset.generate_dataset()
+    X, y = generate_dataset.load_dataset()
 
     # Split to validation + train
     X_train, X_test, y_train, y_test = train_test_split(X,y,test_size = 0.20, random_state= 21)
@@ -98,7 +98,7 @@ def fit_model():
         X_train,
         y_train,
         validation_data=(X_test, y_test),
-        epochs=10,
+        epochs=5,
         batch_size=50,
         
         # callbacks=[tensorboard_callback]
