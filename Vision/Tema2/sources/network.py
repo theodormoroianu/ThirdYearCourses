@@ -52,31 +52,14 @@ def larger_model():
 # For avoiding to train on module load
 model = None
 
-def fit_model():
-    """ from 0-255
-        Trains model.
-        If model exists already, just returns.
-    """
+def train_model():
     global model
-    if model is not None:
-        return
-
-    model = larger_model()
-    
-    try:
-        model.load_weights(MODEL_PATH + MODEL_NAME)
-        print("Loaded model from disk...")
-        return
-        
-    except:
-        print("Model not found on disk.")
-
     print("Generating training data...")
     
     X, y = generate_dataset.load_dataset()
 
     # Split to validation + train
-    X_train, X_test, y_train, y_test = train_test_split(X,y,test_size = 0.20, random_state= 21)
+    X_train, X_test, y_train, y_test = train_test_split(X,y,test_size = 0.1, random_state= 21)
 
     # X_train = X_train.reshape((X_train.shape[0], 28, 28, 1)).astype('float32')
     # X_test = X_test.reshape((X_test.shape[0], 28, 28, 1)).astype('float32')
@@ -98,7 +81,7 @@ def fit_model():
         X_train,
         y_train,
         validation_data=(X_test, y_test),
-        epochs=5,
+        epochs=10,
         batch_size=50,
         
         # callbacks=[tensorboard_callback]
@@ -120,8 +103,35 @@ def fit_model():
 
     print("Validation error: %.2f%%" % (100-scores[1]*100))
 
+def fit_model():
+    """ from 0-255
+        Trains model.
+        If model exists already, just returns.
+    """
+    global model
+    if model is not None:
+        return
 
+    model = larger_model()
+    
+    try:
+        model.load_weights(MODEL_PATH + MODEL_NAME)
+        print("Loaded model from disk...")
+        return
+        
+    except:
+        print("Model not found on disk.")
 
+    train_model()
+
+def load_and_train_model():
+    global model
+    model = larger_model()
+    
+    model.load_weights(MODEL_PATH + MODEL_NAME)
+    print("Loaded model from disk...")
+    train_model()
+    
 
 def preprocess_image(image: np.ndarray) -> np.ndarray:
     image = cv.resize(image, (constants.SIZE_FACE_MODEL, constants.SIZE_FACE_MODEL))

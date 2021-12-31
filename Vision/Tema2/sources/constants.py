@@ -23,9 +23,10 @@ face_heigth_width_ratio = {
 SIZE_FACE_MODEL = 32
 
 # nr of negative samples per input image
-NR_NEGATIVE_SAMPLES_PER_IMAGE = 10
+NR_NEGATIVE_SAMPLES_PER_IMAGE = 7
+
 # maximal intersection over reunion for negative sample
-MAXIMAL_INTERSECTION_OVER_REUNION_NEGATIVE_SAMPLE = 0.6
+MAXIMAL_INTERSECTION_OVER_REUNION_NEGATIVE_SAMPLE = 0.3
 
 # minimal size of considered windows
 MINIMAL_WINDOWS_PIXEL_SIZE = 32

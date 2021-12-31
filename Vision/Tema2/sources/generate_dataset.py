@@ -91,7 +91,7 @@ def _save_dataset(dataset: List[List[np.ndarray]]):
     for id, images in enumerate(tqdm(dataset)):
         os.makedirs("network_dataset/" + str(id))
         for nr, img in enumerate(images):
-            plt.imsave(f"network_dataset/{str(id)}/{str(nr)}.jpg", img)
+            plt.imsave(f"network_dataset/{str(id)}/im_{str(nr)}.jpg", img)
 
 def _generate_negative_samples() -> List[np.ndarray]:
     """
@@ -163,6 +163,12 @@ def generate_dataset() -> List[np.ndarray]:
             ymax = int(ymax)
             filename = "antrenare/" + name + "/" + filename
 
+            dx = xmax - xmin
+            dy = ymax - ymin
+
+            if (dx < dy and dx / dy < 0.5) or (dy < dx and dy / dx < 0.5):
+                continue
+
             face_subimage = _extract_face_subimage(filename, xmin, ymin, xmax, ymax, name)
             dataset[constants.SIM_LABEL_ORDER[face_name]].append(face_subimage)
             _image_path_rectangles[filename].append(((xmin, ymin), (xmax, ymax)))
@@ -187,18 +193,24 @@ def load_dataset() -> Tuple[np.ndarray, np.ndarray]:
     x = []
     y = []
 
-    for type in range(6):
-        for filename in os.listdir("network_dataset/" + str(type) + "/"):
-            im = plt.imread("network_dataset/" + str(type) + "/" + filename)
-            if im.shape[0] != constants.SIZE_FACE_MODEL:
-                im = cv.resize(im, (constants.SIZE_FACE_MODEL, constants.SIZE_FACE_MODEL))
-            
-            images = _data_augment(im)
-            for img in images:
-                x.append(img)
-                y.append(type)
+    def add_img(type, filename):
+        im = plt.imread(filename)
+        if im.shape[0] != constants.SIZE_FACE_MODEL:
+            im = cv.resize(im, (constants.SIZE_FACE_MODEL, constants.SIZE_FACE_MODEL))
+        
+        images = _data_augment(im)
+        for img in images:
+            x.append(np.array(img))
+            y.append(type)
 
-    x = np.array(x)
+    for type in tqdm(range(6)):
+        for filename in os.listdir("network_dataset/" + str(type) + "/"):
+            add_img(type, "network_dataset/" + str(type) + "/" + filename)
+
+        for filename in os.listdir("outsider_dataset/" + str(type) + "/"):
+            add_img(type, "outsider_dataset/" + str(type) + "/" + filename)
+
+    x = np.stack(x)
     y = np.array(y)
 
     return x, y
