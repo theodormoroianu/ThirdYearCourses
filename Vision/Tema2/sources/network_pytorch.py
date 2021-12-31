@@ -15,6 +15,7 @@ from sklearn.model_selection import train_test_split
 import sources.generate_dataset as generate_dataset
 import torchvision.models as models
 from tqdm import tqdm
+from torch.utils.data import TensorDataset
 
 model_path = "model/model.th"
 
@@ -26,14 +27,51 @@ if th.cuda.is_available():
 class Model(nn.Module):
     def __init__(self):
         super().__init__()
-        self.net = models.resnet18(pretrained=True)
-        self.fc = nn.Sequential(
-            nn.Dropout(0.4),
-            nn.Linear(1000, 3)
+        self.net = nn.Sequential(
+            nn.Conv2d(3, 32, kernel_size=5, padding=2),
+            nn.ReLU(),
+            nn.Conv2d(32, 64, kernel_size=5, padding=2),
+            nn.ReLU(),
+            nn.MaxPool2d(2),
+
+            # nn.BatchNorm2d(32),
+
+            nn.Conv2d(64, 128, kernel_size=3, padding=1),
+            nn.ReLU(),
+            nn.MaxPool2d(2),
+
+            nn.Conv2d(128, 128, kernel_size=3, padding=1),
+            nn.ReLU(),
+            nn.MaxPool2d(2),
+            # nn.BatchNorm2d(128),
+
+            nn.Flatten(),
+            nn.Dropout(0.2),
+
+            nn.Linear(128 * (constants.SIZE_FACE_MODEL // 8)**2, 128),
+            nn.ReLU(),
+            nn.Linear(128, 50),
+            nn.ReLU(),
+            nn.Linear(50, 6)
         )
 
     def forward(self, x):
-        return self.fc(self.resnet(x))
+        x = x.permute(0, 3, 1, 2).to(dev)
+        return self.net(x).cpu()
+
+
+# class Model(nn.Module):
+#     def __init__(self):
+#         super().__init__()
+#         self.net = models.resnet18(pretrained=True)
+#         self.fc = nn.Sequential(
+#             nn.Dropout(0.4),
+#             nn.Linear(1000, 6)
+#         )
+
+#     def forward(self, x):
+#         x = x.permute(0, 3, 1, 2).to(dev)
+#         return self.fc(self.net(x)).cpu()
 
 model = None
 criterion = nn.CrossEntropyLoss()
@@ -46,53 +84,60 @@ def compute_model_acc_loss(input, ground_truth):
 
     return accuracy, loss
 
-
-def train_model():
+def train_model(x=None, y=None):
     global model
 
     model = Model().to(dev)
-    
+    print("Loading model to", dev)
+
     try:
-        state = th.load(model_path).to(dev)
+        state = th.load(model_path)
         model.load_state_dict(state)
-        return
+        model.eval()
+        print("Model loaded from memory!", flush=True)
     except:
-        print("Model could not be loaded!")
+        print("Model could not be loaded! Training it...", flush=True)
 
     optimizer = torch.optim.Adam(
         model.parameters(), lr=1e-4
     )
 
-    x, y = generate_dataset.load_dataset()
+    if x is None:
+        x, y = generate_dataset.load_dataset()
     x /= 255.
 
     # Split to validation + train
     X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.15, random_state= 21)
+    x, y = [], []
 
-    train_dataset = th.utils.TensorDataset(th.from_numpy(X_train), th.from_numpy(y_train))
-    test_dataset = th.utils.TensorDataset(th.from_numpy(X_test), th.from_numpy(y_test))
+    X_train = th.from_numpy(X_train).type(th.FloatTensor)
+    X_test = th.from_numpy(X_test).type(th.FloatTensor)
+
+    train_dataset = TensorDataset(X_train, th.from_numpy(y_train))
+    test_dataset = TensorDataset(X_test, th.from_numpy(y_test))
 
     kwargs = {"num_workers": 5, "pin_memory": True}
     train_loader = th.utils.data.DataLoader(
-        train_dataset, batch_size=32, shuffle=True, **kwargs
+        train_dataset, batch_size=64, shuffle=True, **kwargs
     )
     test_loader = torch.utils.data.DataLoader(
         test_dataset, batch_size=64, shuffle=False, **kwargs
     )
 
-    NR_EPOCHS = 5
+    NR_EPOCHS = 20
 
     model.train()
 
     for epoch in range(NR_EPOCHS):
-        print(f"Epoch #{epoch}:", flush=True)
+        print(f"Epoch #{epoch+1}/{NR_EPOCHS}:", flush=True)
 
         batch_loss = []
         batch_acc = []
 
+        print("Train...", flush=True)
         for input, gt in tqdm(train_loader):
-            input = input.to(dev)
-            gt = gt.to(dev)
+            # input = input.to(dev)
+            # gt = gt.to(dev)
 
             optimizer.zero_grad()
             acc, loss = compute_model_acc_loss(input, gt)
@@ -103,24 +148,23 @@ def train_model():
             loss.backward()
             optimizer.step()
 
-            print(loss)
-
-        print(f"Average train loss: {th.mean(batch_loss)}, average train accuracy: {th.mean(batch_acc)}")
+        print(f"Average train loss: {np.mean(batch_loss)}, average train accuracy: {np.mean(batch_acc)}")
 
         batch_loss = []
         batch_acc = []
 
         model.eval()
+        print("Eval...", flush=True)
         for input, gt in tqdm(test_loader):
-            input = input.to(dev)
-            gt = gt.to(dev)
+            # input = input.to(dev)
+            # gt = gt.to(dev)
 
             acc, loss = compute_model_acc_loss(input, gt)
 
             batch_loss.append(loss.item())
             batch_acc.append(acc.item())
         
-        print(f"Average test loss: {th.mean(batch_loss)}, average test accuracy: {th.mean(batch_acc)}")
+        print(f"Average test loss: {np.mean(batch_loss)}, average test accuracy: {np.mean(batch_acc)}")
 
         model.train()
 
@@ -128,7 +172,22 @@ def train_model():
 
     th.save(model.state_dict(), model_path)
 
+    print("Model trained and saved!")
 
+
+def load_model():
+    global model
+
+    model = Model().to(dev)
+    try:
+        state = th.load(model_path)
+        model.load_state_dict(state)
+        model.eval()
+        print("Model loaded from memory!")
+        return
+    except:
+        print("Model could not be loaded! Training it...")
+        train_model()
 
 
 def preprocess_image(image: np.ndarray) -> np.ndarray:
@@ -144,12 +203,13 @@ def recognize_image(image: np.ndarray) -> int:
     global model
 
     if model is None:
-        train_model()
+        load_model()
 
     image = preprocess_image(image)
 
     image = image.reshape((1, constants.SIZE_FACE_MODEL, constants.SIZE_FACE_MODEL, 3))
 
-    preds = model.predict(image)
+    preds = model(th.from_numpy(image).type(th.FloatTensor))
+    preds = F.softmax(preds, dim=1)
 
-    return preds
+    return preds.detach().numpy()

@@ -9,7 +9,7 @@ TODO:
 
 from typing import List, Tuple
 import numpy as np
-import sources.network as network
+import sources.network_pytorch as network
 import sources.constants as constants
 import cv2 as cv
 import matplotlib.pyplot as plt

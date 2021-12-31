@@ -32,10 +32,10 @@ MAXIMAL_INTERSECTION_OVER_REUNION_NEGATIVE_SAMPLE = 0.3
 MINIMAL_WINDOWS_PIXEL_SIZE = 32
 
 # What to multiply windows by
-SLIDING_WINDOW_RESCALE_FACTOR = 0.9
+SLIDING_WINDOW_RESCALE_FACTOR = 0.95
 
 # stride when performing a sliding window (multiply by the window size in pixels to get actual stride)
-SLIDING_WINDOW_STRIDE = 0.2
+SLIDING_WINDOW_STRIDE = 0.09
 
 # remove a window if a more confident one has a better probability
 NON_MAX_SUPPRESSION_THRESHOLD = 0.4

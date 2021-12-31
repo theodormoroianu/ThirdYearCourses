@@ -8,7 +8,7 @@ from tensorflow.keras.datasets import mnist
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 from tensorflow.keras.layers import Dropout
-from tensorflow.keras.layers import Flatten
+from tensorflow.keras.layers import *
 from tensorflow.keras.layers import Conv2D
 from tensorflow.keras.layers import MaxPooling2D
 from tensorflow.keras.utils import to_categorical
@@ -34,10 +34,13 @@ def larger_model():
         Conv2D(32, (5, 5), input_shape=(constants.SIZE_FACE_MODEL, constants.SIZE_FACE_MODEL, 3), activation='relu'),
         Conv2D(64, (5, 5), activation='relu'),
         MaxPooling2D(),
+        BatchNormalization(),
+        Conv2D(128, (3, 3), activation='relu'),
         Conv2D(128, (3, 3), activation='relu'),
         MaxPooling2D(),
         Conv2D(128, (3, 3), activation='relu'),
         MaxPooling2D(),
+        BatchNormalization(),
         Dropout(0.2),
         Flatten(),
         Dense(128, activation='relu'),
@@ -81,7 +84,7 @@ def train_model():
         X_train,
         y_train,
         validation_data=(X_test, y_test),
-        epochs=10,
+        epochs=20,
         batch_size=50,
         
         # callbacks=[tensorboard_callback]

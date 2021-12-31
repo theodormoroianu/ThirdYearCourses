@@ -88,7 +88,9 @@ def _save_dataset(dataset: List[List[np.ndarray]]):
 
     os.makedirs("network_dataset")
 
+
     for id, images in enumerate(tqdm(dataset)):
+        images = np.unique(np.stack(images), axis=0)
         os.makedirs("network_dataset/" + str(id))
         for nr, img in enumerate(images):
             plt.imsave(f"network_dataset/{str(id)}/im_{str(nr)}.jpg", img)
@@ -145,6 +147,7 @@ def generate_dataset() -> List[np.ndarray]:
     
     @returns a list of the dataset
     """
+    global _image_path_rectangles
 
     dataset = [[] for _ in constants.SIM_LABEL_ORDER]
 
@@ -181,10 +184,12 @@ def generate_dataset() -> List[np.ndarray]:
     _save_dataset(dataset)
 
     dataset = [np.stack(i) if len(i) != 0 else [] for i in dataset]
+
+    _image_path_rectangles = defaultdict(lambda: [])
     return dataset
 
 def _data_augment(img):
-    return [img, img[:, ::-1, :], img*0.9, img*1.1]
+    return [img, img[:, ::-1, :]]
 
 def load_dataset() -> Tuple[np.ndarray, np.ndarray]:
     """
@@ -213,4 +218,5 @@ def load_dataset() -> Tuple[np.ndarray, np.ndarray]:
     x = np.stack(x)
     y = np.array(y)
 
+    print("Finished loading dataset...")
     return x, y
