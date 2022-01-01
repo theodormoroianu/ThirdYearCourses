@@ -50,6 +50,8 @@ class Model(nn.Module):
 
             nn.Linear(128 * (constants.SIZE_FACE_MODEL // 8)**2, 128),
             nn.ReLU(),
+            nn.Dropout(0.2),
+            
             nn.Linear(128, 50),
             nn.ReLU(),
             nn.Linear(50, 6)
@@ -84,22 +86,27 @@ def compute_model_acc_loss(input, ground_truth):
 
     return accuracy, loss
 
-def train_model(x=None, y=None):
+def save_model():
+    global model
+    th.save(model.state_dict(), model_path)
+
+def train_model(lr=1e-4, NR_EPOCHS=20, x=None, y=None):
     global model
 
-    model = Model().to(dev)
-    print("Loading model to", dev)
+    if model is None:
+        model = Model().to(dev)
+        print("Loading model to", dev)
 
-    try:
-        state = th.load(model_path)
-        model.load_state_dict(state)
-        model.eval()
-        print("Model loaded from memory!", flush=True)
-    except:
-        print("Model could not be loaded! Training it...", flush=True)
+        try:
+            state = th.load(model_path)
+            model.load_state_dict(state)
+            model.eval()
+            print("Model loaded from memory!", flush=True)
+        except:
+            print("Model could not be loaded! Training it...", flush=True)
 
     optimizer = torch.optim.Adam(
-        model.parameters(), lr=1e-4
+        model.parameters(), lr=lr
     )
 
     if x is None:
@@ -118,13 +125,11 @@ def train_model(x=None, y=None):
 
     kwargs = {"num_workers": 5, "pin_memory": True}
     train_loader = th.utils.data.DataLoader(
-        train_dataset, batch_size=64, shuffle=True, **kwargs
+        train_dataset, batch_size=128, shuffle=True #, **kwargs
     )
     test_loader = torch.utils.data.DataLoader(
-        test_dataset, batch_size=64, shuffle=False, **kwargs
+        test_dataset, batch_size=128, shuffle=False# , **kwargs
     )
-
-    NR_EPOCHS = 20
 
     model.train()
 
@@ -165,6 +170,8 @@ def train_model(x=None, y=None):
             batch_acc.append(acc.item())
         
         print(f"Average test loss: {np.mean(batch_loss)}, average test accuracy: {np.mean(batch_acc)}")
+
+        th.save(model.state_dict(), model_path + f"{np.mean(batch_acc)}.th")
 
         model.train()
 
