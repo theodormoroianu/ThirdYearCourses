@@ -29,7 +29,7 @@ def intersection_over_reunion(rect1, rect2) -> float:
 
     return intersection / reunion
 
-def non_max_suppression(windows: List[Tuple[Tuple, int, float, float]]):
+def non_max_suppression(windows: List[Tuple[Tuple, float]]):
     """
     Removes all windows with a smaller precision.
     """

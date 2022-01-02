@@ -58,20 +58,29 @@ def find_best_sliding_window_face(image: np.ndarray, type: int):
         plt.show()
 
 
-def find_faces(img: np.ndarray) -> List[Tuple[
-                                    Tuple[Tuple[int, int],
-                                          Tuple[int, int]], int, float, float]]:
-
+def find_faces(img: np.ndarray) -> List[List[Tuple[Tuple, float]]]:
     """
     Returns the detected faces from the image.
-    Each item contains:
-        - The bounding box
-        - The class of the face
-        - The probability it is of the selected class
-        - The probability it is NOT a negative sample (sum of all classes)
+    The top-level list is:
+        0-4 -> the 4 guys and unknown
+        5 -> any face
+
     """
     
-    windows = []
+    windows: List[List[Tuple[Tuple, float]]] = [[] for _ in range(6)]
+
+    def process_window(xmin, ymin, xmax, ymax, probs):
+        nonlocal windows
+        for type in range(5):
+            windows[type].append((
+                ((xmin, ymin), (xmax, ymax)),
+                probs[type]
+            ))
+        windows[5].append((
+            ((xmin, ymin), (xmax, ymax)),
+            1. - probs[5]
+        ))
+
 
     window_dim = min(img.shape[0], img.shape[1])
 
@@ -83,24 +92,11 @@ def find_faces(img: np.ndarray) -> List[Tuple[
                 sliding_window = img[ymin:ymin+window_dim, xmin:xmin+window_dim, :]
                 labels = network.recognize_image(sliding_window)[0]
                 
-                # for now consider unknown as not a face
-                # TODO:
-                probability_face = 1. - labels[-1] - labels[-2]
-                face_class = np.argmax(labels[:-2])
-                probability_class = labels[face_class]
+                process_window(xmin, ymin, xmin+window_dim-1, ymin+window_dim-1, labels)
 
-                windows.append((
-                    ((xmin, ymin), (xmin+window_dim-1, ymin+window_dim-1)),
-                    face_class,
-                    probability_class,
-                    probability_face
-                ))
-
-        # rescale sliding window
-        # print("Scale:", window_dim)
         window_dim = window_dim * constants.SLIDING_WINDOW_RESCALE_FACTOR
         window_dim = int(window_dim)
 
-    # print("Got here!", flush=True)
-    windows = project_utils.non_max_suppression(windows)
+    windows = [project_utils.non_max_suppression(wind) for wind in windows]
+    
     return windows

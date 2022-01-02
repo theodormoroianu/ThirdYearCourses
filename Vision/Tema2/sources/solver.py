@@ -23,9 +23,9 @@ def print_task_1(faces_detected, output_path):
     filenames = []
     probabilities = []
 
-    print(faces_detected[0])
+    print("Sample detection:", faces_detected[0])
 
-    for filename, (box, _, _, prob) in faces_detected:
+    for filename, (box, prob) in faces_detected:
         # TODO: Check the bounding box format
         filenames.append(filename)
         probabilities.append(prob)
@@ -42,13 +42,11 @@ def print_task_2(faces_detected, output_path):
     filenames = [[], [], [], []]
     probabilities = [[], [], [], []]
 
-    for filename, (box, type, prob_type, prob_not_a_face) in faces_detected:
-        # TODO: Maybe add to other classes as well?
-        if type > 3:
-            continue
-        filenames[type].append(filename)
-        probabilities[type].append(prob_type)
-        bounding_boxes[type].append([box[0][0], box[0][1], box[1][0], box[1][1]])
+    for type in range(4):
+        for filename, (box, prob) in faces_detected[type]:
+            filenames[type].append(filename)
+            probabilities[type].append(prob)
+            bounding_boxes[type].append([box[0][0], box[0][1], box[1][0], box[1][1]])
 
     for i in range(4):
         np.save(
@@ -83,19 +81,19 @@ def solve(folder_path, output_path):
 
     images = read_images(folder_path)
 
-    faces_detected = []
+    faces_detected = [[] for _ in range(6)]
     
     print("Processing images...", flush=True)
 
     for img in tqdm(images):
         windows = sliding_window.find_faces(img[1])
-        for window in windows:
-            if window[-1] < 0.5:
-                continue
-            faces_detected.append((img[0], window))
 
-    print_task_1(faces_detected, output_path)
-    print_task_2(faces_detected, output_path)
+        for type in range(6):
+            for pred in windows[type]:
+                faces_detected[type].append((img[0], pred))
+
+    print_task_1(faces_detected[-1], output_path)
+    print_task_2(faces_detected[:-2], output_path)
 
 
 if __name__ == "__main__":
