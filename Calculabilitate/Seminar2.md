@@ -9,3 +9,6 @@
     Daca ultimul 1 schimat in 1' este din x, il facem inapoi 1.
 
 2. Mutam toti 1 care au ramas inapoi la sfarsitul benzii (dupa toti 1 si 1').
+
+## Tema
+
