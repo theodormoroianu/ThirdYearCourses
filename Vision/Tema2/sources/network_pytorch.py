@@ -23,6 +23,19 @@ dev = torch.device('cpu')
 if th.cuda.is_available():
     dev = torch.device('cuda')
 
+train_transform = transforms.Compose([
+    transforms.RandomRotation(degrees=5),
+    transforms.RandomAutocontrast(),
+    # transforms.RandomAdjustSharpness(0.95),
+    transforms.RandomResizedCrop(constants.SIZE_FACE_MODEL, scale=(0.9, 1)),
+    # transforms.RandomEqualize(),
+    # PEnc(),
+    # transforms.RandomErasing(scale=(0.02, 0.2)),
+    # transforms.GaussianBlur(3, sigma=(0.01, 0.01)),
+    # transforms.RandomHorizontalFlip(),
+    # transforms.RandomVerticalFlip()
+])
+
 
 class Model(nn.Module):
     def __init__(self):
@@ -79,6 +92,8 @@ model = None
 criterion = nn.CrossEntropyLoss()
 
 def compute_model_acc_loss(input, ground_truth):
+    input = train_transform(input.permute(0, 3, 1, 2)).permute(0, 2, 3, 1)
+
     output = model(input)
 
     loss = criterion(output, ground_truth)
