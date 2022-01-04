@@ -38,4 +38,4 @@ SLIDING_WINDOW_RESCALE_FACTOR = 0.93
 SLIDING_WINDOW_STRIDE = 0.08
 
 # remove a window if a more confident one has a better probability
-NON_MAX_SUPPRESSION_THRESHOLD = 0.4
+NON_MAX_SUPPRESSION_THRESHOLD = 0.3
