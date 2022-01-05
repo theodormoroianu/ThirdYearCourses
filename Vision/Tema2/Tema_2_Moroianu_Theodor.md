@@ -45,6 +45,16 @@ Putem vedea ca este o ingramadire clasica de convolutie + ReLU + MaxPool.
 
 Pentru datele de antrenare, am folosit atat pozele date pentru antrenare (dupa ce am sters anotarile gresite), cat si poze anotate de mine dintr-un dataset luat de pe net cu screen-shooturi din simpsoni.
 
+Modelul are `6` neuroni de output, care corespund claselor:
+ * Bart
+ * Homer
+ * Lisa
+ * Marge
+ * Unknown
+ * NAF (not a face)
+
+Outputul retelei este trecut printr-un filtru softmax inainte de-a extrage probabilitatile fiecarei clase.
+
 ## Sliding Window
 
 Pentru sliding window, implementat in `sources/sliding_window.py`, imi aleg diferite dimensiuni ale ferestrei, pe care o trec prin CNN dupa ce o redimensionez la o dimensiune standard, definita in fisierul `sources/constants.py`.
@@ -59,7 +69,8 @@ while window_dim >= constants.MINIMAL_WINDOWS_PIXEL_SIZE:
 
     for ymin in range(0, img.shape[0] - window_dim + 1, stride):
         for xmin in range(0, img.shape[1] - window_dim + 1, stride):
-            sliding_window = img[ymin:ymin+window_dim, xmin:xmin+window_dim, :]
+            sliding_window =
+                img[ymin:ymin+window_dim, xmin:xmin+window_dim, :]
             
             # procesez sliding_window
             # ...
@@ -76,8 +87,20 @@ Am implementat non-maximal supresion si intersection-over-reunion in fisierul `s
 
 Pentru a rula codul, este suficient sa urmariti instructiunile din `README.txt`.
 
+## Calcularea Probabilitatilor
+
+Pentru a calcula probabilitatie fiecarei clase pe un sliding window, am urmatoarele abordari:
+
+ * Pentru prima parte a proiectului, axata pe detectarea tuturor fetelor:
+    * Consideram toate ferestrele glisante, si consider probabilitatea ca acea fereastra sa fie o fata ca fiind `1 - P(NAF)`.
+    * Aplicam un filtru de Non-Maximal Supresion, care elimina ferestrele redundante.
+ * Pentru a doua parte a proiectului, axata pe recunoasterea personajelor:
+    * Consideram toate ferestrele glisante, si extragem probabilitatile aferente fiecarei din primele `4` clase.
+    * INDEPENDENT PE CLASE, efectuam algoritmul de Non-Maximal Supresion.
+    * Afisam ferestrele pentru fiecare fata. O fereastra poate fi considerata de mai multe ori in clase diferite.
+
 ## Observatii
 
- 1. Reteaua ruleaza in ~10 secunde pe o imagine de validare pe GPU-ul meu (GTX 1060).
+ 1. Reteaua ruleaza in ~20 de secunde pe o imagine de validare pe GPU-ul meu (GTX 1060).
  2. Pe datele de validare am o acuratete de `88%` pe ambele taskuri.
  3. Nu am avut nevoie sa trec pozele in spatiul HLS si sa fac jmecherii pentru a procesa numai zonele galbene, avand in vedere ca atat timpul cat si performanta solutiei considerand orice zona sunt satisfacatoare.

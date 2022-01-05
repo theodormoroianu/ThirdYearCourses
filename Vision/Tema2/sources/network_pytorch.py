@@ -126,6 +126,7 @@ def train_model(lr=1e-4, NR_EPOCHS=20, x=None, y=None):
 
     if x is None:
         x, y = generate_dataset.load_dataset()
+    x = x.astype(np.float32)
     x /= 255.
 
     # Split to validation + train
