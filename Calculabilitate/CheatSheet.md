@@ -184,3 +184,10 @@ Complexitate: O(N^1.5 / log(N))
 ## Recunoscut Limbajul { A AT A }
 
 
+
+
+ * Complexitatea pe masina nedeterminista: nr min sau maxim de pasi?
+ * Accepare pe nedeterminist: O ramura se opreste si accepta?
+ * Calculare pe nedeterminist: Cum??
+ 
+ 
