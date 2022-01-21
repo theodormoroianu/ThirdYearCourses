@@ -43,6 +43,9 @@
         `<id_stare, <pozitie_cursor, godelizare_banda>>`
     - Hardcodam cu if-uri fiecare tranzitie posibila a masinii turing
 
+* Savici
+    NSPACE(f) = DSPACE(f^2) (divide)
+
 ## Programe Standard
 
 * Variabile
