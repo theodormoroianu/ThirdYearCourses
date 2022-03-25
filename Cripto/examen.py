@@ -49,9 +49,7 @@ def extended_gcd(a: int, b: int, verbose=True, offset=''):
 d, c_a, c_b = extended_gcd(12, 8, False)
 assert d == c_a * 12 + c_b * 8 and d == 4
 
-extended_gcd(67, 1000)
-
-# extended_gcd(16, 18)
+# extended_gcd(67, 1000)
 
 #%%
 def invers_modular(element: int, modul: int, verbose=True, offset = ''):
@@ -174,7 +172,38 @@ def cipolla(n: int, p: int, verbose=True, offset=''):
 
 inv = cipolla(1236, 666013, False)
 assert inv * inv % 666013 == 1236
-cipolla(15, 17)
+# cipolla(15, 17)
+
+#%%
+
+"""
+Elgamal
+
+Grup G, generator g.
+
+Cheie secreta: X
+Cheie publica: h = g^x
+
+Encriptare:
+ * Alegem y random.
+ * c1 = g^y
+ * c2 = h^y * m 
+ * Mesaj criptat: (c1, c2) = (g^y, h^y * m)
+
+Decriptare:
+ * Primim (c1, c2) = (g^y, h^y * m) = (g^y, g^xy * m)
+ * m = c2 * (c1^x)^-1
+
+
+Caz aditiv:
+Daca consideram grupul G ca fiind (Zp, +), atunci problema logaritmului
+discret se poate rezolva cu euclid extins:
+    Cautam x a.i. g*x = h
+            <=> x = h * g^-1
+Daca il stim pe x putem decripta mesajul. 
+"""
+
+
 #%%
 
 """
@@ -183,6 +212,5 @@ RSA decriptat cu phi(n) si dupa lambda(n)
 
 Examen:
 
- * ELGAMAL aditiv
  * RSA cu phi si lambda
 """
