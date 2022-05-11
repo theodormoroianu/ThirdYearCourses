@@ -1,6 +1,6 @@
 #%%
+from math import prod
 from typing import List, Tuple
-
 #%%
 
 def gcd(a: int, b: int, verbose=True, offset=''):
@@ -77,6 +77,8 @@ def invers_modular(element: int, modul: int, verbose=True, offset = ''):
     if d != 1:
         print(f"{element} nu este prim cu {modul}!")
         raise Exception()
+
+    x = ((x + modul) % modul) % modul 
 
     if verbose:
         print(f"{offset}{x}*{element} + {y}*{modul} = 1, deci {x} este inversul lui {element} fata de {modul}.")
@@ -288,6 +290,58 @@ discret se poate rezolva cu euclid extins:
             `<=> x = h * g^-1`
 Daca il stim pe `x` putem decripta mesajul. 
 """
+def elgamal_setup(g, modul, sk, multiplicativ=True):
+    print(f"Setul Elgamal:\n    Cheie secreta: sk = x = {sk}")
+    if multiplicativ:
+        pk = (g**sk) % modul
+        print(f"    Cheie publica: pk = h = g^sk = {g}^{sk} = {pk}")
+    else:
+        pk = (g * sk) % modul
+        print(f"    Cheie publica: pk = g*sk = {g}*{sk} = {pk}")
+    print('')
+    return pk
+
+def elgamal_encrypt(g, modul, pk, mesaj, y, multiplicativ=True):
+    print(f"Encriptam m={mesaj}, cu g={g}, valoarea random y={y} si pk={pk}")
+    if multiplicativ:
+        (c1, c2) = (g**y % modul, mesaj * pk**y % modul)
+        print(f"    (c1, c2) = (g^y, pk^y*m) = ({g}^{y}, {pk}^{y} * {mesaj}) = ({c1}, {c2})")
+    else:
+        (c1, c2) = (g * y % modul, (mesaj + pk*y) % modul)
+        print(f"    (c1, c2) = (g*y, pk*y+m) = ({g}*{y}, {pk}*{y}+{mesaj} = ({c1}, {c2})")
+    print('')
+    return (c1, c2)
+
+def elgamal_decrypt(g, modul, sk, c1, c2, multiplicativ=True):
+    print(f"Decriptam mesajul (c1, c2)=({c1}, {c2}), cu g={g}, modul={modul} si cheie secreta sk = x = {sk}")
+    if multiplicativ:
+        print(f"Calculam inversul lui c1 = {c1} modulo {modul}:")
+        inv_c1 = invers_modular(c1, modul, True, "    ")
+        print(f"Calculam (c1^-1)^sk = {inv_c1}^{sk}:")
+        inv_c1_la_sk = fast_pow(inv_c1, sk, modul, True, "    ")
+        m = (c2 * inv_c1_la_sk) % modul
+        print(f"Calculam m = c2 * c1^(-sk) = c2 * (c1^-1)^sk = {c2} * {inv_c1}^{sk} = {c2} * {inv_c1_la_sk} = {m}")
+    else:
+        m = (c2 - c1 * sk) % modul
+        m = (m + modul) % modul
+        print(f"    m = (c2 - c1 * sk) = ({c2} - {c1} * {sk} = m")
+    print('')
+    return m
+
+def elgamal_aditiv_break(g, modul, pk):
+    """
+    Gaseste si intoarce sk pentru un pk dat
+    """
+    print(f"Spargem elgamal aditiv:\npk = g * sk <=> sk = pk * g^-1 = {pk} * {g}^-1")
+    inv_g = invers_modular(g, modul, True, "    ")
+    sk = inv_g * pk % modul
+    print(f"sk = {pk} * {g}^-1 = {pk} * {inv_g} = {sk}")
+    return sk
+
+# elgamal_setup(g=3, modul=101, sk=4, multiplicativ=False)
+# elgamal_encrypt(g=3, modul=101, pk=12, y=22, mesaj=55, multiplicativ=False)
+# elgamal_decrypt(g=3, modul=101, sk=4, c1=66, c2=16, multiplicativ=False)
+elgamal_aditiv_break(3, 101, 12)
 
 
 #%%
@@ -341,12 +395,220 @@ assert not legendre_is_residue(3, 7, False)
 # legendre_is_residue(6, 31)
 
 #%%
+def phi(n, verbose=True, offset=''):
+    factors = []
+    n_copy = n
+    for i in range(2, n + 1):
+        p = 0
+        while n_copy % i == 0:
+            n_copy, p = n_copy // i, p + 1
+        if p > 0:
+            factors.append((i, p))
+    
+    ans = 1
+    for p, e in factors:
+        ans *= p**(e - 1) * (p - 1)
+
+    if verbose:
+        print(
+            f"{offset}{n} = " +
+            " * ".join([f"{i[0]}^{i[1]}" for i in factors])
+        )
+        print(
+            f"{offset}Phi({n}) = " +
+            " * ".join([f"{i[0] - 1}*{i[0]}^{i[1] - 1}" for i in factors])
+        )
+        print(f"{offset}Phi({n}) = {ans}")
+        
+    return ans
+
+decomp = phi
+
+assert phi(10, False) == 4
+# phi(24)
+
+
+#%%
+def rsa_setup(p, q, e=2, use_lambda=False, verbose=True, offset=''):
+    n = p * q
+    phi_or_lambda = (lcm(p - 1, q - 1, False) if use_lambda else (p - 1) * (q - 1))
+
+    if verbose:
+        print(f"N = {p} * {q} = {n}")
+        fun_name = "lambda" if use_lambda else "phi"
+        print(f"{fun_name}({n}) = {phi_or_lambda}")
+
+    while gcd(e, phi_or_lambda, False) != 1:
+        e += 1
+
+    if verbose:
+        print(f"Am ales e = {e}")
+        
+    inv_e = invers_modular(e, phi_or_lambda, verbose, offset+'    ')
+
+    if verbose:
+        print(f"Asadar, cheia publica este N={n}, e={e}, iar cheia privata este d={inv_e}")
+
+def rsa_encrypt(N, e, m):
+    """
+        N, e: public key
+        m: message
+    """
+    c = m**e % N
+    print(f"Encryption is {c}")
+    return c
+
+def rsa_decrypt(N, d, c):
+    """
+        N: modulus
+        d: secret key
+        c: cypher text
+    """
+    m = c**d % N
+    print(f"Decryption is {m}")
+    return m
+
+# rsa_setup(5, 7)
+# rsa_setup(7, 13, 2)
+
+# rsa_encrypt(7 * 13, 5, 10)
+# rsa_decrypt(7 * 13, 29, 82)
+
+#%%
+def recombination_vector(dim):
+    """
+    returns r a.i.
+    f(0) = r[0] * f(1) + r[1] * f(2) + ...
+    for polynomials of rank < dim
+    """
+    def comb(a, b):
+        return prod(range(1, a+1)) // prod(range(1, b+1)) // prod(range(1, a-b+1))
+
+    r = [(-1)**(i - 1) * comb(dim, i) for i in range(1, dim + 1)]
+    return r
 
 """
-RSA decriptat cu phi(n) si dupa lambda(n)
-
-
-Examen:
-
- * RSA cu phi si lambda
+2: [2, -1]
+3: [3, -3, 1]
+4: [4, -6, 4, -1]
 """
+# recombination_vector(4)
+
+def interpolate_recombine(values, verbose=True, offset=""):
+    """
+    value of polynomial in 1, 2, 3, ..., len(value)
+    """
+    r = recombination_vector(len(values))
+    if verbose:
+        print(f"{offset}Avem de combinat vectorul de valori {values}")
+        print(f"{offset}Cum avem {len(values)} valori, consideram ca avem un polinom de grad < {len(values)}.")
+        print(f"{offset}Vectorul de recombinare este astfel {r}")
+    calculus = " + ".join([
+        f"{a}*{b}" for a, b in zip(r, values)
+    ])
+    ans = list(map(lambda x: x[0]*x[1], zip(r, values)))
+    if verbose:
+        print(f"{offset}Raspunsul este {calculus}")
+        print(f"{offset}             = " + ' + '.join([str(i) for i in ans]))
+        print(f"{offset}             = {sum(ans)}")
+        print("")
+
+    return sum(ans)
+
+def compute_polynomial_values(n, coefs):
+    """
+    Computes the polynomial in 1, 2, ..., n
+    """
+    def eval(p):
+        ans, p_act = 0, 1
+        for i in coefs:
+            ans += i * p_act
+            p_act *= p
+        return ans
+
+    return [eval(i) for i in range(1, n + 1)]
+
+def init_sharing(coefs):
+    """
+    list storing for each user a list of coeficients (first one is their secret)
+    dij = ce valoare userul i da userului j
+    """
+    n = len(coefs)
+    print(f"Initializam protocolul cu {n} useri.")
+    for i in range(n):
+        print(f"   * #{i + 1} are secretul {coefs[i][0]} si coeficientii {coefs[i][1:]}")
+
+    for i in range(n):
+        print(f"Userul {i + 1} considera polinomul dat de coeficientii {coefs[i]} si da:")
+        values = compute_polynomial_values(n, coefs[i])
+        for j in range(n):
+            print(f"   * Lui #{j+1} da d[{i + 1}][{j + 1}]={values[j]}")
+    print("")
+
+def multiply_gate(secrets, coefs):
+    """
+    perform a multiplication gate, where each user has the secret from secrets
+    **secrets has the two multiplied values already multiplied**
+    and the coeficients for its hidden polynomial from coefs
+    """
+    n = len(secrets)
+    print(f"Dorim sa efectuam o inmultire.\nCoeficientii inmultiti detinuti de fiecare user sunt:")
+    for i in range(n):
+        print(f"   * #{i + 1} are secretul {secrets[i]}, si alege {coefs[i]} ca si coeficienti.")
+
+    print(f"Fiecare user calculeaza un polinom pentru a masca secretul, si il partajeaza:")
+    obtained_values = [[] for _ in range(n)]
+    for i in range(n):
+        print(f"   * #{i + 1} se uita la polinomul dat de coeficientii {[secrets[i]] + coefs[i]}")
+        values = compute_polynomial_values(n, [secrets[i]] + coefs[i])
+        print(f"     Da:")
+        for j in range(n):
+            print(f"      * Lui #{j + 1} valoarea {values[j]}")
+            obtained_values[j].append(values[j])
+
+    print(f"Fiecare user recombina valorile obtinute:")
+    final_secrets = []
+    for i in range(n):
+        print(f"   * #{i + 1} a primit vectorul {obtained_values[i]}. Recombina valorile:")
+        recomb = interpolate_recombine(obtained_values[i], True, "       ")
+        print(f"     Obtine asadar {recomb}.")
+        final_secrets.append(recomb)
+
+    print("")
+    return final_secrets
+
+
+# 3 - x + 5x^2
+# interpolate_recombine([7, 21, 45])
+# init_sharing([[4, 1], [3, 6], [7, 2]])
+
+
+
+# %%
+
+def goldwasser_micali(modul, numere, use_legendre=False):
+    """
+    if use_legendre is false, just make the list of residues.
+    """
+    p = 2
+    while modul % p != 0:
+        p += 1
+    print(f"Using {p} as prime factor as {modul} = {p} * {modul // p}")
+    if use_legendre:
+        pass
+    else:
+        print(f"Reziduurile patratice modulo {p} sunt [" + " ".join([f"{i}^2" for i in range(p)]))
+        print("    = " + " ".join([f"{i*i % p}" for i in range(p)]))
+        reziduuri = set([i * i % p for i in range(p)])
+        print("    =", reziduuri)
+        for i in numere:
+            if i % p in reziduuri:
+                print(f"     * {i} = {i % p} este reziduu modulo {p} => 0")
+            else:
+                print(f"     * {i} = {i % p} NU este reziduu modulo {p} => 1")
+        rez = [0 if i % p in reziduuri else 1 for i in numere]
+        return rez
+
+
+# goldwasser_micali(77, [58, 71, 55, 17])
+# %%
