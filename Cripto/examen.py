@@ -349,12 +349,13 @@ def elgamal_multiplicativ_break(g, modul, pk):
 
 g = 2
 modul = 19
-# elgamal_setup(g=16, modul=63, sk=5, multiplicativ=False)
-# elgamal_encrypt(g=16, modul=63, pk=17, y=47, mesaj=9, multiplicativ=False)
-elgamal_decrypt(g=g, modul=modul, sk=8, c1=10, c2=11, multiplicativ=True)
-# elgamal_aditiv_break(g=g, modul=modul, pk=17)
+# elgamal_setup(g=g, modul=modul, sk=5, multiplicativ=True)
+# elgamal_encrypt(g=g, modul=modul, pk=10, y=11, mesaj=9, multiplicativ=False)
+# elgamal_decrypt(g=g, modul=modul, sk=5, c1=3, c2=5, multiplicativ=False)
 
-# elgamal_multiplicativ_break(g=g, modul=modul, pk=9)
+# elgamal_aditiv_break(g=g, modul=modul, pk=10)
+
+# elgamal_multiplicativ_break(g=g, modul=modul, pk=13)
 
 #%%
 """
@@ -482,7 +483,7 @@ def rsa_decrypt(N, d, c):
     print(f"Asadar, m = {m}")
     return m
 
-rsa_setup(p=7, q=13, e=5, use_lambda=True)
+# rsa_setup(p=7, q=13, e=5, use_lambda=True)
 # rsa_setup(7, 13, 2)
 
 # rsa_encrypt(7 * 13, e=7, m=57)
@@ -599,7 +600,7 @@ def multiply_gate(secrets, coefs, offset=""):
 # 3 - x + 5x^2
 # interpolate_recombine([7, 21, 45])
 # init_sharing([[4, 1], [3, 6], [7, 2]])
-
+# multiply_gate([5 * 9, 6 * 15, 7 * 21], [[7], [2], [3]])
 
 
 # %%
@@ -635,5 +636,5 @@ def goldwasser_micali(modul, numere, use_legendre=False):
         return rez
 
 
-goldwasser_micali(77, [23, 53, 36, 41])
+# goldwasser_micali(77, [23, 53, 36, 41])
 # %%
