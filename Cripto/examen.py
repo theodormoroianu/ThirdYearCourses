@@ -347,12 +347,14 @@ def elgamal_multiplicativ_break(g, modul, pk):
         if r == pk:
             break
 
-# elgamal_setup(g=51, modul=100, sk=49, multiplicativ=False)
-# elgamal_encrypt(g=51, modul=100, pk=99, y=47, mesaj=45, multiplicativ=False)
-# elgamal_decrypt(g=2, modul=19, sk=16, c1=6, c2=7, multiplicativ=True)
-# elgamal_aditiv_break(g=51, modul=100, pk=99)
+g = 2
+modul = 19
+# elgamal_setup(g=16, modul=63, sk=5, multiplicativ=False)
+# elgamal_encrypt(g=16, modul=63, pk=17, y=47, mesaj=9, multiplicativ=False)
+elgamal_decrypt(g=g, modul=modul, sk=8, c1=10, c2=11, multiplicativ=True)
+# elgamal_aditiv_break(g=g, modul=modul, pk=17)
 
-# elgamal_multiplicativ_break(g=2, modul=19, pk=5)
+# elgamal_multiplicativ_break(g=g, modul=modul, pk=9)
 
 #%%
 """
@@ -480,10 +482,10 @@ def rsa_decrypt(N, d, c):
     print(f"Asadar, m = {m}")
     return m
 
-# rsa_setup(p=7, q=13, e=7, use_lambda=True)
+rsa_setup(p=7, q=13, e=5, use_lambda=True)
 # rsa_setup(7, 13, 2)
 
-rsa_encrypt(7 * 13, e=7, m=57)
+# rsa_encrypt(7 * 13, e=7, m=57)
 # rsa_decrypt(7 * 13, d=7, c=8)
 
 #%%
@@ -633,5 +635,5 @@ def goldwasser_micali(modul, numere, use_legendre=False):
         return rez
 
 
-# goldwasser_micali(77, [58, 71, 55, 17])
+goldwasser_micali(77, [23, 53, 36, 41])
 # %%
