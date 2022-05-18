@@ -211,7 +211,7 @@ def cipolla(n: int, p: int, verbose=True, offset=''):
 
     # cautam a a.i. a^2-n nu e rest patratic
     squares = [i * i % p for i in range(p)]
-    a = 0
+    a = 1
     while (a * a - n + p) % p in squares:
         a += 1
     
