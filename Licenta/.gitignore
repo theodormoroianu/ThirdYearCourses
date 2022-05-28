@@ -1,0 +1,10 @@
+_minted-licenta/
+*.aux
+*.log
+*.out
+*.xml
+*.toc
+*.gz
+licenta-blx.bib
+*.bbl
+*.blg
