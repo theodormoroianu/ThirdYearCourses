@@ -1,12 +1,13 @@
 \documentclass[12pt, a4paper]{report}
+\usepackage{a4wide}
 
 \usepackage[english]{babel}
-\usepackage[backend=bibtex]{biblatex}
-\addbibresource{bibliography.bib}
+%\usepackage[backend=bibtex]{biblatex}
+%\addbibresource{bibliography.bib}
 
 % Setează spațiere inter-linie la 1.5
 \usepackage{setspace}
-\onehalfspacing
+%\onehalfspacing
 
 % Modificarea geometriei paginii
 \usepackage{geometry}
@@ -926,7 +927,7 @@ To facilitate the uploading of filled forms, we accept:
 \begin{itemize}
     \item A list of images, in any of the standard image formats (\code{.jpeg}, \code{.png}, \code{.webp} etc).
     \item A list of PDF documents.
-    \item A \textit{Zip} archive, of which the content is processed recursively.
+    \item A \textit{Zip} archive, the content of which is processed recursively.
 \end{itemize}
 
 Due to the high flexibility and permissive formats supported by \textit{SmartForms}, virtually any structured folder of forms can be zipped, uploaded and parsed.
@@ -958,11 +959,11 @@ https://smartforms.ml/view-form/af61ce94-db35-11ec-a6ed-dca6325bcf52
 scanned 1 barcode symbols from 1 images in 0.02 seconds
 \end{minted}
 
-Please note that the text extracted by \textit{Zbar} is not the actual ID of the form, but rather an URL to the \textit{SmartForms} website, where, depending on permissions, users may fill the form online. To extract the real ID, we simply have to remove the "\textit{https://smartforms.ml/view-form/}" prefix.
+Please note that the text extracted by \textit{Zbar} is not the actual ID of the form, but rather an URL to the \textit{SmartForms} website, where, depending on permissions, users may fill the form online. To extract the real ID, we simply have to remove the "\textit{https://smartforms.ml/view-form/}" prefix. \textit{Pyzbar} operates in a similar way, but can be called from within \textit{Python} code.
 
 With the form ID, we can query the \textit{MongoDB} database to extract all the required details about the form.
 
-\section{Changing Image Perspective}
+\section{Applying Graysclale and Binary Threshold}
 
 \begin{figure}[!h]
 \hfill
@@ -971,9 +972,32 @@ With the form ID, we can query the \textit{MongoDB} database to extract all the 
 \subfigure[Processed]{\includegraphics[width=6cm]{images/graphs/parser_processed_image.jpg}}
 \hfill
 \caption{Picture converted to binary}
-\label{etichetaTT}
+\label{original-vs-processed-image}
 \end{figure}
-Ca in figura \ref{etichetaTT}
+
+Most image processing algorithms rely on grayscale or binary images. As such, we first have to convert our colored image to grayscale, and then apply a binary threshold.
+
+To convert an image to grayscale, we can independently transform each pixel from a \code{RGB} value to a single channel. \textit{OpenCV}, the machine vision framework we are using, converts an image to grayscale using the following formula\cite{opencv-color-convention}:
+
+$$Y = 0.299*R+0.587*G+0.114*B$$
+
+Our first step is converting a picture or scan of our form into grayscale. Figure \ref{original-vs-processed-image} (a) shows what such a picture might look like. However, even with the image in grayscale we cannot simply apply a standard binary threshold, due to possible differences in brightness.
+
+ \begin{figure}[!h]
+  \centering
+  \includegraphics[width=20em]{images/other/Checker_shadow_illusion.svg.png}
+  \caption{Checker Shadow Illusion\cite{checker-illusion}}
+  \label{checker-illusion}
+\end{figure}
+
+As ilustrated in Figure \ref{checker-illusion}, where squares marked with \textbf{A} and \textbf{B} seem different even though the color is the same, separating dark and light regions is not a trivial task, if we want to take into account lighing and brightness. Similarly, applying a binary threshold considering pixel intensities larger than a fixed $K$ black and intensities smaller than $K$ white will lead to misclassified pixels, where darker empty regions of the form might be classified as black, and similarly lighter text or graphics of the form might get classified as white.
+
+To convert our grayscale image to binary, we use an adaptive thresholding technique\cite{opencv-image-threshold}, which for each pixels determines, based on a small region around it, if it should be black or white. Applying such an algorithm over our grayscale image gives us an image similar to Figure \ref{original-vs-processed-image} (b).
+
+
+%Ca in figura \ref{etichetaTT}
+
+\section{Changing Image Perspective}
 
 % \begin{figure}[!h]%
 %     \centering
@@ -985,38 +1009,42 @@ Ca in figura \ref{etichetaTT}
 %     %\label{fig:example}%
 % \end{figure}
 
-% \begin{figure}[!h]
-%     \centering
-%     \fbox{\includegraphics[width=35em]{images/graphs/parser_matches.png}}
-%     \caption{Matches found with ORB}
-%     \label{fig:label}
-% \end{figure}
+ \begin{figure}[!h]
+     \centering
+     \fbox{\includegraphics[width=35em]{images/graphs/parser_image_matches.png}}
+     \caption{Matches found with ORB}
+     \label{orb-matches}
+ \end{figure}
 
 For parsing the form, we have to be able to match specific pixels of the picture / scan of the form with the template, to figure out where locations we are interested in are. Further in this section, we will call the picture / scan of the form the \textit{picture}, and the original form, retrieved from the database, the \textit{template}.
 
 Matching the picture with the template is not trivial, as things become quite messy:
 \begin{itemize}
     \item If the picture keeps the same proportions, orientation and scaling as the template, then we have a perfect 1-1 match between the two.
-    \item If the picture keeps the same proportions and orientation, but the scaling is not $1$, then a scaling factor is needed, to be able to match the picture and the template.
-    item
+    \item If the picture keeps the same proportions and orientation, but the scaling is not $1$, then a scaling factor is needed in order to be able to match the picture and the template.
+    \item If the picture only keeps the same proportions, then in addition to the scaling factor a rotating factor is also required.
+    \item If the picture does not keep the same proportions, then we have to find a homography between the two.
 \end{itemize}
 
-Only simple linear computations are required to locate specific pixels on a form, . Rotation and scaling force us to perform vector calculus, but given a single point of the form, its rotation and scale, one can still determine any point of the 
+As finding homographies between two images is a quite common task, \textit{OpenCV} offers the ORB feature extractor\cite{rublee2011orb}, which is able to extract and match features of the two images, as seen in Figure \ref{orb-matches}. If enough matches are found, we can change the image's perspective, to get a frontal view of the form.
+
+
+\begin{figure}[!h]
+	\centering
+	\fbox{\includegraphics[width=15em]{images/graphs/parser_corrected_image.jpg}}
+	\caption{Corrected Picture}
+	\label{parser-corrected-image}
+\end{figure}
+
+In Figure \ref{parser-corrected-image} we can see the result of our perspective transformation over the binary picture. We can observe that:
+
+\begin{itemize}
+	\item The thresholding is not perfect, as some white areas have a few black pixels, and black text has a few white spots, which means that our OCR network has to be resistant to small noise.
+	\item Straight lines (more specifically the boundaries of the text boxes) seem slightly curved. This is actually the case, as phone cameras add small distorsions to the images. This fenomenon does not appear on scans though.
+\end{itemize}
 
 \section{Extracting Answer Squares}
 
-
-Here I will talk about:
-\begin{itemize}
-    \item Template matching, how we make the perspective transformation.
-    \item OCR
-\end{itemize}
-
-For OCR, we also have to talk about:
-\begin{itemize}
-    \item Contiguous learning.
-    \item how we trained the model.
-\end{itemize}
 
 % cum antrenez reteaua
 \chapter{Neural Network Design and Training}
@@ -1058,7 +1086,36 @@ Merge with conclusion
     \item Add multi-threading while reading forms, to speed up the process. 23
 \end{itemize}
 
+\begin{thebibliography}{99}	
 
-\printbibliography
+\bibitem{wicker1999reed}
+S.~B.~Wicker, V.~K.~Bhargava,
+\emph{Reed-Solomon codes and their applications},
+John Wiley \& Sons, 1999.
+
+\bibitem{masinter1998rfc2388}
+L.~Masinter, 
+\emph{RFC2388: Returning Values from Forms: multipart/form-data},
+RFC Editor, 1998.
+
+\bibitem{opencv-color-convention}
+\emph{OpenCV: Color Conversions}, n.d., accessed 29 May 2022,  https://docs.opencv.org/3.4/de/d25/imgproc\_color\_conversions.html.
+
+\bibitem{opencv-image-threshold}
+\emph{OpenCV: Image Thresholding}, n.d., accessed 29 May 2022,
+https://docs.opencv.org/4.x/d7/d4d/tutorial\_py\_thresholding.html
+
+\bibitem{checker-illusion}
+E.~H.~Adelson, Pbroks13, \emph{checker shadow illusion}, accessed 29 May 2022, https://commons.wikimedia.org/w/index.php?curid=75000950.
+
+\bibitem{rublee2011orb}
+E.~Rublee, V.~Rabaud, K.~Konolige, G.~Bradski,
+\emph{ORB: An efficient alternative to SIFT or SURF},
+	2011 International conference on computer vision, IEEE (2011),
+	2564--2571.
+
+
+\end{thebibliography}
+%\printbibliography
 %\printbibliography[heading=bibintoc]
 \end{document}

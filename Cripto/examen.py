@@ -599,7 +599,7 @@ def multiply_gate(secrets, coefs, offset=""):
 
 # 3 - x + 5x^2
 # interpolate_recombine([7, 21, 45])
-# init_sharing([[4, 1], [3, 6], [7, 2]])
+init_sharing([[4, 1], [3, 6], [7, 2]])
 # multiply_gate([5 * 9, 6 * 15, 7 * 21], [[7], [2], [3]])
 
 
