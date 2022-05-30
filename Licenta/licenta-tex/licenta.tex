@@ -917,7 +917,7 @@ The lateral markers and the optional preview notice are present on all the pages
 
 % Arat cum fac matchingul si ocr-ul.
 % tot aici vorbesc despre CNN
-\chapter{Form Parsing And Optical Character Recognition}
+\chapter{Form Parsing}
 
 \section{How Data is Loaded}
 
@@ -1045,37 +1045,84 @@ In Figure \ref{parser-corrected-image} we can see the result of our perspective 
 
 \section{Extracting Answer Squares}
 
+Extracting squares containing an answer from a form is straightforward, given a corrected image. As we save the position of squares where users are writing their answers when we generate the form, we simply have to extract said square.
+
+For each form we store in the database a list with the absolute position of each answer square. An sample of the stored information is:
+
+\begin{minted}[bgcolor=bg]{yaml}
+    answer_squares_location:
+        - 0:
+            - 0:
+                - width: 8
+                - x: 23.5
+                - y: 49.5
+                - page: 0
+            - 1:
+                - width: 8
+                - x: 32.5
+                - y: 49.5
+                - page: 0
+            ...
+        - 1:
+            - 0:
+                - width: 8
+                - x: 23.5
+                - y: 89.5
+            ...
+\end{minted}
+
+With the help of the information mentioned above, and of a corrected image similar to Figure \ref{parser-corrected-image}, we can mark and extract each answer square of the form. We marked in Figure \ref{answer-squares-red} the answer squares we extract in red.
+
+\begin{figure}[!h]
+	\centering
+	\fbox{\includegraphics[width=18em]{images/graphs/fixed_image_squares.jpg}}
+	\caption{Answer Squares Marked}
+	\label{answer-squares-red}
+\end{figure}
 
 % cum antrenez reteaua
 \chapter{Neural Network Design and Training}
 
+\section{Why Use a CNN}
+
+Using traditional CV approaches we have been able to isolate small images of the characters we want to extract. While traditional methods (such as HOG\cite{HOG} approaches) perform reasonably well, we decided to design, train and use a convolutional neural network (CNN)\cite{CNN}, which often outperforms classic classificators.
+
+We use \textit{Pytorch}, "\textit{an optimized tensor library for deep learning using GPUs and CPU}"\cite{pytorch}. \textit{Pytorch} allows us to design, train, save and evaluate a convolutional neural network we then use to predict characters.
+
+\section{CNN Architecture}
+
+\section{Dataset Used}
+
+\section{Data Processing and Augmentation}
+
+\section{Training}
+
+\section{Contiguous Training}
+
+
 % Aici vorbesc despre fastapi, si cum il folosesc in aplicatie
 \chapter{HTTP/S Server, Secure Authentication}
 
-Move to tech stack
+\section{FastAPI}
 
-Here I will talk about:
-\begin{itemize}
-    \item FastAPI
-    \item Session Middleware
-    \item ...
-\end{itemize}
+\section{Session Middleware}
+
+\section{Oauth2}
 
 
 % Vorbesc despre cum a functionat git, CI/CD, sincronizare cu Felix
 \chapter{Tests, Source Control and CI/CD}
 
-Here I will talk about:
-\begin{itemize}
-    \item What is Git
-    \item Division of the project in backend/frontend
-    \item Unit / Integration testing
-    \item Contiguous integration
-    \item Contiguous deployment to RPI
-\end{itemize}
+\section{Git}
+
+\section{Smartforms Backend / Frontend}
+
+\section{Testing}
+
+\section{CI/CD}
 
 % vorbesc de ce poate fi adaugat in plus
-\chapter{Future Work}
+\chapter{Conclusion and Future Work}
 
 Stuff that can be added to enhance the user experience:
 
@@ -1114,6 +1161,19 @@ E.~Rublee, V.~Rabaud, K.~Konolige, G.~Bradski,
 	2011 International conference on computer vision, IEEE (2011),
 	2564--2571.
 
+\bibitem{HOG}
+N.~Dalal, B.~Triggs,
+\emph{Histograms of oriented gradients for human detection},
+2005 IEEE computer society conference on computer vision and pattern recognition, IEEE (2005), Vol. 1, 886--893.
+
+\bibitem{CNN}
+K.~O'Shea, R.~Nash,
+\emph{An introduction to convolutional neural networks},
+arXiv:1511.08458, 2015.
+
+\bibitem{pytorch}
+\emph{Pytorch documentation}, n.d., accessed 30 May 2022,
+https://pytorch.org/docs/stable/index.html.
 
 \end{thebibliography}
 %\printbibliography
