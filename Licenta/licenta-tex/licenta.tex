@@ -68,7 +68,7 @@
 
 \def\code#1{\texttt{#1}}
 
-\title{Design and Implementation of an automated form generation and parsing tool}
+\title{\emph{SmartForms API}: an automated tool for form generation and parsing}
 \author{Theodor Pierre Moroianu}
 
 % Generează variabilele cu @
@@ -145,7 +145,7 @@
 \end{titlepage}
 
 \restoregeometry
-\restoregeometry
+%\restoregeometry
 \newgeometry{
     margin=2.5cm
 }
@@ -156,9 +156,11 @@
 \begin{abstractpage}
 
   \begin{abstract}{}
-  Am g\u{a}ndit \c{s}i implementat serverul unei aplica\c{t}ii de creare, gestionare \c{s}i parsare automat\u{a} a formularelor. Produsul complet este API-ul utilizat de o aplica\c{t}ie web modern\u{a} (web 2.0), care ofera urmatoarele functionalita\c{t}i: autentificarea utilizatorilor folosind \textit{OAuth2}, generarea formularelor \c{s}i descarcarea acestora \^{i}n format PDF, completarea formularelor online, extragerea automat\c{a} a raspunsurilor din pozele unui formular imprimat, c\^{a}t \c{s}i control deplin (citire / creare / modificare / \c{s}tergere) asupra formularelor \c{s}i a r\u{a}spunsurilor.
+  Am dezvoltat o aplicatie care extrage in format text continutul unor formulare completate de mana si fotografiate.
+  %Am g\u{a}ndit \c{s}i implementat serverul unei aplica\c{t}ii de creare, gestionare \c{s}i parsare automat\u{a} a formularelor.
+  Produsul complet este API-ul utilizat de o aplica\c{t}ie web modern\u{a} (web 2.0) numita \textit{Smart Forms}, care ofera urmatoarele functionalita\c{t}i: autentificarea utilizatorilor folosind \textit{OAuth2}, generarea formularelor \c{s}i descarcarea acestora \^{i}n format PDF, completarea formularelor online si extragerea automat\u{a} a raspunsurilor din pozele unui formular imprimat. Aplicatia oferta de asemenea control deplin (citire, creare, modificare si \c{s}tergere) asupra formularelor \c{s}i a r\u{a}spunsurilor.
   
-  \^{I}mpreun\u{a} cu aplica\c{t}ia client (implementat\u{a} in cadrul altui proiect), produsul nostru constituie o alternativ\u a a serviciilor precum \textit{Google Forms} sau \textit{Microsoft Forms}. Aplica\c tia este disponibil\u a pe internet la adresa \textit{https://smartforms.ml}, dar poate fi \c si g\u azduit\u a local -- codul este open-source \c si distribuit sub o licen\c t\u a \textit{MIT} permisiv\u a. Prin capacitatea acesteia de-a citi \c si parsa formulare imprimate \c si completate de m\^ an\u a, aplica\c tia este ideal\u a pentru profesori, secretariate sau oricine av\u and de digitalizat cantita\c ti mari de date. 
+  \^{I}mpreun\u{a} cu aplica\c{t}ia client (implementat\u{a} in cadrul altui proiect de licenta al unui coleg de an), produsul nostru constituie o alternativ\u a a serviciilor precum \textit{Google Forms} sau \textit{Microsoft Forms}. Aplica\c tia este disponibil\u a pe internet la adresa \textit{https://smartforms.ml}, dar poate fi \c si g\u azduit\u a local de utilizatori, codul fiind open-source \c si distribuit sub o licen\c t\u a \textit{MIT} permisiv\u a. Prin capacitatea acesteia de-a citi \c si parsa formulare imprimate \c si completate de m\^ an\u a, aplica\c tia poate fi util\u a pentru profesori, secretariate sau institutii care doresc sa digitalizeze automat cantita\c ti mari de date in format imprimat. 
   
   \end{abstract}
   
@@ -185,58 +187,54 @@
 
 \section{Functionality}
 
-Our project, called \textit{SmartForms} is centered around creating and digitization of forms, for minimizing human intervention. By using the software we created, users can, between others:
+Our project, called \textit{SmartForms}, is centered around creating and digitizing forms with minimal human intervention. By using our software, users can:
 \begin{itemize}
-    \item Create simple forms, in a PDF format, prompting readers to fill in multiple choice questions or manually writing answers.
-    \item Upload scans of filled forms, which are then automatically parsed and added to the list of answers.
-    \item Share the link to an online form, similar to modern survey websites.
-    \item Fully control (View / Edit / Delete) forms and answers.
+    \item Create simple forms in .pdf format, prompting readers either to fill in multiple choice questionnaires or to write personalized answers.
+    \item Upload scans of filled forms which are automatically parsed and added to the database.
+    \item Share the link to an online form, similar to modern survey websites like google forms.
+    \item Fully control (Create, View, Edit, and Delete) forms and answers.
 \end{itemize}
 
 \section{Use Case and Target Audience}
 
-The main use case of this software is situations where massive amounts of physical data need to be digitized to be further processed, or, due to legal or connectivity issues, alternatives like \textit{Google Forms} or \textit{Microsoft Forms} are not an option.
+The main use case of this software is in situations where massive amounts of physical data need to be digitized and further processed, and also whenever commercial online services like \textit{Google Forms} or \textit{Microsoft Forms} are not envisageable for legal reasons or because of connectivity issues.
 
-Due to the its high flexibility, our software aims to solve the given scenarios:
+Thanks to its flexibility, our software can solve the following scenarios:
 
 \subsection*{Scenario 1: Written Exams}
 
 A teacher wants to organize an exam for a large number of students.\\
-The exam is comprised of questions which are either multiple choice, either with a restrained set of possible answers (e.g. for a geography course, an answer could be "\textit{Paris}", or for a mathematics course a possible answer would be "$3.1415$").
+The exam is comprised of questions which are either multiple choice, or have a well-defined set of expected answers (e.g., for a geography course, the question ``What is the capital city of Uganda?'' has as admissible answer ``Kampala''; similarly, in a mathematics exam, the question ``What are the first 5 decimals in $\pi$'' requires the answer ``$3.1415$").
 
-The teacher doesn't want to give his/her students access to the internet, to avoid fraud, so an online form isn't feasible. On the other hand, a written exam means the teacher has to manually go throughout each exam paper.
+The teacher doesn't want to allow the students access to the internet, in order to avoid fraud, so an online form isn't available. On the other hand, a written exam means that the teacher has to manually go throughout each exam paper.
 
 Our software gives the teacher two options:
 \begin{enumerate}
     \item Host the software's server locally, letting students connect to the local network without them accessing the internet, and having them submit their answers via our online form submission service.
-    \item Create and print the exam using our form generation tool, and have the students fill their answers on a printed copy of the form. Then upload a scan of their answers and let the software extract them.
+    \item Create and print the exam using our form generation tool, have the students fill their answers on paper copies of the form, and then upload scans of their papers in the application. 
 \end{enumerate}
 
-\subsection*{Scenario 2: Covid-19 Tracking}
+\subsection*{Scenario 2: Routine medical questionnaires}
 
-While entering institutions such as hospitals, for legal reasons people are asked to fill a simple form with their name, address and contact information.
+While entering institutions such as hospitals, for legal reasons people may be required to fill a simple form with their name, address, contact information and health status.
+The front office have to manually go throughout each form and enter the details into the hospital management tool.
 
-In case of emergency, workers have to manually go throughout each form to contact the people concerned.
+Using our software, the hospital can simply upload a scan of the filled forms and extract the entire list of personal details with minimal human intrervention.
 
-Using our software, workers can simply upload a scan of the filled forms, and download the entire list of email addresses, making contacting the affected people easier and more reliable.
+\subsection*{Scenario 3:  Legal Issues concerning Data Protection}
 
-\subsection*{Scenario 3: Data Protection Legal Issues}
+With GDPR regulations, data protection has become a top priority for many companies.
 
-With the recent GDPR regulations, data protection is becoming for many companies one of the top priorities.
-
-In this scenario, our software aims to replace online forms or endless email mailing lists, providing a simple, self-contained and self-hosted solution for companies which do not want to use 3rd party questionnaire solutions.
+In this scenario, our software aims to replace online forms or large email mailing lists, providing a simple, self-contained and self-hosted solution for companies not wanting to use $3^\textrm{rd}$ party questionnaire solutions.
 
 \section{Scope of the Project}
 
-The software is made in collaboration with another student from my cohort.
-
-The complete software is made out of three main components:
+The software is made in collaboration with another student from my cohort \cite{felix}.
+The complete software consists of two components:
 \begin{itemize}
     \item The API server, receiving and answering to requests.
     \item The Client, running on the users' browsers as a modern web application.
-    \item The environment, connecting the two services from above and making the app visible online.
 \end{itemize}
-
 My project's scope is the API server and the services behind it. It includes:
 \begin{itemize}
     \item Implementing the API routes.
@@ -245,13 +243,12 @@ My project's scope is the API server and the services behind it. It includes:
     \item Implementing the parsing pipeline, extracting answers from scanned forms.
     \item Implementing the authentication mechanism, to allow for different confidentiality levels.
 \end{itemize}
-
 My project does NOT include:
 \begin{itemize}
     \item Implement any user-facing elements.
     \item Connecting the two services or exposing the application to the internet.
 \end{itemize}
-
+As mentioned above, these elements can be found in \cite{felix}.
 
 \section{Related Work}
 
@@ -267,9 +264,9 @@ The primary programming language used in the backend is \textit{Python 3}.
 
 The main reason we chose \textit{Python} over more conventional languages for web servers is the abundance of packages available to install via \textit{Pip}, the Python Package Manager.
 
-The main drawback of \textit{Python} is its speed. Being an interpreted language it is slower than traditional languages such as \textit{C/C++} or \textit{Java}.
+The main drawback of \textit{Python} is its relatively low speed. Being an interpreted language, it is slower than traditional programming languages such as \textit{C/C}++ or \textit{Java}.
 
-To illustrate the speed difference, we ran a simple program in both \textit{Python} and \textit{C++}, to see the difference.
+To illustrate the speed difference, we ran a simple program in both \textit{Python} and \textit{C}++.
 
 The \textit{Python} code is:
 
@@ -289,7 +286,7 @@ for i in range(2, N):
 print(f"There are {len(primes)} prime numbers up to {N}")
 \end{minted}
 
-The \textit{C++} code, running the exact same instructions is:
+The \textit{C}++ code, encoding the exact same algorithm, is:
 \definecolor{bg}{rgb}{0.95,0.95,0.95}
 \begin{minted}[bgcolor=bg]{C++}
 #include <bits/stdc++.h>
@@ -331,9 +328,9 @@ Executed in    2.57 secs    fish           external
    sys time    0.00 secs    0.00 micros    0.00 secs
 \end{minted}
 
-In other words, \textit{Python} runs our (quite naive) prime counting algorithm $60$ times slower than the same \textit{C++} code!
+In other words, \textit{Python} executes our (quite naive) prime counting algorithm $60$ times slower than the \textit{C}++ code!
 
-While this might seem problematic, in practical cases the difference is less noticeable, and most of our server's computing time is spent by libraries like \textit{OpenCV} or \textit{Numpy}, which are implemented in \textit{C++}, essentially offering us \textit{C++} speeds in \textit{Python}.
+While this speed gap might seem at first problematic, in practice the difference is less noticeable, and most of our software's computing time is spent by libraries like \textit{OpenCV} or \textit{Numpy}, which are implemented in \textit{C}++ anyway under the \textit{Python} bindings.
 
 \section{Web Server Framework}
 
@@ -868,7 +865,7 @@ Lateral matching helpers, or markers, are irregular patterns we print on the cor
     \centering
     \includegraphics[width=10em]{images/screenshoots/top-left-marker.png}
     \caption{Top left marker}
-    \label{fig:label}
+    \label{fig:label2}
 \end{figure}
 
 Similar shapes are often printed on objects that robots or software agents need to be able to identify, due to their vast number of descriptors. \textit{SmartForms} uses a \textit{ORB} feature extractor\cite{rublee2011orb}, which relies on intensity differences between adjacent pixels.
@@ -904,7 +901,7 @@ As such, adding each intermediate result to the database doesn't make much sense
     \centering
     \fbox{\includegraphics[width=30em]{images/screenshoots/sample-preview-form.png}}
     \caption{Form with "\textit{PREVIEW}" banner.}
-    \label{fig:label}
+    \label{fig:label3}
 \end{figure}
 
 \subsection{Multi-page Support}
@@ -1091,14 +1088,196 @@ We use \textit{Pytorch}, "\textit{an optimized tensor library for deep learning 
 
 \section{CNN Architecture}
 
+We played with various common architectures, both pretrained and not pretrained, such as the \textit{VGG}\cite{VGG} or the \textit{Resnet}\cite{resnet} architectures.
+
+However, such architectures are way to complex for our relativly simple task of classifying around $100$ characters. We ence decided to define and train our own convolutional netural network, using the \textit{Pytorch} framework.
+
+The layers definition of our network is:
+
+\begin{minted}[bgcolor=bg]{python}
+# backend/sources/ocr/network.py
+model = nn.Sequential(
+    nn.Conv2d(1, 16, kernel_size=(5, 5), padding=(2, 2)),
+    nn.ReLU(),
+    
+    nn.Conv2d(16, 32, kernel_size=(3, 3), padding=(1, 1)),
+    nn.ReLU(),
+    
+    nn.BatchNorm2d(32),
+    nn.MaxPool2d((2, 2)),
+    
+    nn.Conv2d(32, 64, kernel_size=(3, 3), padding=(1, 1)),
+    nn.ReLU(),
+    
+    nn.Conv2d(64, 64, kernel_size=(3, 3), padding=(1, 1)),
+    nn.ReLU(),
+    
+    nn.Conv2d(64, 64, kernel_size=(3, 3), padding=(1, 1)),
+    nn.ReLU(),
+
+    nn.BatchNorm2d(64),
+    nn.MaxPool2d((2, 2)),
+
+    nn.Flatten(),
+    nn.Dropout(0.2),
+
+    nn.Linear((IMAGE_SIZE // 4)**2 * 64, 1024),
+    nn.ReLU(),
+
+    nn.Linear(1024, len(CHARACTERS))
+)
+\end{minted}
+
+Our network consists of:
+\begin{itemize}
+	\item $6$ layers of two domentional convolutions, with square kernels of sizes $3$ and $5$, over $16$, $32$ and $64$ channels.
+	\item A \textit{ReLU}\cite{ReLU} activation layer after each convolution.
+	\item Batch normalization and dimensionality reduction (max pools) layers.
+	\item Two linear layers, acting as the classificator part of the model.
+\end{itemize}
+
+As we will show in the \textit{Training} section, this architecture is more than enough to accuratly perform our classification task. Its small size also allows it to load and run fast. The total size of the model is under $14$Mb, which, by today's standards, is really light. This allows our model to run smoothly on the \textit{CPU} as well as the \textit{GPU}, which in turn allows \textit{SmartForms} to run on low-end devices and reduces the power usage. 
+
 \section{Dataset Used}
+
+An easy solution to get a dataset would have been to simply create one. This has however major drawbacks:
+\begin{itemize}
+	\item We have to create over $62$ classes ($26 x 2$ lowercase and uppercase letters, and $10$ digits, not counting special characters such as '\code{+}', '\code{-}', spaces etc.). Making from scratch a dataset large enough to correctly train a network would be extremly time-consumming.
+	\item The network is meant to recognize any handwritting. Training it on a dataset made by only two people means that characters won't have a large enough diversity to correctly generalize (different people write characters such as '\code{1}', '\code{7}', '\code{a}', '\code{e}' etc. differently).
+	\item Similarly, the dataset would be dependent on the type of pen and ink used (which can have different thikness and darkness), the scanning device / phone camera model (due to post-processing all modern capturing devices do), etc. Making a robust dataset would mean spending a lot of time, effort and money in using as many different parameters as possible. 
+\end{itemize}
+
+To fix this issue, the obvious solution is to use an already made dataset.
+The dataset we choose to use is the \textit{EMNIST}\cite{emnist} dataset, which contains over $500000$ handwritten letter, lowercase and uppercase letters. Sadly we were unable to find a dataset containing non-alphanumeric characters.
+
+To account for whitespaces, we enhanced the EMNIST dataset with $10000$ peppered (with random black noise) blank images. This is necessary as the network needs to be able to detect if a certain square contains or not a character.
+
+For optimization reasons, we processed the entire dataset once, resizing images to the size our network expects as input, and adding whitespaces. A small snippet of code showing an overview of the dataset extraction is the following:
+
+
+\begin{minted}[bgcolor=bg]{python}
+# backend/sources/ocr/generate_dataset.py
+
+images: np.ndarray, labels: np.ndarray = [], []
+
+# importing and loading the entire dataset
+import tensorflow_datasets as t_d
+ds = t_d.load('emnist', split='train', shuffle_files=True)
+
+# resizing images from the dataset and adding them
+# to the `images` and `labels` lists
+# [...]
+
+# generating a list of 10000 blank images
+# and adding them to the `images` and `labels` list
+whitespaces = []
+for i in range(10000):
+    whitespaces.append((np.zeros((28, 28), dtype=np.uint8), 62))
+# [...]
+
+# saving the entire dataset as a numpy binary file
+# at the location `DATASET_PATH`
+os.makedirs(DATASET_PATH)
+
+imgs = np.stack(imgs)
+labels = np.stack(labels)
+
+np.save(IMAGES_PATH, imgs)
+np.save(LABELS_PATH, labels)
+\end{minted}
 
 \section{Data Processing and Augmentation}
 
+The main issue we had to fight against is that images from the EMNIST dataset do not look completly similar. This means the data we train on is not the same as the data we want our model to predict.
+
+To fix this issue, we heavily rely on data augmentation and post-processing. The augmentation techniques we use are:
+\begin{itemize}
+	\item Image erosion and dilation (increasing / reducing the white zone).
+	\item Image resizing -- randomly cropping borders of the images or padding it, essentially zoomin into / out of the image.
+	\item Random translations. This is especially usefull as most EMNIST data is perfectly centered in the image, but ours is not.
+	\item Random rotations by a relatively small angle.
+	\item Salt and pepper random noise.
+\end{itemize}
+
+For post-processing, we apply the Canny edge detector, which returns a smoothed contour of the image. After applying data augmentation on the EMNIST dataset and post-processing on both EMNIST and our images we found no visual difference between the two, and, based on a small handmade dataset, the accuracy of our model is similar.
+ 
+
+
+\begin{figure}[!h]
+	\begin{center}
+%		\hspace{1cm}
+		\subfigure[Raw Data]{\includegraphics[width=5cm]{images/graphs/raw-emnist-data.png}}
+%		\hfill
+		\hspace{1cm}
+		\subfigure[Augmented Data]{\includegraphics[width=5cm]{images/graphs/augmented-emnist-data.png}}
+%		\hspace{2cm}
+		\\
+%		\hspace{1cm}
+		\subfigure[Processed Raw Data]{\includegraphics[width=5cm]{images/graphs/processed-emnist-data.png}}
+%		\hfill
+		\hspace{1cm}
+		\subfigure[Processed Augmented Data]{\includegraphics[width=5cm]{images/graphs/processed-augmented-emnist-data.png}}
+%		\hspace{1cm}
+	\end{center}
+	\caption{Data Augmentation of the EMNIST dataset}
+	\label{emnist-transformation}
+\end{figure}
+
+In Figure \ref{emnist-transformation} we can see the different stages of pre-processing of our dataset. We train the network on the processed augmented data (d), but validate against and expect real world data to be similar to (c). Blank characters represent whitespaces (' ').
+
 \section{Training}
+
+We trained the network using the standard \textit{Pytorch} method:
+\begin{minted}[bgcolor=bg]{python}
+model = network.Network.get_instance().model
+
+train_dataset = th.utils.data.TensorDataset(x_train, y_train)
+train_dataloader = th.utils.data.DataLoader(
+    train_dataset,
+    batch_size=256,
+    shuffle=True
+)
+
+test_dataset = th.utils.data.TensorDataset(x_test, y_test)
+test_dataloader = th.utils.data.DataLoader(
+    test_dataset,
+    batch_size=128,
+    shuffle=False
+)
+
+print("Training model...")
+
+criterion = nn.CrossEntropyLoss()
+optimizer = th.optim.Adam(model.parameters(), lr=1e-3)
+
+train_one_epoch(
+    model, optimizer, criterion, train_dataloader, test_dataloader, 4)
+
+optimizer = th.optim.Adam(model.parameters(), lr=1e-4)
+train_one_epoch(
+    model, optimizer, criterion, train_dataloader, test_dataloader, 4)
+
+optimizer = th.optim.Adam(model.parameters(), lr=1e-5)
+train_one_epoch(
+    model, optimizer, criterion, train_dataloader, test_dataloader, 5)	
+\end{minted}
+
+Note that the function \code{train\_one\_epoch} trains the network a single epoch using the specified parameters. While $13$ epochs might seem not enough, our dataset consists of over $600.000$ images, and in our experience the model converges in less than $13$ epochs.
+
+TODO: insert graphics.
 
 \section{Contiguous Training}
 
+As mentioned above, the \textit{EMNIST} dataset we are using only contains alphanumeric characters. We manually added whitespaces, but special characters such as '\code{+}', '\code{-}', '\code{@}' etc. are still not present in the dataset.
+\\
+To mitigate this issue, we have the following approach:
+\begin{enumerate}
+	\item When a form is uploaded in order to be parsed, we save an image of the characters we extracted alongside the answer.
+	\item If a user edits a parsed form, we assume the user corected a mistake made by the OCR network, and, for each modified character, save in a separate database the now labled image.
+	\item Maintainers of the application can train the network again, taking into account the newly created dataset.
+\end{enumerate}
+
+This approach is ideal, as SmartForms generates a dataset from the same universe as the characters it has to parse, and over time less and less mistakes are made due to the larger and larger dataset.
 
 % Aici vorbesc despre fastapi, si cum il folosesc in aplicatie
 \chapter{HTTP/S Server, Secure Authentication}
@@ -1114,6 +1293,10 @@ We use \textit{Pytorch}, "\textit{an optimized tensor library for deep learning 
 \chapter{Tests, Source Control and CI/CD}
 
 \section{Git}
+
+We are using Git\cite{Git} as a source control software, and use the Github platform as a remote.
+
+
 
 \section{Smartforms Backend / Frontend}
 
@@ -1168,12 +1351,33 @@ N.~Dalal, B.~Triggs,
 
 \bibitem{CNN}
 K.~O'Shea, R.~Nash,
-\emph{An introduction to convolutional neural networks},
+\emph{An introduction to convolutional neural networks}, arXiv preprint
 arXiv:1511.08458, 2015.
 
 \bibitem{pytorch}
 \emph{Pytorch documentation}, n.d., accessed 30 May 2022,
 https://pytorch.org/docs/stable/index.html.
+
+\bibitem{resnet}
+K.~He, X.~Zhang, S.~Ren, J.~Sun, 2016,
+\emph{Deep residual learning for image recognition},
+2016 IEEE conference on computer vision and pattern recognition, IEEE (2016), 770--778.
+
+\bibitem{VGG}
+K.~Simonyan, A.~Zisserman,
+\emph{Very deep convolutional networks for large-scale image recognition}, arXiv preprint arXiv:1409.1556, 2014.
+
+\bibitem{ReLU}
+A.F.~Agarap,
+\emph{Deep learning using rectified linear units (relu)}, arXiv preprint arXiv:1803.08375, 2018.
+
+\bibitem{emnist}
+G.~Cohen, S.~Afshar, J.~Tapson, A.~Schaik,
+\emph{EMNIST: an extension of MNIST to handwritten letters}, arXiv preprint arXiv:1702.05373, 2017.
+
+\bibitem{Git}
+\emph{Git}, n.d.m accessed 30 May 2022,
+https://git-scm.com/
 
 \end{thebibliography}
 %\printbibliography
