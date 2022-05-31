@@ -1068,14 +1068,26 @@ For each form we store in the database a list with the absolute position of each
             ...
 \end{minted}
 
-With the help of the information mentioned above, and of a corrected image similar to Figure \ref{parser-corrected-image}, we can mark and extract each answer square of the form. We marked in Figure \ref{answer-squares-red} the answer squares we extract in red.
-
 \begin{figure}[!h]
 	\centering
 	\fbox{\includegraphics[width=18em]{images/graphs/fixed_image_squares.jpg}}
 	\caption{Answer Squares Marked}
 	\label{answer-squares-red}
 \end{figure}
+
+
+With the help of the information mentioned above, and of a corrected image similar to Figure \ref{parser-corrected-image}, we can mark and extract each answer square of the form. We marked in Figure \ref{answer-squares-red} the answer squares we extract in red.
+
+Figure \ref{parsing-flow} is a flowchart of the entire parsing pipeline. As one can see, each step is independent and self-contained, which adds stability to the software and makes the source code easier to follow. 
+
+\begin{figure}[!h]
+	\centering
+	\fbox{\includegraphics[width=18em]{images/diagrams/parsing-flow.png}}
+	\caption{Answer Squares Marked}
+	\label{parsing-flow}
+\end{figure}
+
+
 
 % cum antrenez reteaua
 \chapter{Neural Network Design and Training}
@@ -1264,7 +1276,7 @@ train_one_epoch(
 
 Note that the function \code{train\_one\_epoch} trains the network a single epoch using the specified parameters. While $13$ epochs might seem not enough, our dataset consists of over $600.000$ images, and in our experience the model converges in less than $13$ epochs.
 
-TODO: insert graphics.
+An issue 
 
 \section{Contiguous Training}
 
