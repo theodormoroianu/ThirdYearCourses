@@ -1276,7 +1276,7 @@ train_one_epoch(
 
 Note that the function \code{train\_one\_epoch} trains the network a single epoch using the specified parameters. While $13$ epochs might seem not enough, our dataset consists of over $600.000$ images, and in our experience the model converges in less than $13$ epochs.
 
-An issue 
+TODO: Adauga imaginile cu training
 
 \section{Contiguous Training}
 
@@ -1294,25 +1294,65 @@ This approach is ideal, as SmartForms generates a dataset from the same universe
 % Aici vorbesc despre fastapi, si cum il folosesc in aplicatie
 \chapter{HTTP/S Server, Secure Authentication}
 
-\section{FastAPI}
+\section{FastAPI Session Middleware}
 
-\section{Session Middleware}
+Our entire API service is written using FastAPI, \textit{a modern, fast (high-performance), web framework for building APIs with Python 3.6+ based on standard Python type hints}\cite{FastAPI}.
+\\
+FastAPI helps us to validate data received, and automatically generates the OpenAPI\cite{open-api} specification of our service.
 
-\section{Oauth2}
+In order to authenticate users we use a session middleware. This allows us to use a stateless authentication mechanism, where all of the authentication data is stored within an encrypted cookie on the user's browser.
 
+An API endpoint looks similar to this one, which shows a short message to the users and allows him to login and logout of their account:
+
+\begin{minted}[bgcolor=bg]{python}
+@app.get('/')
+async def home(request: Request):
+    """
+    Shows the user its authentication status, and allows him to
+    check the documentation, login or logout.
+    """
+    # retrieve the user's details from the session
+    # if the user is not logged in, then the `user` object is None
+    user = request.session.get('user')
+    email = user['email'] if user is not None else 'Not signed in'
+
+    html = (
+        f"<pre>Email: {email}</pre><br>" +
+        "<a href='/api/docs'>documentation</a><br>" +
+        ("<a href='/api/user/logout'>logout</a>"
+            if user is not None else
+            "<a href='/api/user/login/'>login</a>")
+    )
+    return HTMLResponse(html)
+\end{minted}
+
+\section{Oauth2 Authentication Framework}
+
+As SmartForms is a small application, requiring users to create an account with a username and password is tidious. We decided to use the \textit{OAuth v2.0}\cite{oauth2} (\textbf{O}pen \textbf{Auth}entication) protocol, which allows users to login using a $3^\textrm{rd}$ pary account, such as a Facebook, Google or Microsoft account.
+
+Due to the difficulty to open register SmartForms as an OAuth service on most platforms (we need to show a proof we own a domain, ask for human verification, add a credit card etc) we have only registered our application on with Google Cloud.
+
+This means that in its current state SmartForms only allows for authentication using a Google account, but adding additional services only requires a few lines of code besides registering SmartForms on said services.
+
+TODO: Add diagrama.
 
 % Vorbesc despre cum a functionat git, CI/CD, sincronizare cu Felix
 \chapter{Tests, Source Control and CI/CD}
 
+\section{Testing}
+
+To ensure a high stability of the application and help speed up the development we decided to use the \textit{TDD} (\textbf{T}est \textbf{D}riven \textbf{D}evelopment) approach: each endpoint and feature of SmartForms is thoroughly tested by unit tests.
+
+We also have integration tests, testing the application end-to-end (generating forms, creating, modifying and uploading answers).
+
+The total coverage of our unit tests is of $85\%$, which might seem low, but most of the untested lines of code are not business-critical and hard to reach.
+
 \section{Git}
 
-We are using Git\cite{Git} as a source control software, and use the Github platform as a remote.
+We are using Git\cite{Git} as a source control software, and use the Github platform as a remote. The entire project can be viewed online at \url{https://github.com/TeamUnibuc/SmartForms/}, where the entire history of the project (commits, pull requests and issues) is public. Please note that the repository contains SmartForms API as well as the SmartForms client, which is not part of our project, due to their tight connection.
 
+The repository (backend and frontend combined) has over $300$ pull requests on the main branch, $35$ branches and a total of $36.000$ added and $14.000$ deleted lines thoughout its history. 
 
-
-\section{Smartforms Backend / Frontend}
-
-\section{Testing}
 
 \section{CI/CD}
 
@@ -1388,9 +1428,25 @@ G.~Cohen, S.~Afshar, J.~Tapson, A.~Schaik,
 \emph{EMNIST: an extension of MNIST to handwritten letters}, arXiv preprint arXiv:1702.05373, 2017.
 
 \bibitem{Git}
-\emph{Git}, n.d.m accessed 30 May 2022,
+\emph{Git}, n.d., accessed 30 May 2022,
 https://git-scm.com/
 
+\bibitem{FastAPI}
+\emph{FastAPI}, n.d., accessed 31 May 2022,
+https://fastapi.tiangolo.com/
+
+\bibitem{open-api}
+\emph{OpenAPI Specification}, 20 February 2020, accessed 31 May 2022,
+https://swagger.io/specification/
+
+\bibitem{authentication-cookies}
+J.S.~Murdoch,
+\emph{Hardened stateless session cookies},
+International Workshop on Security Protocols, Springer (2008),  93--101.
+
+\bibitem{oauth2}
+D.~Hardt,
+\emph{RFC 6749: The OAuth 2.0 authorization framework}, RFC Editor, 2012.
 \end{thebibliography}
 %\printbibliography
 %\printbibliography[heading=bibintoc]
