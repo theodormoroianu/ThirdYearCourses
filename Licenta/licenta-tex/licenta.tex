@@ -1,4 +1,4 @@
-\documentclass[12pt, a4paper]{report}
+\documentclass[11pt, a4paper]{report}
 \usepackage{a4wide}
 
 \usepackage[english]{babel}
@@ -964,9 +964,9 @@ With the form ID, we can query the \textit{MongoDB} database to extract all the 
 
 \begin{figure}[!h]
 \hfill
-\subfigure[Original]{\includegraphics[width=6cm]{images/graphs/original_image.jpg}}
+\subfigure[Original]{\includegraphics[width=6cm]{images/graphs/original_image_fixed.jpg}}
 % \hfill
-\subfigure[Processed]{\includegraphics[width=6cm]{images/graphs/parser_processed_image.jpg}}
+\subfigure[Processed]{\includegraphics[width=6cm]{images/graphs/parser_processed_image_fixed.jpg}}
 \hfill
 \caption{Picture converted to binary}
 \label{original-vs-processed-image}
@@ -1008,7 +1008,7 @@ To convert our grayscale image to binary, we use an adaptive thresholding techni
 
  \begin{figure}[!h]
      \centering
-     \fbox{\includegraphics[width=35em]{images/graphs/parser_image_matches.png}}
+     \fbox{\includegraphics[width=35em]{images/graphs/parser_image_matches_fixed.jpg}}
      \caption{Matches found with ORB}
      \label{orb-matches}
  \end{figure}
@@ -1025,11 +1025,17 @@ Matching the picture with the template is not trivial, as things become quite me
 
 As finding homographies between two images is a quite common task, \textit{OpenCV} offers the ORB feature extractor\cite{rublee2011orb}, which is able to extract and match features of the two images, as seen in Figure \ref{orb-matches}. If enough matches are found, we can change the image's perspective, to get a frontal view of the form.
 
-
 \begin{figure}[!h]
-	\centering
-	\fbox{\includegraphics[width=15em]{images/graphs/parser_corrected_image.jpg}}
-	\caption{Corrected Picture}
+	\hfill
+	\subfigure[Original]{\includegraphics[height=8cm]{images/graphs/original_image_fixed.jpg}}
+	% \hfill
+	\subfigure[Corrected]{\fbox{\includegraphics[height=8cm]{images/graphs/parser_corrected_image.jpg}}}
+	\hfill
+%	\caption{Picture converted to binary}
+%	\label{original-vs-processed-image}
+%	\centering
+%	\fbox{\includegraphics[width=15em]{images/graphs/parser_corrected_image.jpg}}
+	\caption{Original and Corrected Picture}
 	\label{parser-corrected-image}
 \end{figure}
 
@@ -1065,6 +1071,7 @@ For each form we store in the database a list with the absolute position of each
                 - width: 8
                 - x: 23.5
                 - y: 89.5
+                - page: 0
             ...
 \end{minted}
 
@@ -1263,20 +1270,33 @@ criterion = nn.CrossEntropyLoss()
 optimizer = th.optim.Adam(model.parameters(), lr=1e-3)
 
 train_one_epoch(
-    model, optimizer, criterion, train_dataloader, test_dataloader, 4)
+    model, optimizer, criterion, train_dataloader, test_dataloader, 1)
 
 optimizer = th.optim.Adam(model.parameters(), lr=1e-4)
 train_one_epoch(
-    model, optimizer, criterion, train_dataloader, test_dataloader, 4)
+    model, optimizer, criterion, train_dataloader, test_dataloader, 1)
 
 optimizer = th.optim.Adam(model.parameters(), lr=1e-5)
 train_one_epoch(
-    model, optimizer, criterion, train_dataloader, test_dataloader, 5)	
+    model, optimizer, criterion, train_dataloader, test_dataloader, 2)	
 \end{minted}
 
-Note that the function \code{train\_one\_epoch} trains the network a single epoch using the specified parameters. While $13$ epochs might seem not enough, our dataset consists of over $600.000$ images, and in our experience the model converges in less than $13$ epochs.
+Note that the function \code{train\_one\_epoch} trains the network a single epoch using the specified parameters. While $4$ epochs might seem not enough, our dataset consists of over $600.000$ images, and in our experience the model converges in less than $3$ epochs.
 
-TODO: Adauga imaginile cu training
+The classification task we want our model to perform is ambiguous (e.g., '\code{o}', '\code{O}' and '\code{0}' are written similarly). To counter this issue, we define a \textit{per-class accuracy}, where for a given character we only consider characters in the same class (digits, lowercase or uppercase) -- note that whitespaces are considered to belong to all $3$ classes.
+
+This metric is the one we are interesed in, as questions we have to parse contain a list of allowed characters set by users (for instance, a phone number field will only allow digits). The network obtains an error rate of less than $1.5\%$, with which we are confortable, as the misclassified characters are for the most part badly written characters. Figure \ref{ocr-results} shows the evolution of loss and accuracy over the training. 
+
+
+\begin{figure}[!h]
+	\begin{center}
+		\subfigure{\includegraphics[width=10cm]{images/ocr/accuracy.png}}
+		\\
+		\subfigure{\includegraphics[width=10cm]{images/ocr/loss.png}}
+	\end{center}
+	\caption{Training results of the CNN network}
+	\label{ocr-results}
+\end{figure}
 
 \section{Contiguous Training}
 
@@ -1292,7 +1312,7 @@ To mitigate this issue, we have the following approach:
 This approach is ideal, as SmartForms generates a dataset from the same universe as the characters it has to parse, and over time less and less mistakes are made due to the larger and larger dataset.
 
 % Aici vorbesc despre fastapi, si cum il folosesc in aplicatie
-\chapter{HTTP/S Server, Secure Authentication}
+\chapter{HTTP/S Server and Secure Authentication}
 
 \section{FastAPI Session Middleware}
 
@@ -1326,6 +1346,25 @@ async def home(request: Request):
     return HTMLResponse(html)
 \end{minted}
 
+By default, \textit{FastAPI} only handles requests over \textit{HTTP}, but one can use a web-server such as \textit{Nginx}\cite{nginx} to act as a HTTP endpoint and proxy for our service.
+
+The setup currently running on the \url{https://smartforms.ml} website, made as part of ???\cite{felix} is the following:
+\begin{itemize}
+	\item \textit{SmartForms API} is running on \code{0.0.0.0:5000}.
+	\item \textit{Nginx} is binded to \code{0.0.0.0:443} and \code{0.0.0.0:80}, and proxies any requests made to the \code{/api/} route to \code{localhost:5000}, which is the API server. 
+\end{itemize}
+
+Please note that both services are binded to the meta-address \code{0.0.0.0}, which makes them accessible over all networking interfaces. This means in particular that the API server is exposed to the interned by accessing the \url{http://smartforms.ml:5000} URL (please note the connection is \code{HTTP} and not \code{HTTPS}). The unsecure connection might seem problematic, but, as it can only be used by users forging requests, this is not a security issue, and can be stopped by binding the API service to \code{localhost} instead. Figure \ref{smartformsml-diagram} shows a diagram of the entire service.
+
+
+\begin{figure}[!h]
+	\centering
+	\fbox{\includegraphics[width=13cm]{images/diagrams/smartformsmlsetup.png}}
+	\caption{\url{https://smartforms.ml/} service diagram}
+	\label{smartformsml-diagram}
+\end{figure}
+
+
 \section{Oauth2 Authentication Framework}
 
 As SmartForms is a small application, requiring users to create an account with a username and password is tidious. We decided to use the \textit{OAuth v2.0}\cite{oauth2} (\textbf{O}pen \textbf{Auth}entication) protocol, which allows users to login using a $3^\textrm{rd}$ pary account, such as a Facebook, Google or Microsoft account.
@@ -1334,47 +1373,124 @@ Due to the difficulty to open register SmartForms as an OAuth service on most pl
 
 This means that in its current state SmartForms only allows for authentication using a Google account, but adding additional services only requires a few lines of code besides registering SmartForms on said services.
 
-TODO: Add diagrama.
 
 % Vorbesc despre cum a functionat git, CI/CD, sincronizare cu Felix
 \chapter{Tests, Source Control and CI/CD}
 
 \section{Testing}
 
-To ensure a high stability of the application and help speed up the development we decided to use the \textit{TDD} (\textbf{T}est \textbf{D}riven \textbf{D}evelopment) approach: each endpoint and feature of SmartForms is thoroughly tested by unit tests.
+To ensure a high stability of the application and help speed up the development process we decided to use the \textit{TDD} (\textbf{T}est \textbf{D}riven \textbf{D}evelopment) approach: each API endpoint and all features of SmartForms are thoroughly tested by unit tests.
 
-We also have integration tests, testing the application end-to-end (generating forms, creating, modifying and uploading answers).
+We also have integration tests, running the application end-to-end (generating forms, creating, modifying and uploading answers).
 
-The total coverage of our unit tests is of $85\%$, which might seem low, but most of the untested lines of code are not business-critical and hard to reach.
+The only components of the application which are not tested by unit tests are:
+\begin{itemize}
+	\item The CNN training module, which is technically part of the software, but is only runned manually or if the network model is not found, which only happens due to human intervention.
+	\item The \code{user} router, which can hardly be tested as it performs requests to Google Cloud. Testing the endpoints would require creating a test account on Google, extracting its authentication cookies, and manually forging a request to authenticate it on SmartForms, which is almost impossible and strongly forbidden by the Google terms\&conditions. 
+\end{itemize}
+
+The total coverage of our unit tests is of $85\%$, which might seem low, but most of the untested lines of code live either in the two modules mentioned above, or hard to reach sections which were manually tested during development.
 
 \section{Git}
 
 We are using Git\cite{Git} as a source control software, and use the Github platform as a remote. The entire project can be viewed online at \url{https://github.com/TeamUnibuc/SmartForms/}, where the entire history of the project (commits, pull requests and issues) is public. Please note that the repository contains SmartForms API as well as the SmartForms client, which is not part of our project, due to their tight connection.
 
-The repository (backend and frontend combined) has over $300$ pull requests on the main branch, $35$ branches and a total of $36.000$ added and $14.000$ deleted lines thoughout its history. 
+The repository (backend and frontend combined) has over $300$ PRs and commits on the main branch, $35$ active branches and a total of $36.000$ added and $14.000$ deleted lines of code thoughout its history. 
 
 
 \section{CI/CD}
 
-SmartForms 
+The \textit{SmartForms} repository is set-up using \textbf{C}ontiguous \textbf{I}ntegration and \textbf{C}ontiguous \textbf{D}eployment pipelines. They are used in the following scenario:
+\begin{enumerate}
+	\item A developer wants to add a new feature to the project. He branches off from the master branch and implements the feature on the newly created branch.
+	\item Once the feature is finished, the developer makes a \textit{pull request} -- also called \textit{merge request}, asking for his/her squashed commits to be applied to the master branch (instead of applying the squashed commits, a rebase or a simple merge are also possible, but less common).
+	\item The \textbf{CI} pipeline kicks in, automatically running a series of checks and tests.
+	\item If the tests succeed, and the branch is merged, the \textbf{CD} pipeline starts, pushing the entire code from the master branch to production.
+\end{enumerate}
+
+The contiguous deployment pipeline is written and mentained by ????\cite{felix}, but the integration one is written by us:
+
+\begin{minted}[bgcolor=bg]{yaml}
+# .github/workflows/backend.yml
+
+name: Run Backend Unittests
+
+on:
+    push:
+        branches: [ main ]
+    pull_request:
+        branches: [ main ]
+        types: [ opened, synchronize ]
+jobs:
+    build:
+        # avoids running AFTER a merged PR
+        if: "!contains(github.event.head_commit.message,
+                                         'Merge pull request #')"
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v2
+            - name: Set up Python 3.10
+              uses: actions/setup-python@v2
+              with:
+                  python-version: "3.10"
+            - name: Install dependencies
+              run: |
+                sudo apt-get install -y libzbar0 poppler-utils
+                python -m pip install --upgrade pip
+                pip install flake8 pytest
+                pip install -r backend/requirements.txt
+            - name: Lint with flake8
+                ...
+            - name: Test with unittest
+              env:
+                MONGO_USER: ${{ secrets.MONGO_USER }} 
+                MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
+                ...
+              run: |
+                (cd backend/sources/tests/ && python -m unittest)
+\end{minted}
+
+The code shown above does:
+\begin{enumerate}
+	\item Check if the code being tested is part of a PR, and stops if not. 
+	\item Install required packages on the machine -- both \textit{Debian} packages with \code{apt}, and \textit{Python} packages with \code{pip}.
+	\item Sintactially check the code with \code{flake8}, a \textit{Python} linter.
+	\item Run the backend unit and integration tests.
+\end{enumerate}
 
 % vorbesc de ce poate fi adaugat in plus
 \chapter{Conclusion and Future Work}
 
 \section{Possible Enhancements}
 
-
+The software presented in this project is a MVP of a modern online forms and surveys generation and parsing tool. There however many areas in which the project can be extended.
 
 \subsection{User Roles}
 
+The \textit{SmartForms} API does not currently have any support for user roles, such as moderators or administrators. This is purely by design, as we did not consider it essential for our product -- as we use MongoDB, any modifications to users, forms or answers can easily be made directly from the database.
+
+Adding user roles would however make the application more attractive to large corporations, where each employee has a specific set of attributions and authorizations.
+
 \subsection{Stateless PDF Forms}
+
+An important improvement we could have made, but decided against due to the centralized design of our application, is to save any form-related information directly on QR codes.
+
+Currently, QR codes store the ID of the form they are printed onto, which is then used to retrieve from the database details about the form, in order to parse it. We can shortcircuit and completly eliminate the need for a database (in the matching process) by storing on the QR codes all of the details of the form.
+
+While the amount of information to store might seem excessive, people already managed to fit an entire GUI game on single QR code\cite{game-qr-code}, which offers up to a few kilobytes of storage, depending on the error-correction level.
 
 \subsection{Multithreading}
 
+An important improvement speed-wise would be introducing multi-threading to our parsing pipeline. While the OCR model is hard to be ran in paralel as it might be running on the GPU, preprocessing such as QR code extraction, adaptive thresholding, features extraction\&matching and even dataloaders for the CNN could be ran in paralel, to fully utilize more than one CPU core. 
+
+
 \subsection{Offline Login System}
 
+\textit{SmartForms} relies on online $3^\textrm{rd}$ party authentication. While authentication checks can be disabled altogether by editing the '\code{.env}' file, being able to manage access to forms and answers could be useful, even in offline scenarios.
 
 \section{Conclusions}
+
 Stuff that can be added to enhance the user experience:
 
 Merge with conclusion
@@ -1463,6 +1579,14 @@ International Workshop on Security Protocols, Springer (2008),  93--101.
 \bibitem{oauth2}
 D.~Hardt,
 \emph{RFC 6749: The OAuth 2.0 authorization framework}, RFC Editor, 2012.
+
+\bibitem{nginx}
+\emph{NGINX}, n.d., accessed 1 June 2022, 
+https://nginx.org/en/.
+
+\bibitem{game-qr-code}
+MattKC, \emph{Can you fit a whole game into a QR code?}, accessed 2 Jun 2022, https://www.youtube.com/watch?v=ExwqNreocpg, 2020.
+
 \end{thebibliography}
 %\printbibliography
 %\printbibliography[heading=bibintoc]
