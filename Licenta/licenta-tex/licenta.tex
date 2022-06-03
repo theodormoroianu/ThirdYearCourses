@@ -189,9 +189,9 @@
 
 Our project, called \textit{SmartForms}, is centered around creating and digitizing forms with minimal human intervention. By using our software, users can:
 \begin{itemize}
-    \item Create simple forms in .pdf format, prompting readers either to fill in multiple choice questionnaires or to write personalized answers.
+    \item Create simple forms downloadable in a \code{.pdf} format, prompting readers either to fill in multiple choice questionnaires or to write personalized answers.
     \item Upload scans of filled forms which are automatically parsed and added to the database.
-    \item Share the link to an online form, similar to modern survey websites like google forms.
+    \item Share a link to our website users can follow to fill the form online, similar to modern survey websites like \textit{Google forms}.
     \item Fully control (Create, View, Edit, and Delete) forms and answers.
 \end{itemize}
 
@@ -210,14 +210,14 @@ The teacher doesn't want to allow the students access to the internet, in order 
 
 Our software gives the teacher two options:
 \begin{enumerate}
-    \item Host the software's server locally, letting students connect to the local network without them accessing the internet, and having them submit their answers via our online form submission service.
     \item Create and print the exam using our form generation tool, have the students fill their answers on paper copies of the form, and then upload scans of their papers in the application. 
+    \item Self-host the server locally, letting students connect to the local network without them accessing the internet, and having them submit their answers via our online form submission service.
 \end{enumerate}
 
 \subsection*{Scenario 2: Routine medical questionnaires}
 
 While entering institutions such as hospitals, for legal reasons people may be required to fill a simple form with their name, address, contact information and health status.
-The front office have to manually go throughout each form and enter the details into the hospital management tool.
+The front office has to manually go throughout each form and enter the details into the hospital management tool.
 
 Using our software, the hospital can simply upload a scan of the filled forms and extract the entire list of personal details with minimal human intrervention.
 
@@ -226,6 +226,12 @@ Using our software, the hospital can simply upload a scan of the filled forms an
 With GDPR regulations, data protection has become a top priority for many companies.
 
 In this scenario, our software aims to replace online forms or large email mailing lists, providing a simple, self-contained and self-hosted solution for companies not wanting to use $3^\textrm{rd}$ party questionnaire solutions.
+
+\subsection*{Scenario 4: Street Survey or Petitions}
+
+A group of volunteers are in the street, asking people to fill in a questionaire. At the end of the day, the volunteers have to manually transcribe all of the filled questionaires to a spreadsheet document.
+
+Using our software, the tidious task of manually copying the information can be automated, volunteers only have to load the questionaires to a self-feed scanner and upload the scanned documents.
 
 \section{Scope of the Project}
 
@@ -243,7 +249,7 @@ My project's scope is the API server and the services behind it. It includes:
     \item Implementing the parsing pipeline, extracting answers from scanned forms.
     \item Implementing the authentication mechanism, to allow for different confidentiality levels.
 \end{itemize}
-My project does NOT include:
+Please note that my project does NOT include:
 \begin{itemize}
     \item Implement any user-facing elements.
     \item Connecting the two services or exposing the application to the internet.
@@ -262,7 +268,7 @@ As mentioned above, these elements can be found in \cite{felix}.
 The primary programming language used in the backend is \textit{Python 3}.
 \textit{Python 3} offers a great flexibility, native support for essential datastructures used in web development such as \textit{JSON} (JavaScript Object Notation) and easy to follow syntax.
 
-The main reason we chose \textit{Python} over more conventional languages for web servers is the abundance of packages available to install via \textit{Pip}, the Python Package Manager.
+The main reason we chose \textit{Python} over more conventional languages for web servers is the abundance of packages available to install via \textit{Pip}, the \textit{Python} Package Manager.
 
 The main drawback of \textit{Python} is its relatively low speed. Being an interpreted language, it is slower than traditional programming languages such as \textit{C/C}++ or \textit{Java}.
 
@@ -330,15 +336,15 @@ Executed in    2.57 secs    fish           external
 
 In other words, \textit{Python} executes our (quite naive) prime counting algorithm $60$ times slower than the \textit{C}++ code!
 
-While this speed gap might seem at first problematic, in practice the difference is less noticeable, and most of our software's computing time is spent by libraries like \textit{OpenCV} or \textit{Numpy}, which are implemented in \textit{C}++ anyway under the \textit{Python} bindings.
+While this speed discrepency might seem at first problematic, in practice the difference is less noticeable, and most of our software's computing time is spent by libraries like \textit{OpenCV} or \textit{Numpy}, which are under the hood implemented in \textit{C}++ (and used within \textit{Python} thanks to language bindings).
 
 \section{Web Server Framework}
 
 The framework we used for implementing the API server is \textit{FastAPI}. \textit{FastAPI} is a scalable, lightweight and efficient \textit{Python} framwork, whose main advantages are:
 \begin{itemize}
     \item Automatic validation, serialization and deserialization of the data sent and received by the API endpoints.
-    \item Automatic generation of the \textit{OpenAPI} (Swagger) specifications, which can then be used as a reference point for using the API in the frontend.
-    \item Asynchronous programming and multiple threads, making it fit for CPU-intensive tasks.
+    \item Automatic generation of the \textit{OpenAPI}\cite{open-api} (Swagger) specifications, which can then be used as a reference point for using the API in the frontend.
+    \item Asynchronous programming and multithreading, making it fit for CPU-intensive tasks.
 \end{itemize}
 
 \section{Database Management System}
@@ -351,7 +357,7 @@ We decided to use \textit{MongoDB}, a document-oriented \textit{NoSQL} system.
 
 For parsing scanned documents, correctly identifying the location of the answers on them and manipulating the images we use \textit{OpenCV}, one of the best computer vision frameworks available together with \textit{Numpy}, the industry standard to data manipulation in \textit{Python}.
 
-While \textit{OpenCV} and \textit{Numpy} are written in \textit{C++} for performance reasons, \textit{Python} bindings allow us to fully use their extensive set of functionality without leaving \textit{Python} land.
+While \textit{OpenCV} and \textit{Numpy} are written in \textit{C}++ for performance reasons, \textit{Python} bindings allow us to fully use their extensive set of functionality without leaving \textit{Python} land.
 
 \section{Machine Learning Framework}
 
@@ -370,7 +376,7 @@ The neural network is implemented in \textit{Pytorch}, one of the best deep lear
 
 \section{Application Modules}
 
-To simplify the structure of the project and make the code easier to understand, the server is divided into different modules, each one having a different scope (single-responsibility principle). The modules are:
+To simplify the structure of the project and make the code easier to understand, the server is divided into different modules, each one having a different scope (single-responsibility principle). The modules, ilustrated in Figure \ref{smart-forms-modules}, are:
 \begin{itemize}
     \item The database module, handling the connection with the \textit{MongoDB} database.
     \item The OCR module, taking care of the neural network and character prediction.
@@ -381,16 +387,9 @@ To simplify the structure of the project and make the code easier to understand,
 \end{itemize}
 
 
-\begin{figure}[!h]
-    \centering
-    \includegraphics[width=37em]{images/diagrams/ProjectModulesDiagram.png}
-    \caption{UML Diagram Of SmartForms's Backend Modules}
-    \label{fig:label}
-\end{figure}
+Each module is designed to act as an independent unit, interacting with the others only with the help of a reduced number of function calls or Singleton interfaces.
 
-Each module is designed to act as an independent unit, interacting with the others only with the help of a reduced number of function calls / \textit{Singleton} interfaces.
-
-Modules are written according to the standard \textit{Python} conventions:
+The modules are written according to the standard \textit{Python} conventions:
 \begin{itemize}
     \item The source files for each module is located in a folder with the module's name.
     \item At the root of the folder, a file named \code{\_\_init\_\_.py} is created. This file is then populated with all of the functionalities the module needs to export.
@@ -421,14 +420,23 @@ from smart_forms_types.user import *
 from smart_forms_types.inference_dataset import *
 \end{minted}
 
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=37em]{images/diagrams/ProjectModulesDiagram.png}
+	\caption{UML Diagram Of SmartForms's Backend Modules}
+	\label{smart-forms-modules}
+\end{figure}
+
+
 % explic cum functioneaza aplicatia
 \chapter{Detailed Overview of the API}
 
 \section{What is an API, and why do we need one?}
 
-The \textit{API} -- or \textit{Application Programming Interface} is an interface acting like a bridge between applications, essentially allowing for an over-the-network communication between two applications.
+The API -- or \textbf{A}pplication \textbf{P}rogramming \textbf{I}nterface is an interface acting like a bridge between applications, essentially allowing for an over-the-network communication between them.
 
-The most common form of \textit{API} implementations are made with the help of the \textit{HTTP} protocol, an application-layer protocol on top of \textit{TCP}. For showcasing the utility of using an \textit{API}, we can make a simple request to get the current time:
+The most common API implementations are made with the help of the \textit{HTTP} protocol, an application-layer protocol on top of the \textit{TCP/IP} stack. For showcasing the utility of using an API, we can make a simple request to get the current time:
 
 \definecolor{bg}{rgb}{0.95,0.95,0.95}
 \begin{minted}[bgcolor=bg]{Shell}
@@ -464,15 +472,15 @@ This shell script uses the \textit{curl} program, used for querying content over
         \item The resource path (or route) -- \code{/api/timezone/Europe/Bucharest}, used by the API server to determine what information we want to receive.
     \end{itemize}
     \item Sends the request to the API server.
-    \item Receives back the payload sent by the API server, which is piped into the \textit{Python} \textit{JSON} displaying tool to be easy to read.
+    \item Receives back a payload, which is piped into the \textit{Python} \textit{JSON} displaying tool to be easier to read.
 \end{enumerate}
 
-In the example above, the \textit{API} function we called doesn't have any side-effects -- it doesn't change the internal state of the server. However, in most practical cases we need to be able to alter the stored information.
+In the example above, the API function we called doesn't have any side-effects -- it doesn't change the internal state of the server. However, in most practical cases, the API exposes functions mutating the stored information.
 
 \section{SmartForms \textit{API}}
 
 The entire \textit{SmartForms} backend software is aimed at being able to respond to API calls.\\
-In this section we will go over all of the available endpoints of the \textit{API}, exposing all of the user-facing functionalities of the application. They are divided into categories, each one determined by its path and served by a different router.
+In this section we will go over all of the available endpoints of the \textit{API}, presenting all of the user-facing functionalities of the application. They are divided into categories, each one determined by its path and served by a different router.
 
 Note that we will only give a short description of the available endpoints (the \textit{HTTP Verb} and the path used). To see additional details such as parameters or security restrictions, please check the resources mentioned in the appendix.
 
@@ -483,22 +491,20 @@ This router exposes functionalities relating to the authentication, registration
 Its endpoints are:
 \begin{itemize}
     \item \code{GET /api/user} -- shows a simple message telling the user if he/she is logged in, and promps it to sign in or sign out.
-    \item \code{GET /api/user/login} and code{GET /api/user/auth} -- both endpoints help the user to sign-in / sign-up.
+    \item \code{GET /api/user/login} and \code{GET /api/user/auth} -- both endpoints help the user to sign-in and sign-up.
     \item \code{GET /api/logout} -- signs out the user.
     \item \code{DELETE /api/delete-account} -- deletes the user's account, his/her forms and his/her entries.
 \end{itemize}
 
 \subsection{Form Router}
 
-The \textit{Form Router} handles the PDF form creation / modification / deletion and retrieval.
-
-Its endpoints are:
+This router handles the \textit{PDF} form creation, modification, deletion, and retrieval. Its endpoints are:
 \begin{itemize}
-    \item \code{POST /api/form/preview} -- receives a description of a form (questions, title, author etc) and returns a preview of the final PDF form. This is especially useful as users tend to try out multiple formats before settling for a form.
+    \item \code{POST /api/form/preview} -- receives a description of a form (questions, title, author etc) and returns a preview of the final \textit{PDF} form. This is specially useful as users tend to try out multiple formats before settling for a form.
     \item \code{POST /api/form/create} -- similar to the \textit{preview} endpoint, but commits the created form to the database.
     \item \code{POST /api/form/list} -- returns a list of available forms, depending on filtering criteria.
     \item \code{GET /api/description/\{formId\}} -- returns the description of a given form.
-    \item \code{GET /api/form/pdf/\{formId\}} -- returns the \textit{Base64} encoding of a given PDF form.
+    \item \code{GET /api/form/pdf/\{formId\}} -- returns the \textit{Base64} encoding of the \textit{PDF} representation of a given form.
     \item \code{DELETE /api/form/delete/\{formId\}} -- deletes the form and all of its associated answers.
     \item \code{PUT /api/form/online-access/\{formId\}} -- updates the visibility of the form (for instance if anyone can submit an answer to it online).
 \end{itemize}
@@ -507,9 +513,7 @@ Note that it is \textbf{not} possible to change the actual content of a form. Th
 
 \subsection{Entry Router}
 
-Similarly to the \textit{Form Router}, the \textit{Entry Router} contains API endpoints manipulating entries (or answers).
-
-Its endpoints are:
+Similarly to the \textit{Form Router}, the \textit{Entry Router} contains API endpoints manipulating entries (or answers). Its endpoints are:
 \begin{itemize}
     \item \code{POST /api/entry/create} -- adds a new answer to a given form.
     \item \code{DELETE /api/entry/delete/\{entryId\}} -- deletes the entry with the given Id.
@@ -520,18 +524,18 @@ Its endpoints are:
 
 \subsection{Inference Router}
 
-The single scope of the \textit{Inference Router} is to receive scanned PDF documents, \textit{zip} compressed files, images etc. which are then parsed.
+The single scope of the \textit{Inference Router} is to receive pictures of forms filled by hand, which are then parsed.
 
 When the software is able to detect a form, it parses it and extracts the answer, which is then added to the database. The endpoint is \code{POST /api/inference/infer}.
 \\ \\
-Another functionality of the \textit{Inference Router} is to extract character data:
+Another functionality of the \textit{Inference Router} is to extract character data, in order to generate a character dataset:
 \begin{enumerate}
-    \item When an answer is uploaded, the \code{infer} endpoint saves for each character the corresponding sub-image of the answer.
-    \item If the answer is later modified by a \code{/api/entry/edit} call, then an annotated character datapoint is generated.
+    \item When an answer is uploaded, the \code{infer} endpoint saves for each character the corresponding sub-image containing its pixels.
+    \item If the answer is later modified, then an annotated character datapoint is generated.
     \item The OCR neural network is trained on the generated dataset.
 \end{enumerate}
 
-In other words, if the inference failed, a character is wrongly identified. If someone updates the answer with the correct one, then the software finds the difference and generates a new labeled image it can then use to fine-tune the OCR neural network.
+In other words, if the inference failed, a character is wrongly identified. If someone updates the answer with the correct one, then the software finds the difference and generates a new labeled character image it can then use to fine-tune the OCR neural network.
 
 \subsection{Statistics Router}
 
@@ -585,7 +589,7 @@ We get back from the API the following \textit{JSON} object:
 }
 \end{minted}
 
-We have now added the form to the database, and received back its Id and a \textit{Base64} encoding of the Pdf document. Let's decode it.
+We have now added the form to the database, and received back its Id and a \textit{Base64} encoding of its \textit{PDF} representation. Let's decode it.
 
 We first have to manually copy the content of the \code{formPdfBase64} field, and we can then run:
 
@@ -595,27 +599,27 @@ We first have to manually copy the content of the \code{formPdfBase64} field, an
     teo@fedora ~> open form.pdf
 \end{minted}
 
-Please note that \code{pbpaste} is a non-standard utility outputing the content of the clipboard. The \code{open} command opened a Pdf viewer, with our form:
+Please note that \code{pbpaste} is a non-standard utility outputing the content of the clipboard. The \code{open} command opened a \textit{PDF} viewer, with our form, as illustrated by Figure \ref{simple-form-preview}.
 
 \begin{figure}[!h]
     \centering
     \includegraphics[width=20em]{images/screenshoots/sample_form.png}
     \caption{Sample form created with the SmartForms API}
-    \label{fig:label}
+    \label{simple-form-preview}
 \end{figure}
 
-The features of the Pdf form are:
+The features of the \textit{PDF} document are:
 \begin{itemize}
-    \item The questions, where users are prompted to either write an 'X', '*' or a similar symbol for multiple choice questions, and capital letters for regular questions.
+    \item The questions, where users are prompted to either write an '\code{X}', '\code{*}' or a similar symbol for multiple choice questions, and words for regular questions, one character per box.
     \item Lateral markers, forming a binary grid of small squares generated at random, which are added to maximize the number of features we can extract to match a scan / picture of the form with the original.
     \item The QR code (top right corner), playing a double role:
     \begin{itemize}
         \item Users can scan the form, which sends them to the webpage where they can fill the form online.
-        \item The parsing software uses the QR code to extract the ID of the form, to know what it should look for.
+        \item The parsing software uses the QR code to extract the ID of the form, to retrieve the form's description from the database.
     \end{itemize}
 \end{itemize}
 
-We can now add an answer directly from the API:
+We can now add an answer directly using the API (the \code{/api/entry/create} route):
 
 \definecolor{bg}{rgb}{0.95,0.95,0.95}
 \begin{minted}[bgcolor=bg]{Shell}
@@ -638,13 +642,13 @@ teo@fedora ~> curl -X 'POST' \
 }
 \end{minted}
 
-We can also print the form, and fill it by hand. We can then pass to the inference API the following scan:
+We can also print the form, and fill it by hand. We can then pass to the inference API the scan showed in Figure \ref{scan-of-filled-form}.
 
 \begin{figure}[!h]
     \centering
     \includegraphics[width=30em]{images/screenshoots/sample_form_scan.png}
     \caption{Scan of a manually filled form}
-    \label{fig:label}
+    \label{scan-of-filled-form}
 \end{figure}
 
 
@@ -808,15 +812,17 @@ The last two collection -- namely the \code{DatasetCharacters} and the \code{Inf
 
 \section{Objective and Constraints}
 
+Forms are not internally stored as \textit{PDF} documents. Users do not actually need to use \textit{PDF} documents at all, as one can create, share, and fill forms from the application itself. However, being able to have a printed copy of the form can be useful.
+
 The primary objective when generating a \textit{PDF} form is getting a concise, easy to understand and professional looking document, which can then be efficiently parsed and digitized.
 
 The main contraints and details we have to consider are:
 \begin{itemize}
-    \item While in most usecases users want to print their forms on \textit{A4} paper, we should also make forms printable on smaller or larger paper.
+    \item While in most usecases users want to print their forms on \code{A4} paper, we should also make forms printable on smaller or larger paper.
     \item We want to allow both scans and pictures, made by a wide range of devices, in which brightness, color saturation and contrast differ.
     \item Modern smartphone cameras, because of the shrinkage of the size of their optical instruments, add slight distortions to the pictures (lines become curves). As each camera is different, fixing the distortions ourselves is not feasable.
-    \item Even though most printers advertise the ability to print edge-to-edge, most modern printers aren't able to print anything too close to the edge of the paper.
-    \item As most office printers only print in black and white for efficiency reasons, we shouldn't include color in our documents.
+    \item Even though most printers advertise the ability to print edge-to-edge, most modern printers are not able to print anything too close to the edges of the paper.
+    \item As most office printers only print in black and white for efficiency reasons, we should not include color in our documents.
     \item People have extremely diverse styles of handwriting, which makes parsing cursive text with high accuracy difficult, even with modern technology.
     \item Forms can have varying lengths, from a simple question to multiple pages.
 \end{itemize}
@@ -833,24 +839,24 @@ Questions are the most obvious element of the forms. They are made out of a ques
     \centering
     \includegraphics[width=8em]{images/screenshoots/sample-multiple-choice-question.png}
     \caption{Sample multiple-choice question}
-    \label{fig:label}
+    \label{multiple-choice-question}
 \end{figure}
 
-If the question is a multiple choice question, where the user has to select a subset of the given possibilities (e.g. "Boy" or "Girl"), the each option is printed on a different line, with a square the user can tick to select the question.
+If the question is a multiple choice question as in Figure \ref{multiple-choice-question}, where the user has to select a subset of the given possibilities (e.g. "Boy" or "Girl"), each option is printed on a different line, with a square the user can tick to select the question.
 
 
 \begin{figure}[!h]
     \centering
     \includegraphics[width=40em]{images/screenshoots/sample-text-question.png}
     \caption{Sample text question}
-    \label{fig:label}
+    \label{text-question}
 \end{figure}
 
-If the question is a text question, then a user-specified number of squares are printed. People filling the form can then write one letter per square.
+If the question is a text question as in Figure \ref{text-question}, then a user-specified number of squares are printed. People filling the form can then write one letter per square.
 
 The main advantages of this approach are:
 \begin{itemize}
-    \item Multiple-choice and text questions can be processed similarly, as we simply want to check if boxes from the multiple choice questions contain an 'X', 'V', '*' or similar marker.
+    \item Multiple-choice and text questions can be processed similarly, as we simply want to check if boxes from the multiple choice questions contain an '\code{X}', '\code{V}', '\code{*}', or a similar marker.
     \item This format is writing-style agnostic, as users are forced to write each letter to a specific location in a specific format.
     \item The forms are easy to understand and fill-in.
 \end{itemize}
@@ -874,13 +880,13 @@ With the help of the \textit{ORB} feature extractor, we can then match extracted
 
 \subsection{QR Code}
 
-QR codes (shorthand for Quick Response codes) are visual machine barcodes. QR codes are machine-readable, use the Reed–Solomon error correction algorithm\cite{wicker1999reed}, and can store arbitrary data, from Wi-Fi details to contacts or simple text.
+QR codes (shorthand for Quick Response codes) are visual machine barcodes. QR codes are machine-readable, use a powerful correction algorithm\cite{wicker1999reed} which makes them readable even when damaged, and can store arbitrary data, from Wi-Fi details to binary data or simple text.
 
 \begin{figure}[!h]
     \centering
     \includegraphics[width=13em]{images/screenshoots/sample-qr-code.png}
     \caption{QR code with content "\textit{https://smartforms.ml/view-form/af61...}"}
-    \label{fig:label}
+    \label{qr-code-image}
 \end{figure}
 
 We use QR codes for multiple reasons:
@@ -906,7 +912,7 @@ As such, adding each intermediate result to the database doesn't make much sense
 
 \subsection{Multi-page Support}
 
-If the form has many questions, then the Pdf document might spread among multiple pages. In such situations, each page gets a unique ID encoded within the QR code, to allow the parsing pipeline to order them accordingly.
+If the form has many questions, then the \textit{PDF} document might spread among multiple pages. In such situations, each page gets a unique ID encoded within the QR code, to allow the parsing pipeline to order them accordingly.
 
 The lateral markers and the optional preview notice are present on all the pages.
 
@@ -916,6 +922,8 @@ The lateral markers and the optional preview notice are present on all the pages
 % tot aici vorbesc despre CNN
 \chapter{Form Parsing}
 
+When a user has a list of handfilled documents he/she wishes to digitize, they just have to upload the files to \textit{SmartForms API} and let it parse the documents automatically.
+
 \section{How Data is Loaded}
 
 The API relies on the \code{multipart/form-data}\cite{masinter1998rfc2388} format to receive reliably larger files than what is usually permitted over the \textit{HTTP} protocol.
@@ -923,22 +931,22 @@ The API relies on the \code{multipart/form-data}\cite{masinter1998rfc2388} forma
 To facilitate the uploading of filled forms, we accept:
 \begin{itemize}
     \item A list of images, in any of the standard image formats (\code{.jpeg}, \code{.png}, \code{.webp} etc).
-    \item A list of PDF documents.
-    \item A \textit{Zip} archive, the content of which is processed recursively.
+    \item A list of \textit{PDF} documents.
+    \item A \textit{ZIP} archive, the content of which is processed recursively.
 \end{itemize}
 
 Due to the high flexibility and permissive formats supported by \textit{SmartForms}, virtually any structured folder of forms can be zipped, uploaded and parsed.
 
-Once the backend receives the files, it automatically deflates all zip files, and:
+Once the backend receives the files, it automatically deflates all \textit{ZIP} files, and:
 \begin{enumerate}
-    \item Considers each PDF as a folder, whose content are the pages of the document (each page is considered as a single picture).
+    \item Considers each \textit{PDF} as a folder, whose content are the pages of the document (each page is considered as a single picture).
     \item Splits all the images into groups, according to their containing folder.
     \item Parses each group as a single form.
 \end{enumerate}
 
 \section{Finding the Template}
 
-Given a set of images (obtained directly from the user, from a zip file or extracted from a page of a PDF document), the backend has to figure out which form is being parsed.
+Given a set of images (obtained directly from the user, from a \textit{ZIP} file or extracted from a page of a \textit{PDF} document), the backend has to figure out which form is being parsed.
 
 To do this quickly and reliably, we look for the QR code inserted on each document. Finding the QR code is itself a challenge, as most libraries used for scanning QR codes (like the ones used on mobile phones) expect a close-up picture of the code. However, because we can't know the orientation, size or location of the form in the received picture, we can't reliably determine the exact location of the QR code.
 
@@ -956,7 +964,7 @@ https://smartforms.ml/view-form/af61ce94-db35-11ec-a6ed-dca6325bcf52
 scanned 1 barcode symbols from 1 images in 0.02 seconds
 \end{minted}
 
-Please note that the text extracted by \textit{Zbar} is not the actual ID of the form, but rather an URL to the \textit{SmartForms} website, where, depending on permissions, users may fill the form online. To extract the real ID, we simply have to remove the "\textit{https://smartforms.ml/view-form/}" prefix. \textit{Pyzbar} operates in a similar way, but can be called from within \textit{Python} code.
+Please note that the text extracted by \textit{Zbar} is not the actual ID of the form, but rather an URL to the \textit{SmartForms} website, where, depending on permissions, users may fill the form online. To extract the real ID, we simply have to remove the "\textit{https://smartforms.ml/view-form/}" prefix. \textit{Pyzbar} operates in a similar way as its command-line counterpart, but can be called from within \textit{Python} code.
 
 With the form ID, we can query the \textit{MongoDB} database to extract all the required details about the form.
 
@@ -1097,11 +1105,13 @@ Figure \ref{parsing-flow} is a flowchart of the entire parsing pipeline. As one 
 
 
 % cum antrenez reteaua
-\chapter{Neural Network Design and Training}
+\chapter{OCR Neural Network Design and Training}
 
 \section{Why Use a CNN}
 
-Using traditional CV approaches we have been able to isolate small images of the characters we want to extract. While traditional methods (such as HOG\cite{HOG} approaches) perform reasonably well, we decided to design, train and use a convolutional neural network (CNN)\cite{CNN}, which often outperforms classic classificators.
+We use a neural network in order to be able to extract from a small square, as the ones marked in Figure \ref{answer-squares-red}, the character written inside.
+
+While traditional methods (such as the HOG\cite{HOG} approache) perform reasonably well, we decided to design, train and use a convolutional neural network (CNN)\cite{CNN}, as it often outperforms classic classificators.
 
 We use \textit{Pytorch}, "\textit{an optimized tensor library for deep learning using GPUs and CPU}"\cite{pytorch}. \textit{Pytorch} allows us to design, train, save and evaluate a convolutional neural network we then use to predict characters.
 
@@ -1246,44 +1256,9 @@ In Figure \ref{emnist-transformation} we can see the different stages of pre-pro
 
 \section{Training}
 
-We trained the network using the standard \textit{Pytorch} method:
-\begin{minted}[bgcolor=bg]{python}
-model = network.Network.get_instance().model
+We trained the network using the standard \textit{Pytorch} method (defining a loss function, an optimizer, and looping throughout mini-batches to train the network).
 
-train_dataset = th.utils.data.TensorDataset(x_train, y_train)
-train_dataloader = th.utils.data.DataLoader(
-    train_dataset,
-    batch_size=256,
-    shuffle=True
-)
-
-test_dataset = th.utils.data.TensorDataset(x_test, y_test)
-test_dataloader = th.utils.data.DataLoader(
-    test_dataset,
-    batch_size=128,
-    shuffle=False
-)
-
-print("Training model...")
-
-criterion = nn.CrossEntropyLoss()
-optimizer = th.optim.Adam(model.parameters(), lr=1e-3)
-
-train_one_epoch(
-    model, optimizer, criterion, train_dataloader, test_dataloader, 1)
-
-optimizer = th.optim.Adam(model.parameters(), lr=1e-4)
-train_one_epoch(
-    model, optimizer, criterion, train_dataloader, test_dataloader, 1)
-
-optimizer = th.optim.Adam(model.parameters(), lr=1e-5)
-train_one_epoch(
-    model, optimizer, criterion, train_dataloader, test_dataloader, 2)	
-\end{minted}
-
-Note that the function \code{train\_one\_epoch} trains the network a single epoch using the specified parameters. While $4$ epochs might seem not enough, our dataset consists of over $600.000$ images, and in our experience the model converges in less than $3$ epochs.
-
-The classification task we want our model to perform is ambiguous (e.g., '\code{o}', '\code{O}' and '\code{0}' are written similarly). To counter this issue, we define a \textit{per-class accuracy}, where for a given character we only consider characters in the same class (digits, lowercase or uppercase) -- note that whitespaces are considered to belong to all $3$ classes.
+The classification task we want our model to perform is ambiguous (for e.g., '\code{o}', '\code{O}' and '\code{0}' are written similarly). To counter this issue, we define a \textit{per-class accuracy}, where for a given character we only consider characters in the same class (digits, lowercase or uppercase) -- note that whitespaces are considered to belong to all $3$ classes. In other words, a given character is corectly determined in our \textit{per-class accuracy} metric iff the corect label has the highest score among all characters of the same class.
 
 This metric is the one we are interesed in, as questions we have to parse contain a list of allowed characters set by users (for instance, a phone number field will only allow digits). The network obtains an error rate of less than $1.5\%$, with which we are confortable, as the misclassified characters are for the most part badly written characters. Figure \ref{ocr-results} shows the evolution of loss and accuracy over the training. 
 
@@ -1489,16 +1464,25 @@ An important improvement speed-wise would be introducing multi-threading to our 
 
 \textit{SmartForms} relies on online $3^\textrm{rd}$ party authentication. While authentication checks can be disabled altogether by editing the '\code{.env}' file, being able to manage the access to forms and answers could be useful, even in offline scenarios.
 
+\subsection{Additional Input Formats}
+
+Another addition to \textit{SmartForms} could be the introduction of additional input formats, such as a large square for a signature, or a more advanced question format, mimicking questionaires of the form ``When I go to school I have to walk ..... km and it takes ..... minutes", in which text and answer boxes are mixed.
+
 \section{Conclusions}
 
-Stuff that can be added to enhance the user experience:
+\textit{SmartForms} was an idea that came up with while helping a front desk worker transcribe a form I had just filled into his computer, one of the situations \textit{SmartFroms} solves. The API, form generation, and form parsing modules went through multiple iterations of approaches and technologies used before ending up in the current state, which we hope is the perfect balance of simplicity and usability, as \textit{SmartForms API} aims to offer a simple yet effective interface for managing questionaires and surverys.
 
-Merge with conclusion
-
+The hardest part of the project has been by far the form parsing pipeline, due to many reasons, such as:
 \begin{itemize}
-    \item Add in the QR code info about the form, to not require a database.
-    \item Add multi-threading while reading forms, to speed up the process. 23
+	\item As data is comming from users, we cannot assume that the file format is recognized, files are not corrupted, images contain a valid form, the form exists etc.
+	\item The process uses real-world images, which cannot be accuratly created digitally, which translated into a lot of printed forms, scans with various settings, pictures under different lighting conditions and angles and so forth.
+	\item We had to make the existing dataset used for training the OCR CNN mimic our data. To check the real accuracy of the network, we had to also create a small verification dataset from scratch.
 \end{itemize}
+
+We have not talked too much about the client of \textit{SmartForms}, as it is not part of this project, but the two components (\textit{SmartForms API} and the \textit{SmartForms} client) work perfectly together, making the inner workings of the API completly transparent to the user.
+
+
+While the software can still be improved, we believe it is already fit for being used by people or institutions for which \textit{SmartForms} presents attractive features, which in our opinion, makes the entire project an overall success.
 
 \begin{thebibliography}{99}	
 
