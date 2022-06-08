@@ -22,9 +22,9 @@ def smooth_vector(v):
 plt.figure(figsize=(6, 2))
 plt.title("Loss")
 val_loss_space = np.linspace(0, 1, len(val_loss))
-plt.plot(val_loss_space, val_loss, label="Validare")
+plt.plot(val_loss_space, val_loss, label="Validation")
 train_loss_space = np.linspace(0, 1, len(train_loss))
-plt.plot(train_loss_space, train_loss, label="Antrenare")
+plt.plot(train_loss_space, train_loss, label="Train")
 plt.legend()
 plt.ylabel("Cross-entropy loss")
 plt.xlabel("Training completed")
@@ -45,9 +45,9 @@ plt.plot(train_acc_space, smooth_vector(train_class_acc) * 100, label="Train Per
 plt.legend()
 plt.ylabel("Accuracy (percentage)")
 plt.xlabel("Training completed")
-plt.ylim(bottom=40, top=100)
+plt.ylim(bottom=10, top=100)
 plt.grid()
-plt.savefig("accuracy.png", dpi=200)
+plt.savefig("accuracy.png", dpi=300)
 plt.show()
 
 # %%
