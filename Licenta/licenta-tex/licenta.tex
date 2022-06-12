@@ -18,6 +18,9 @@
 % Listări de cod
 \usepackage{listings}
 
+\usepackage[table]{xcolor}
+
+
 % Linkuri interactive în PDF
 \usepackage[
     colorlinks,
@@ -167,18 +170,20 @@
 \begin{abstractpage}
 
   \begin{abstract}{}
-  Am dezvoltat o aplica\c tie care extrage in format text continutul unor formulare completate de m\^an\u a \c si fotografiate.
+  Am dezvoltat un framework care extrage in format text continutul unor formulare completate de m\^an\u a \c si fotografiate.
   %Am g\u{a}ndit \c{s}i implementat serverul unei aplica\c{t}ii de creare, gestionare \c{s}i parsare automat\u{a} a formularelor.
   Produsul complet este API-ul utilizat de o aplica\c{t}ie web modern\u{a} (\textit{Web 2.0}) numit\u{a} ``\textit{Smart Forms}", care ofer\u a urm\u atoarele functionalit\u a\c{t}i: autentificarea utilizatorilor folosind \textit{OAuth2}, generarea formularelor \c{s}i descarcarea acestora \^{i}n format \textit{PDF}, completarea formularelor online \c si extragerea automat\u{a} a r\u aspunsurilor in format editabil din pozele unui formular completat de m\^an\u a. Aplica\c tia ofer\u a de asemenea control deplin (citire, creare, modificare \c si \c{s}tergere) asupra formularelor \c{s}i a r\u{a}spunsurilor.
   
-  \^{I}mpreun\u{a} cu aplica\c{t}ia client (implementat\u{a} \^ in cadrul proiectului de licen\c ta al unui coleg de an), produsul nostru constituie o alternativ\u a a serviciilor precum \textit{Google Forms} sau \textit{Survery Monkey}. Aplica\c tia este accesibil\u a pe internet la adresa \url{https://smartforms.ml/}, dar poate fi \c si g\u azduit\u a local de utilizatori, codul fiind open-source \c si distribuit sub o licen\c t\u a \textit{MIT} permisiv\u a. Prin capacitatea acesteia de-a citi \c si parsa formulare imprimate \c si completate de m\^ an\u a, aplica\c tia poate fi util\u a pentru profesori, secretariate sau institutii care doresc s\u a digitalizeze automat cantit\u a\c ti mari de date completate de m\^an\u a. 
+  \^{I}mpreun\u{a} cu o aplica\c{t}ie client (implementat\u{a} \^ in cadrul proiectului de licen\c ta al unui coleg de an), produsul rezultat constituie o alternativ\u a a serviciilor precum \textit{Google Forms} sau \textit{Survery Monkey}. Aplica\c tia este accesibil\u a pe internet la adresa \url{https://smartforms.ml/}, dar poate fi \c si g\u azduit\u a local de utilizatori, codul fiind open-source, disponibil la adresa \url{https://github.com/TeamUnibuc/SmartForms} \c si distribuit sub o licen\c t\u a \textit{MIT} permisiv\u a. Prin capacitatea acesteia de-a citi \c si parsa formulare imprimate \c si completate de m\^ an\u a, aplica\c tia poate fi util\u a pentru profesori, secretariate sau institutii care doresc s\u a digitalizeze automat cantit\u a\c ti mari de date completate de m\^an\u a. 
   
   \end{abstract}
   
   \begin{abstract}{}
-  \textbf{THIS WILL BE A TRANSLATION OF WHAT IS ABOVE.} I designed and implemented the backend of an app focused on the creation and management of forms and surveys. The final product is the API server used by a \textit{Web 2.0} application, offering the following functionality: user authentication (using \textit{OAuth 2}),creation of forms and the ability to download them as PDF documents, filling forms online, extracting answers from pictures or scans of filled forms, and CRUD control over forms and answers.
   
-  Together with the client app (which was implemented within another project), our software is an alternative to online websites such as \textit{Google Forms} or \textit{Microsoft Forms}. The application is accessible online at \textit{https://smartforms.ml}, but can be also ran locally -- the code is open-source and distributed under a permissive \textit{MIT} licence. Thanks to its ability to digitize printed forms, our software is especially useful to to teachers, receptions or anywhere massive amounts of digitisation are required.
+  I developped a framework able to extract in a text format the pictures of forms filled by hand. The final product is the API used by a modern web application (\textit{Web 2.0}), called ``\textit{SmartForms}", offering the following functionalities: authenticating users using \textit{OAuth2}, generating forms and making them downloadable in a \textit{PDF} format, allowing users to fill forms online, and the ability to automatically parse answers written by hand on printed forms. The framework offers complet control (create, read, update and delete) over forms and answers.
+  
+  Together with the client application (implemented within the thesis project of a colegue), the resulting product presents an alternative to services such as \textit{Google Forms} or \textit{Survey Monkey}. The application is available online at \url{https://smartforms.ml/}, but can be also hosted locally, as the code is open-source, available at \url{https://github.com/TeamUnibuc/SmartForms}, and distributed under a permissive MIT licence. Thanks to its ability to parse forms filled by hand, the application can be useful to teachers, front-desk workers, or institutions needing to automatically digitize large amound of hand-filled data. 
+  
   \end{abstract}
   
 \end{abstractpage}
@@ -201,8 +206,8 @@
 
 \textit{SmartForms}, our project, is centered around creating and digitizing forms with minimal human intervention. By using our software, users can:
 \begin{itemize}
-    \item Create simple forms, downloadable as a \textit{PDF} document (\code{.pdf} format), admitting either multiple-choice or personalized answers.
-    \item Upload scans of filled forms which are automatically parsed by the application and added to the database.
+    \item Create simple forms, downloadable as a \textit{PDF} document (\code{.pdf} format), allowing either multiple-choice or personalized answers.
+    \item Upload scans of filled forms that are automatically parsed by the framework and added to the database.
     \item Share a link for users to fill the form online on our website, similar to modern survey websites like \textit{Google forms}.
     \item Fully control (Create, View, Edit, and Delete) forms and answers.
 \end{itemize}
@@ -211,7 +216,7 @@
 
 The main use case of this software is in situations where massive amounts of physical data need to be digitized and further processed, and also whenever commercial online services like \textit{Google Forms} or \textit{Survery Monkey} are not envisageable for legal reasons or because of connectivity issues.
 
-Thanks to its flexibility, our software can solve the following scenarios:
+Thanks to its flexibility, our framework can solve the following scenarios:
 
 \subsection*{Scenario 1: Written Exams}
 
@@ -247,36 +252,79 @@ Using our software, the tedious task of manually entering the information can be
 
 \section{Scope of the Project}
 
-The software is one of the components of a complete project built in collaboration with another student from my cohort \cite{felix}.
-The complete software consists of two components:
+Our framework consists of the following components:
 \begin{itemize}
-    \item The API server, receiving and answering to requests, which makes the object of the present graduation thesis.
-    \item The Client, running on the users' browsers as a modern web application \cite{felix}.
+	\item The API routes exposing its functionalities.
+	\item The form-generation pipeline.
+	\item The parsing pipeline, extracting answers from scanned forms.
+	\item The database management system connector.
+	\item The authentication mechanism, to allow for different confidentiality levels.
 \end{itemize}
-My project's scope is the API server and the services behind it. It includes:
+
+Note that our framework does not have a UI, as its main focus is exposing the forms-manipulating engine via the API. An example of using the framework through an UI was offered by a student colleague \cite{felix}. He showcased my framework via the following two components:
 \begin{itemize}
-    \item Implementing the API routes.
-    \item Implementing the form-generation pipeline.
-    \item Setting up the database management system.
-    \item Implementing the parsing pipeline, extracting answers from scanned forms.
-    \item Implementing the authentication mechanism, to allow for different confidentiality levels.
-\end{itemize}
-The current project does \emph{not} include:
-\begin{itemize}
-    \item Implement any user-facing elements.
-    \item Connecting the two services, or exposing the application to the internet.
+	\item The \textit{SmartForms} client, a modern web application written in \textit{React}.
+	\item A complete server setup, exposing both the client and the API at \url{https://smartforms.ml}.
 \end{itemize}
 As mentioned above, these components can be found in \cite{felix}.
+
+
+%The software is one of the components of a complete project built in collaboration with another student from my cohort \cite{felix}.
+%The complete software consists of two components:
+%\begin{itemize}
+%    \item The API server, receiving and answering to requests, which makes the object of the present graduation thesis.
+%    \item The Client, running on the users' browsers as a modern web application \cite{felix}.
+%\end{itemize}
+%My project's scope is the API server and the services behind it. It includes:
+%\begin{itemize}
+%    \item Implementing the API routes.
+%    \item Implementing the form-generation pipeline.
+%    \item Setting up the database management system.
+%    \item Implementing the parsing pipeline, extracting answers from scanned forms.
+%    \item Implementing the authentication mechanism, to allow for different confidentiality levels.
+%\end{itemize}
+%The current project does \emph{not} include:
+%\begin{itemize}
+%    \item Implement any user-facing elements.
+%    \item Connecting the two services, or exposing the application to the internet.
+%\end{itemize}
+%As mentioned above, these components can be found in \cite{felix}.
 
 \section{Related Work}
 
 We were unable to find another software for generating forms, downloading them as \textit{PDF} files or similar formats, and parsing manually filled documents within the same solution. \textit{SmartForms} seems to be the first software with those functionalities freely available on the internet.
 
-We have found many tools for conducting surveys online. The most most known are \textit{Google Forms}, \textit{Microsoft Forms} or \textit{Survey Monkey}, and a notable mention is \textit{Lime Surveys}, which is one of the only FOSS (\textbf Free \textbf Open \textbf Source \textbf Software) survey software we were able to find\cite {limesurveys}. These softwares lack the parsing abilities of SmartForms.
+We have found many tools for conducting surveys online. The most most known are \textit{Google Forms}, \textit{Microsoft Forms} or \textit{Survey Monkey}, and a notable mention is \textit{Lime Surveys}, which is one of the only FOSS (\textbf Free \textbf Open \textbf Source \textbf Software) survey software we were able to find \cite {limesurveys}. These tools however lack the parsing abilities of SmartForms.
 
-There also exist softares with parsing abilities, like for instance \textit{docparser} \cite{docparser}. However, docparser does not support generating forms or parsing scanned documents, as it only parses special types of\textit{PDF} files where the text is already copiable. 
+There also exist tools with parsing abilities, like for instance \textit{Docparser} \cite{docparser}. However, \textit{Docparser} does not support generating forms or parsing handwritten text, which makes it unfit for our usecases. 
 
-In conclusion, even by combining several other existing tools one cannot achieve the capabilities of SmartForms.
+In conclusion, even by combining several other existing tools one cannot achieve all of the capabilities of \textit{SmartForms}.
+
+A comparison of the features provided by each tool is given in the following table:
+
+\begin{center}
+	\begin{tabular}{ | l | l | l | l | l | l |}
+		\hline
+		& \textit{Google Forms} & \textit{SurveyMonkey} & \textit{Lime Surveys} & \textit{DocParser} & \textit{SmartForms} \\
+		\hline
+		Create Forms & \cellcolor[rgb]{0.5,1,0.5}Yes & \cellcolor[rgb]{0.5,1,0.5}Yes & \cellcolor[rgb]{0.5,1,0.5}Yes & \cellcolor[rgb]{1,0.5,0.5}No & \cellcolor[rgb]{0.5,1,0.5}Yes \\
+		\hline
+		Fill Online & \cellcolor[rgb]{0.5,1,0.5}Yes & \cellcolor[rgb]{0.5,1,0.5}Yes & \cellcolor[rgb]{0.5,1,0.5}Yes & \cellcolor[rgb]{1,0.5,0.5}No & \cellcolor[rgb]{0.5,1,0.5}Yes \\
+		\hline
+		View Results & \cellcolor[rgb]{0.5,1,0.5}Yes & \cellcolor[rgb]{0.5,1,0.5}Yes & \cellcolor[rgb]{0.5,1,0.5}Yes & \cellcolor[rgb]{1,0.5,0.5}No & \cellcolor[rgb]{0.5,1,0.5}Yes \\
+		\hline
+		Export as \textit{PDF} & \cellcolor[rgb]{1,0.5,0.5}No & \cellcolor[rgb]{1,0.5,0.5}No & \cellcolor[rgb]{1,0.5,0.5}No & \cellcolor[rgb]{1,0.5,0.5}No & \cellcolor[rgb]{0.5,1,0.5}Yes \\
+		\hline
+		Parse Scans & \cellcolor[rgb]{1,0.5,0.5}No & \cellcolor[rgb]{1,0.5,0.5}No & \cellcolor[rgb]{1,0.5,0.5}No & \cellcolor[rgb]{0.5,1,0.5}Yes & \cellcolor[rgb]{0.5,1,0.5}Yes \\
+		\hline
+		Open-Source & \cellcolor[rgb]{1,0.5,0.5}No & \cellcolor[rgb]{1,0.5,0.5}No & \cellcolor[rgb]{0.5,1,0.5}Yes & \cellcolor[rgb]{1,0.5,0.5}No & \cellcolor[rgb]{0.5,1,0.5}Yes \\
+		\hline
+		Self-Hostable & \cellcolor[rgb]{1,0.5,0.5}No & \cellcolor[rgb]{1,0.5,0.5}No & \cellcolor[rgb]{0.5,1,0.5}Yes & \cellcolor[rgb]{1,0.5,0.5}No & \cellcolor[rgb]{0.5,1,0.5}Yes \\
+		\hline
+	\end{tabular}
+\end{center}
+
+
 
 \section{Overview of this Thesis}
 
@@ -290,7 +338,7 @@ This thesis is divided into several chapters:
 	\item Chapter \ref{chapter-conclusions-future-work} contains our conclusions and possible areas for future development.
 \end{itemize}
 
-As stressed above, the sections containing the most inovative content are  \autoref{chapter-pdf-form-creation}, \autoref{chapter-form-parsing}, and \autoref{chapter-ocr-neural-network}.
+As stressed above, the sections containing the most inovative content are  \autoref{chapter-pdf-form-creation}, \autoref{chapter-form-parsing}, and \autoref{chapter-ocr-neural-network}. In these sections is presented the \textit{PDF} form creation and parsing pipeline, which is in our opinion the most interesting functionality of the framework. Building the pipeline posed us many difficulties, such as acquiring a relevant dataset for training our OCR neural network, testing the pipeline in real-world scenarios, or making the pipeline resistant to invalid or malicious data. 
 
 % Explic toate tehnologiile folosite, si
 % la ce ne ajuta.
@@ -396,9 +444,11 @@ While \textit{OpenCV} and \textit{Numpy} are written in \textit{C}++ for perform
 \section{Machine Learning Framework}
 
 The character recognition functionality of \textit{SmartForms} is achieved by means of machine learning techniques, using a convolutional neural network.
-This neural network is implemented and trained in \textit{Pytorch}, one of the best deep learning libraries currently available.
+This neural network is implemented and trained in \textit{PyTorch}, one of the best deep learning libraries currently available \cite{pytorch}.
 
+\vspace{1em}
 
+The necessity and usage of each of the mentioned tools and frameworks is further discussed in the following sections.
 
 
 % dau detalii tehnice, cu o explicatie
@@ -1011,11 +1061,15 @@ To convert an image to grayscale, we can independently transform each pixel from
 \[Y = 0.299*R+0.587*G+0.114*B\]
 
 However, even for grayscale images we cannot simply apply a standard binary threshold, due to possible differences in brightness. 
-As ilustrated in Figure \ref{checker-illusion}, where squares marked with \textbf{A} and \textbf{B} seem different even though the color is the same, separating dark and light regions is not a trivial task, if we want to take into account lighing and brightness. Similarly, applying a binary threshold considering pixel intensities larger than a fixed $K$ black and intensities smaller than $K$ white will lead to misclassified pixels, where darker empty regions of the form might be classified as black, and similarly lighter text or graphics of the form might get classified as white.
+Figure \ref{checker-illusion} is an optical ilusion, where squares marked with \textbf{A} and \textbf{B} seem different (one is black and the other white), but their pixels have the same color, which makes it impossible to separate them using a binary threshold. Generally, separating dark and light regions is not a trivial task, if we want to take into account lighting and brightness. Similarly, applying a binary threshold considering pixel intensities larger than a fixed $K$ black and intensities smaller than $K$ white in our scanned forms will lead to misclassified pixels, where darker empty regions of the form might be classified as black, and lighter text or graphics of the form might get classified as white.
+
+
+%However, even for grayscale images we cannot simply apply a standard binary threshold, due to possible differences in brightness. 
+%As ilustrated in Figure \ref{checker-illusion}, where squares marked with \textbf{A} and \textbf{B} seem different even though the color is the same, separating dark and light regions is not a trivial task, if we want to take into account lighting and brightness. Similarly, applying a binary threshold considering pixel intensities larger than a fixed $K$ black and intensities smaller than $K$ white will lead to misclassified pixels, where darker empty regions of the form might be classified as black, and similarly lighter text or graphics of the form might get classified as white.
 
 \begin{figure}[!h]
 	\centering
-	\includegraphics[width=20em]{images/other/Checker_shadow_illusion.svg.png}
+	\includegraphics[width=40em]{images/other/Checker_shadow_illusion.svg.png}
 	\caption{Checker Shadow Illusion \cite{checker-illusion}}
 	\label{checker-illusion}
 \end{figure}
@@ -1133,7 +1187,7 @@ Figure \ref{parsing-flow} is a flowchart of the entire parsing pipeline. As one 
 \begin{figure}[!h]
 	\centering
 	\fbox{\includegraphics[width=24em]{images/diagrams/parsing-flow.png}}
-	\caption{Parsing flowchart TO UPDATE}
+	\caption{Parsing flowchart}
 	\label{parsing-flow}
 \end{figure}
 
@@ -1147,7 +1201,7 @@ Figure \ref{parsing-flow} is a flowchart of the entire parsing pipeline. As one 
 
 We use a neural network in order to be able to extract from a small square, as the ones marked in Figure \ref{answer-squares-red}, the character written inside.
 
-While traditional methods (such as the HOG\cite{HOG} approach) perform reasonably well, we decided to design, train and use a convolutional neural network (CNN)\cite{CNN}, as it often outperforms classical classificators.
+While traditional methods (such as the HOG \cite{HOG} approach) perform reasonably well, we decided to design, train and use a convolutional neural network (CNN) \cite{CNN}, as it often outperforms classical classificators.
 
 We use \textit{Pytorch}, ``\textit{an optimized tensor library for deep learning using GPUs and CPU}" \cite{pytorch}. \textit{Pytorch} allows us to design, train, save and evaluate a convolutional neural network we then use to identify characters.
 
@@ -1369,7 +1423,7 @@ async def home(request: Request):
 
 By default, \textit{FastAPI} only handles requests over \textit{HTTP}, but one can use a web-server such as \textit{Nginx} \cite{nginx} to act as a HTTP endpoint and proxy for our service.
 
-The setup currently running on the \url{https://smartforms.ml} website, made as part of ???\cite{felix} is the following:
+The setup currently running on the \url{https://smartforms.ml} website, made as part of a different project \cite{felix}, is the following:
 \begin{itemize}
 	\item \textit{SmartForms API} is running on \code{0.0.0.0:5000}.
 	\item \textit{Nginx} is binded to \code{0.0.0.0:443} and \code{0.0.0.0:80}, and proxies any requests made to the \code{/api/} route to \code{localhost:5000}, which is the API server. 
@@ -1415,7 +1469,7 @@ The total coverage of our unit tests is of $85\%$, which might seem low, but mos
 
 \section{Git}
 
-We are using Git\cite{Git} as a source control software, and use the Github platform as a remote. The entire project can be viewed online at \url{https://github.com/TeamUnibuc/SmartForms/}, where the complete history of the project (commits, pull requests and issues) is public. The repository contains \textit{SmartForms API} as well as the \textit{SmartForms} client which is not part of our project, due to their tight connection.
+We are using Git\cite{Git} as a source control software, and use the Github platform as a remote. The source code can be viewed online at \url{https://github.com/TeamUnibuc/SmartForms/tree/main/backend}, where the complete history of the project (commits, pull requests and issues) is public. The repository contains \textit{SmartForms API} (our project), as well as the \textit{SmartForms} client \cite{felix}, due to their tight connection.
 
 At the time of writting, the repository (backend and frontend combined) has over $300$ PRs and commits on the main branch, $35$ active branches and a total of $36.000$ added and $14.000$ deleted lines of code thoughout its history. 
 
@@ -1487,7 +1541,7 @@ The code shown above does the following:
 
 \section{Possible Enhancements}
 
-The software presented in this project is a MVP of a modern online forms and surveys generation and parsing tool. There are many directions in which the project can be extended.
+The framework presented in this project is a MVP of a modern online forms and surveys generation and parsing tool. There are many directions in which the project can be extended.
 
 \subsection{User Roles}
 
@@ -1518,19 +1572,19 @@ Another addition to \textit{SmartForms} could be the introduction of additional 
 
 \section{Conclusions}
 
-\textit{SmartForms} was an idea that came up with while helping a front desk worker transcribe a form I had just filled into his computer, one of the situations \textit{SmartFroms} aims to solve. The API, form generation, and form parsing modules went through multiple iterations of approaches and technologies used before ending up in the current state, which we hope is the perfect balance of simplicity and usability, as \textit{SmartForms API} aims to offer a simple yet effective interface for managing questionaires and surverys.
+\textit{SmartForms} was an idea that I came up with while helping a front desk worker transcribe a form I had just filled into his computer, one of the situations \textit{SmartFroms} aims to solve. The API, form generation, and form parsing modules went through multiple iterations of approaches and technologies used before ending up in the current state, which we hope is the perfect balance of simplicity and usability, as \textit{SmartForms API} aims to offer a simple yet effective interface for managing questionaires and surverys.
 
 The hardest part of the project has been by far the form parsing pipeline, due to many reasons, such as:
 \begin{itemize}
 	\item As data is comming from users, we cannot assume that the file format is recognized, files are not corrupted, images contain a valid form, the form exists etc.
-	\item The process uses real-world images, which cannot be accuratly created digitally, which translated into a lot of printed forms, scans with various settings, pictures under different lighting conditions and angles and so forth.
+	\item The process uses real-world images that cannot be accuratly created digitally, which translated into a lot of printed forms, scans with various settings, pictures under different lighting conditions and angles and so forth.
 	\item We had to make the existing dataset used for training the OCR CNN mimic our data. To check the real accuracy of the network, we had to also create a small verification dataset from scratch.
 \end{itemize}
 
 We have not talked too much about the client of \textit{SmartForms}, as it is not part of this project, but the two components (\textit{SmartForms API} and the \textit{SmartForms} client) work perfectly together, making the inner workings of the API completly transparent to the user.
 
 
-While the software can still be improved, we believe it is already fit for being used by people or institutions for which \textit{SmartForms} presents attractive features.
+While the framework can still be improved, we believe it is already fit for being used by people or institutions for which \textit{SmartForms} presents attractive features.
 
 \begin{thebibliography}{99}	
 
@@ -1627,7 +1681,78 @@ MattKC, \emph{Can you fit a whole game into a QR code?}, accessed 2 June 2022, \
 \emph{Convert PDF Forms to Excel, CSV or Webhooks}, n.d., accessed 5 June 2022,
 \url{https://docparser.com/solutions/form-pdf-to-text/}.
 
+\bibitem{felix}
+F.~Puscasu, \emph{Design and implementation of an application for generating and parsing forms with modern methodologies of software development},
+University of Bucharest, 2022.
+
 \end{thebibliography}
 %\printbibliography
 %\printbibliography[heading=bibintoc]
+
+
+\appendix
+\chapter{Manual Deployment of SmartForms}
+\label{appendix-links}
+
+\textit{SmartForms API} is currently deployed at \url{http://smartforms.ml:5000}, and the companion \textit{SmartForms} client is deployed at \url{https://smartforms.ml:443} -- or \url{https://smartforms.ml}.
+
+It is however possible to host both the client and the API server locally. The steps to do so are:
+\begin{enumerate}
+	\item Download the \textit{SmartForms} repository.
+	\item Install dependencies.
+	\item Set-up the environmnent file.
+	\item Start the services.
+\end{enumerate}
+
+\subsection*{Step 1: Download the repository}
+
+There are two ways to download the repository:
+\begin{itemize}
+	\item Clone the repository with \textit{Git}: \code{git clone https://github.com/TeamUnibuc/SmartForms}.
+	\item Manually download and deflate a \textit{ZIP} archive of the repository by visiting \url{https://github.com/TeamUnibuc/SmartForms/archive/refs/heads/main.zip}.
+\end{itemize}
+
+
+\subsection*{Step 2: Install dependencies}
+
+The dependencies unusally not available out-of-the-box on most systems of \textit{SmartForms} are:
+\begin{itemize}
+	\item A \textit{Conda} distribution, such as \textit{Anaconda} or \textit{Miniconda}.
+	\item The \textit{Zbar} library, downloadable from \url{http://zbar.sourceforge.net/}, and installable as \code{libzbar0} on most UNIX systems.
+\end{itemize}
+
+Note that you may have additional unresolved dependencies, which will need to be manually installed.
+
+\subsection*{Step 3: Set-up the environment}
+
+To set-up the \textit{SmartForms API} environment, you need to create the file \code{backend/.env}, which can be done by renaming the \code{backend/.env.sample} file.
+
+The required fields of the \code{.env} file are:
+\begin{itemize}
+	\item \code{MONGO\_USER}, \code{MONGO\_PASSWORD}, \code{MONGO\_CLUSTER}, and \code{MONGO\_DB\_NAME} which are the username and password of the \textit{MongoDB} user, URI of the database and the database name. The database itself can be either installed locally by following the steps described at \url{https://www.mongodb.com/docs/manual/installation/} or on the cloud (\url{https://www.mongodb.com/cloud}).
+	\item \code{GOOGLE\_CLIENT\_ID} and \code{GOOGLE\_CLIENT\_SECRET}, which are provided by Google when registering an \textit{OAuth} application (\url{https://console.cloud.google.com/apis/credentials/}).
+	\item \code{COOKIES\_SECRET}, a secret passphrase to encrypt and decrypt session cookies (which are stored on the client-side due to our stateless design), allowing among others to not sign out users when restarting the server.
+	\item \code{FRONTEND\_URL}, the URL the client is available at (for e.g. \url{https://smartforms.ml}). If you are not planning to use a client, please use the address of the backend instead. This variable is used to redirect the user though login.
+	\item \code{FORM\_ID\_PREFIX}, the prefix added to form IDs when generating QR codes, which can be usefull when users scan the QR code.
+\end{itemize}
+
+\subsection*{Step 4: Start the services}
+
+To build and start \textit{SmartForms API}, you have to:
+\begin{enumerate}
+	\item Install the \textit{SmartForms} conda environment.
+	\item Enable the environment.
+	\item Build and start the API.
+\end{enumerate}
+
+The steps can be done on a UNIX system with the following commands:
+
+\begin{minted}[bgcolor=bg]{shell}
+$ conda env create -f conda_environment.yaml
+$ conda activate SmartForms
+$ ./deploy_script.sh
+\end{minted}
+
+Note that only the API server is started. The client service is built into static files, which need to be served with a server such as \textit{Nginx}.
+
 \end{document}
