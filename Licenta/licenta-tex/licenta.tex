@@ -172,15 +172,15 @@
   \begin{abstract}{}
   Am dezvoltat un framework care extrage \^ in format text con\c tinutul unor formulare completate de m\^an\u a \c si fotografiate.
   %Am g\u{a}ndit \c{s}i implementat serverul unei aplica\c{t}ii de creare, gestionare \c{s}i parsare automat\u{a} a formularelor.
-  Produsul complet este API-ul utilizat de o aplica\c{t}ie web modern\u{a} (\textit{Web 2.0}) numit\u{a} ``\textit{Smart Forms}", care ofer\u a urm\u atoarele functionalit\u a\c{t}i: autentificarea utilizatorilor folosind \textit{OAuth2}, generarea formularelor \c{s}i desc\u arcarea acestora \^{i}n format \textit{PDF}, completarea formularelor online \c si extragerea automat\u{a} a r\u aspunsurilor \^ in format editabil din pozele unui formular completat de m\^an\u a. Aplica\c tia ofer\u a de asemenea control deplin (citire, creare, modificare \c si \c{s}tergere) asupra formularelor \c{s}i a r\u{a}spunsurilor.
+  Produsul complet este API-ul utilizat de o aplica\c{t}ie web modern\u{a} (\textit{Web 2.0}) numit\u{a} ``\textit{SmartForms}", care ofer\u a urm\u atoarele functionalit\u a\c{t}i: autentificarea utilizatorilor folosind \textit{OAuth2}, generarea formularelor \c{s}i desc\u arcarea acestora \^{i}n format \textit{PDF}, completarea formularelor online \c si extragerea automat\u{a} a r\u aspunsurilor \^ in format editabil din pozele unui formular completat de m\^an\u a. Aplica\c tia ofer\u a de asemenea control deplin (citire, creare, modificare \c si \c{s}tergere) asupra formularelor \c{s}i a r\u{a}spunsurilor.
   
-  \^{I}mpreun\u{a} cu o aplica\c{t}ie client (implementat\u{a} \^ in cadrul proiectului de licen\c ta al unui coleg de an), produsul rezultat constituie o alternativ\u a la serviciiile precum \textit{Google Forms} sau \textit{Survery Monkey}. Aplica\c tia este accesibil\u a pe internet la adresa \url{https://smartforms.ml/}, dar poate fi \c si g\u azduit\u a local de utilizatori, codul fiind open-source, disponibil la adresa \url{https://github.com/TeamUnibuc/SmartForms} \c si distribuit sub o licen\c t\u a \textit{MIT} permisiv\u a. Prin capacitatea acesteia de a citi \c si parsa formulare imprimate \c si completate de m\^ an\u a, aplica\c tia poate fi util\u a pentru profesori, secretariate sau institutii care doresc s\u a digitalizeze automat cantit\u a\c ti mari de date completate de m\^an\u a. 
+  \^{I}mpreun\u{a} cu o aplica\c{t}ie client (implementat\u{a} \^ in cadrul proiectului de licen\c ta al unui coleg de an), produsul rezultat constituie o alternativ\u a la serviciiile precum \textit{Google Forms} sau \textit{Survery Monkey}. Aplica\c tia este accesibil\u a pe internet la adresa \url{https://smartforms.ml/}, dar poate fi \c si g\u azduit\u a local de utilizatori, codul fiind open-source, disponibil la adresa \url{https://github.com/TeamUnibuc/SmartForms} \c si distribuit sub o licen\c t\u a \textit{MIT} permisiv\u a. Prin capacitatea acesteia de a citi \c si parsa formulare imprimate \c si completate de m\^ an\u a, aplica\c tia poate fi util\u a pentru profesori, secretariate sau institu\c tii care doresc s\u a digitalizeze automat cantit\u a\c ti mari de date completate de m\^an\u a. 
   
   \end{abstract}
   
   \begin{abstract}{}
   
-  I developped a framework able to extract in text format the pictures of forms filled by hand. The final product is the API used by a modern web application (\textit{Web 2.0}), called ``\textit{SmartForms}", offering the following functionalities: authenticating users using \textit{OAuth2}, generating forms and making them downloadable in \textit{PDF} format, allowing users to fill forms online, and the ability to automatically parse answers written by hand on printed forms. The framework offers complete control (create, read, update and delete) over forms and answers.
+  We developped a framework able to extract in text format the content of hand-filled forms. The final product is the API used by a modern web application (\textit{Web 2.0}), called ``\textit{SmartForms}", offering the following functionalities: authenticating users using \textit{OAuth2}, generating forms and making them downloadable in \textit{PDF} format, allowing users to fill forms online, and the ability to automatically parse answers written by hand on printed forms. The framework offers complete control (create, read, update and delete) over forms and answers.
   
   Together with the client application (implemented within the thesis project of a colleague), the resulting product can replace services such as \textit{Google Forms} or \textit{Survey Monkey}. The application is available online at \url{https://smartforms.ml/}, but can be also hosted locally, as the code is open-source, available at \url{https://github.com/TeamUnibuc/SmartForms}, and distributed under a permissive MIT licence. Thanks to its ability to parse handwritten forms, the application can be useful to teachers, front-desk workers, or institutions needing to automatically digitize large amounts of hand-filled data. 
   
@@ -261,7 +261,7 @@ Our framework consists of the following components:
 	\item The authentication mechanism, to allow for different confidentiality levels.
 \end{itemize}
 
-Note that our framework does not have an UI, as its main focus is exposing the forms-manipulating engine via the API. An example of using the framework through an UI was offered by a student colleague \cite{felix}. He showcased my framework via the following two components:
+Note that our framework does not have an UI, as its main focus is exposing the forms-manipulating engine via the API. An example of using the framework through an UI was offered by a student colleague \cite{felix}. He showcased our framework via the following two components:
 \begin{itemize}
 	\item The \textit{SmartForms} client, a modern web application written in \textit{React}.
 	\item A complete server setup, exposing both the client and the API at \url{https://smartforms.ml}.
@@ -342,7 +342,7 @@ As stressed above, the sections containing the most innovative content are  \aut
 
 \section{Acknowledements}
 
-I would like to express my gratitude to my advisor, Prof. Alin \c Stef\u anescu, without whom this project would not have been possible. I also want to thank Lucian Bicsi, who helped me improve the parsing functionalities of \textit{SmartForms}, and Emma Chirlomer for her kind help in proofreading this thesis.
+I would like to express my gratitude to my advisor, Prof.~Alin \c Stef\u anescu, without whom this project would not have been possible. I also want to thank Lucian Bicsi, who helped me improve the parsing functionalities of \textit{SmartForms}, and Emma Chirlomez for her kind help in proofreading this thesis.
 
 % Explic toate tehnologiile folosite, si
 % la ce ne ajuta.
@@ -441,7 +441,7 @@ We decided to use \textit{MongoDB}, a document-oriented \textit{NoSQL} system.
 
 \section{Image Manipulation Framework}
 
-For parsing scanned documents, correctly identifying the location of the answers on them and manipulating the images we chose \textit{OpenCV}, one of the best computer vision frameworks available, together with \textit{Numpy}, the industry standard for data manipulation in \textit{Python}.
+For parsing scanned documents, correctly identifying the location of the answers on them, and manipulating the images we chose \textit{OpenCV}, one of the best computer vision frameworks available, together with \textit{Numpy}, the industry standard for data manipulation in \textit{Python}.
 
 While \textit{OpenCV} and \textit{Numpy} are written in \textit{C}++ for performance reasons, \textit{Python} bindings allow us to fully use their extensive set of functionalities without leaving \textit{Python} land.
 
@@ -461,7 +461,7 @@ The necessity and usage of each of the mentioned tools and frameworks are furthe
 \chapter{Design of the Application}
 \label{chapter-design-of-the-application}
 
-\section{Application Modules}
+%\section{Application Modules}
 
 To simplify the structure of the project and make the code easier to understand, the server is divided into different modules, each one having a different scope (single-responsibility principle). The modules, illustrated in Figure \ref{smart-forms-modules}, are:
 \begin{itemize}
@@ -522,9 +522,9 @@ from smart_forms_types.inference_dataset import *
 
 \section{What is an API, and why do we need one?}
 
-The API -- or \textbf{A}pplication \textbf{P}rogramming \textbf{I}nterface -- is an interface acting as a bridge between applications, essentially allowing for an over-the-network communication between them.
+The \textit{API} -- or \textbf{A}pplication \textbf{P}rogramming \textbf{I}nterface -- is an interface acting as a bridge between applications, essentially allowing for an over-the-network communication between them.
 
-The most common API implementations are made with the help of the \textit{HTTP} protocol, an application-layer protocol on top of the \textit{TCP/IP} stack. For showcasing the utility of using an API, we can make a simple request to get the current time:
+The most common \textit{API} implementations are made with the help of the \textit{HTTP} protocol, an application-layer protocol on top of the \textit{TCP/IP} stack. For showcasing the utility of using an \textit{API}, we can make a simple request to get the current time:
 
 \definecolor{bg}{rgb}{0.95,0.95,0.95}
 \begin{minted}[bgcolor=bg]{Shell}
@@ -559,15 +559,15 @@ This shell script uses the \textit{curl} program, used for querying content over
         \item The domain -- \url{http://worldtimeapi.org}, which in turn is changed into an \textit{IP} address with the help of a \textit{DNS} server.
         \item The resource path (or route) -- \code{/api/timezone/Europe/Bucharest}, used by the API server to determine what information we want to receive.
     \end{itemize}
-    \item Sends the request to the API server.
+    \item Sends the request to the \textit{API} server.
     \item Receives back a payload, which is piped into the \textit{Python} \textit{JSON} displaying tool to be easier to read.
 \end{enumerate}
 
-In the example above, the API function we called does not have any side-effects -- it doesn't change the internal state of the server. However, in most practical cases, the API exposes functions mutating the stored information.
+In the example above, the \textit{API} function we called does not have any side-effects -- it doesn't change the internal state of the server. However, in most practical cases, the \textit{API} exposes functions mutating the stored information.
 
 \section{SmartForms \textit{API}}
 
-The entire \textit{SmartForms} backend software is aimed at being able to respond to API calls.\\
+The entire \textit{SmartForms} backend software is aimed at being able to respond to \textit{API} calls.\\
 In this section we will go over all of the available endpoints of the \textit{API}, presenting all of the user-facing functionalities of the application. They are divided into categories, each one determined by its path and served by a different router.
 
 Note that we will only give a short description of the available endpoints (the \textit{HTTP Verb} and the path used). To see additional details such as parameters or security restrictions, please check the resources mentioned in the appendix.
@@ -601,7 +601,7 @@ Note that once a form is created, it is no longer possible to change its content
 
 \subsection{Entry Router}
 
-Similarly to the \textit{Form Router}, the \textit{Entry Router} contains API endpoints manipulating entries (or answers). Its endpoints are:
+Similarly to the \textit{Form Router}, the \textit{Entry Router} contains \textit{API} endpoints manipulating entries (or answers). Its endpoints are:
 \begin{itemize}
     \item \code{POST /api/entry/create} -- adds a new answer to a given form.
     \item \code{DELETE /api/entry/delete/\{entryId\}} -- deletes the entry with the given ID.
@@ -632,7 +632,7 @@ Currently, the only available endpoint is \code{GET /api/statistics/global}, whi
 
 \section{Usage Scenario}
 
-We will now present a simple usage scenario. We will communicate with the API using the \code{curl} command to better illustrate its functionality, however, note that in normal circumstances users only interact with the client, which performs the API calls on their behalf using the \code{fetch API}.
+We will now present a simple usage scenario. We will communicate with the \textit{API} using the \code{curl} command to better illustrate its functionality, however, note that in normal circumstances users only interact with the client, which performs the \textit{API} calls on their behalf using the \code{fetch API}.
 
 Let us create a new form with the title "\textit{Sample Form}" consisting of two questions, one asking for the user's gender and the second prompting for his/her name:
 
@@ -667,7 +667,7 @@ teo@fedora ~> curl -X 'POST' \
               }'
 \end{minted}
 
-We get back from the API the following \textit{JSON} object:
+We get back from the \textit{API} the following \textit{JSON} object:
 \definecolor{bg}{rgb}{0.95,0.95,0.95}
 \begin{minted}[bgcolor=bg]{Shell}
 {
@@ -704,7 +704,7 @@ The features of this \textit{PDF} document are:
     \end{itemize}
 \end{itemize}
 
-We can now add an answer directly using the API (the \code{/api/entry/create} route):
+We can now add an answer directly using the \textit{API} (the \code{/api/entry/create} route):
 
 \definecolor{bg}{rgb}{0.95,0.95,0.95}
 \begin{minted}[bgcolor=bg]{Shell}
@@ -727,7 +727,7 @@ teo@fedora ~> curl -X 'POST' \
 }
 \end{minted}
 
-We can alternately print the form, fill it by hand and scan it. We can then pass to the inference API the scan showed in Figure \ref{scan-of-filled-form}.
+We can alternately print the form, fill it by hand and scan it. We can then pass to the inference \textit{API} the scan showed in Figure \ref{scan-of-filled-form}.
 
 \begin{figure}[!h]
     \centering
@@ -770,7 +770,7 @@ It should be noted that the process is not entirely flawless. This aspect is dis
 \\
 
 
-We can now query the API to retrieve our two entries:
+We can now query the \textit{API} to retrieve our two entries:
 
 \definecolor{bg}{rgb}{0.95,0.95,0.95}
 \begin{minted}[bgcolor=bg]{Shell}
@@ -813,7 +813,7 @@ teo@fedora ~> curl -X 'POST' \
 }
 \end{minted}
 
-In a similar fashion, the API allows us to edit or delete answers and forms.
+In a similar fashion, the \textit{API} allows us to edit or delete answers and forms.
 
 
 % dau mai multe detalii despre cum 
@@ -868,8 +868,8 @@ We created multiple databases:
     \item Databases used for local development and testing without disturbing the other environments. 
 \end{itemize}
 
-Databases store the information used by \textit{SmartForms}. As forms and answers requested by the users are unpredictable, and \textit{SmartForms} is built to be able to run on relatively low-end devices, locally caching data for lower latency didn't make sense. As such, any CRUD (Create, Read, Update or Delete) operations performed on forms, answers or users are directly committed to the database.
-
+Databases store the information used by \textit{SmartForms}. As forms and answers requested by the users are unpredictable, and \textit{SmartForms} is built to be able to run on relatively low-end devices, locally caching data for lower latency didn't make sense. As such, any CRUD (\textbf{C}reate, \textbf{R}ead, \textbf{U}pdate or \textbf{D}elete) operations performed on forms, answers or users are directly committed to the database.
+\\
 
 \begin{figure}[!h]
     \centering
@@ -1029,7 +1029,7 @@ Once the backend receives the files, it automatically deflates all \textit{ZIP} 
 \begin{enumerate}
     \item Considers each \textit{PDF} as a folder, whose content is the pages of the document (each page is considered as a single picture).
     \item Splits all the images into groups, according to their containing folder.
-    \item Parses each group as a single form.
+    \item Parses each group as a list of forms (possibly only one).
 \end{enumerate}
 
 \section{Finding the Template}
@@ -1056,7 +1056,7 @@ Note that the text extracted by \textit{Zbar} is not the actual ID of the form, 
 
 With the form ID, we can query the \textit{MongoDB} database to extract all the required details about the form.
 
-\section{Applying Graysclale and Binary Threshold}
+\section{Grayscale and Binary Threshold}
 
 Most image processing algorithms rely on grayscale or binary images. As such, we first have to convert our colored image to grayscale, and then apply a binary threshold.
 
@@ -1120,7 +1120,7 @@ Matching the picture with the template is not trivial, as several issues arise:
 \begin{itemize}
     \item If the picture keeps the same proportions, orientation, and scaling as the template, then we have a perfect 1-1 match between the two.
     \item If the picture keeps the same proportions and orientation, but the scaling is not $1:1$, then a scaling factor is needed in order to be able to match the picture and the template.
-    \item If the picture only preserves proportions then, in addition to the scaling factor,  rotation and translation transformations (Euclidean isometries) are also required.
+    \item If the picture only preserves proportions, then, in addition to the scaling factor,  rotation and translation transformations (Euclidean isometries) are also required.
     \item If the picture does not keep the same proportions, then we have to find a homography between the two.
 \end{itemize}
 
@@ -1149,7 +1149,7 @@ In Figure \ref{parser-corrected-image} we can see the result of our perspective 
 
 \section{Extracting Answer Squares}
 
-Extracting squares containing an answer from a form is straightforward once we have a corrected image. As we save the position of squares where users write their answers when we generate the form, we simply have to extract said square.
+Extracting squares containing an answer from a form is straightforward once we have a corrected image. As we save the position of squares where users write their answers when we generate the form, we simply have to extract said squares.
 
 For each form, we store in the database a list with the absolute position of each answer square. A sample of the stored information is:
 
@@ -1203,11 +1203,11 @@ Figure \ref{parsing-flow} is a flowchart of the entire parsing pipeline. As one 
 
 \section{Why Use a CNN}
 
-We use a neural network in order to be able to extract the character written inside from a small square, as the ones marked in Figure \ref{answer-squares-red}.
+We use a neural network in order to extract the characters written inside small squares, as the ones marked in Figure \ref{answer-squares-red}.
 
 While traditional methods (such as the HOG \cite{HOG} approach) perform reasonably well, we decided to design, train and use a convolutional neural network (CNN) \cite{CNN}, as it often outperforms classical classificators.
 
-We use \textit{Pytorch}, ``\textit{an optimized tensor library for deep learning using GPUs and CPU}" \cite{pytorch}. \textit{Pytorch} allows us to design, train, save and evaluate a convolutional neural network we then use to identify characters.
+We use \textit{Pytorch}, ``\textit{an optimized tensor library for deep learning using GPUs and CPU}" \cite{pytorch}. \textit{Pytorch} allows us to design, train, save, and evaluate a convolutional neural network we then use to identify characters.
 
 \section{CNN Architecture}
 
@@ -1265,7 +1265,7 @@ As we will show in the \textit{Training} section, this architecture is more than
 An easy solution to get a dataset would have been to simply create one. This has however major drawbacks:
 \begin{itemize}
 	\item We have to create over $62$ classes ($26*2$ lowercase and uppercase letters, and $10$ digits, not counting special characters such as '\code{@}', '\code{!}', '\code{+}', spaces, etc.). Making from scratch a dataset large enough to correctly train a network would be extremely time-consuming.
-	\item The network is meant to recognize any handwriting. Training it on a dataset made by only a handful of people means that characters won't have a large enough diversity to correctly generalize (different people write characters such as '\code{1}', '\code{7}', '\code{a}', '\code{e}' etc. differently).
+	\item The network is meant to recognize any handwriting. Training it on a dataset made by only a handful of people means that characters won't have a large enough diversity to correctly generalize (different people write characters such as '\code{1}', '\code{7}', '\code{a}', '\code{e}', etc.~differently).
 	\item Similarly, the dataset would be dependent on the type of pen and ink used (which can have different thickness and darkness), the scanning device or phone camera model (due to post-processing all modern capturing devices do), etc. Making a robust dataset would mean spending a lot of time, effort, and resources to vary as many different parameters as possible. 
 \end{itemize}
 
@@ -1274,7 +1274,7 @@ We chose the \textit{EMNIST} \cite{emnist} dataset, which contains over $600.000
 
 To account for whitespaces, we enhanced the EMNIST dataset with $10.000$ peppered (with random black noise) blank images. This is necessary as the network needs to be able to detect if a certain square contains or not a character.
 
-For optimization reasons, we pre-processed the entire dataset, resizing images to the size our network expects as input and adding the whitespaces. A small snippet of code showing an overview of the dataset pre-processing is the following:
+For optimization reasons, we pre-processed the entire dataset, resizing images to the size our network expects as input and adding the whitespaces. A small overview of the dataset pre-processing is the following:
 
 
 \begin{minted}[bgcolor=bg]{python}
@@ -1466,7 +1466,7 @@ We also have integration tests, running the application end-to-end (generating f
 The only components of the application which are not tested by unit tests are:
 \begin{itemize}
 	\item The CNN training module, which is technically part of the software, but is only runned manually or if the network model is not found, which only happens due to human intervention.
-	\item The \code{user} router, which can hardly be tested as it performs requests to Google Cloud. Testing the endpoints would require creating a test account on Google, extracting its authentication cookies, and manually forging a request to authenticate it on SmartForms, which is almost impossible and strongly forbidden by the Google terms \& conditions. 
+	\item The \code{user} router, which can hardly be tested as it performs requests to Google Cloud. Testing the endpoints would require creating a test account on Google, extracting its authentication cookies, and manually forging a request to authenticate it on SmartForms, which is almost impossible and forbidden by the Google terms \& conditions. 
 \end{itemize}
 
 The total coverage of our unit tests is $85\%$, which might seem low, but most of the untested lines of code live either in the two modules mentioned above, or hard to reach sections which were manually tested during development.
@@ -1475,7 +1475,7 @@ The total coverage of our unit tests is $85\%$, which might seem low, but most o
 
 We are using Git\cite{Git} as a source control software, and use the Github platform as a remote. The source code can be viewed online at \url{https://github.com/TeamUnibuc/SmartForms/tree/main/backend}, where the complete history of the project (commits, pull requests, and issues) is public. The repository contains \textit{SmartForms API} (our project), as well as the \textit{SmartForms} client \cite{felix}, due to their tight connection.
 
-At the time of writing, the repository (backend and frontend combined) has over $300$ PRs and commits on the main branch, $35$ active branches, and a total of $36.000$ added and $14.000$ deleted lines of code throughout its history. 
+At the time of writing, the repository (backend and frontend combined) has over $340$ PRs and commits on the main branch, $38$ active branches, and a total of $39.000$ added and $14.000$ deleted lines of code throughout its history. 
 
 
 \section{CI/CD}
@@ -1636,7 +1636,7 @@ K.~O'Shea, R.~Nash,
 arXiv:1511.08458, 2015.
 
 \bibitem{felix}
-F.~Puscasu, \emph{Design and implementation of an application for generating and parsing forms with modern methodologies of software development},
+F.~Pu\c sca\c su, \emph{Design and implementation of an application for generating and parsing forms with modern methodologies of software development},
 University of Bucharest, 2022.
 
 \bibitem{rublee2011orb}
@@ -1654,6 +1654,26 @@ S.~B.~Wicker, V.~K.~Bhargava,
 \emph{Reed-Solomon codes and their applications},
 John Wiley \& Sons, 1999.
 
+\bibitem{docparser}
+\emph{Convert PDF Forms to Excel, CSV or Webhooks}, n.d., accessed 5 June 2022,
+\url{https://docparser.com/solutions/form-pdf-to-text/}.
+
+\bibitem{FastAPI}
+\emph{FastAPI}, n.d., accessed 31 May 2022,
+\url{https://fastapi.tiangolo.com/}.
+
+\bibitem{Git}
+\emph{Git}, n.d., accessed 30 May 2022,
+\url{https://git-scm.com/}.
+
+\bibitem{limesurveys}
+\emph{Lime Survey}, n.d., accessed 5 June 2022,
+\url{https://github.com/LimeSurvey/LimeSurvey}.
+
+\bibitem{nginx}
+\emph{Nginx}, n.d., accessed 1 June 2022, 
+\url{https://nginx.org/en/}.
+
 \bibitem{opencv-color-convention}
 \emph{OpenCV: Color Conversions}, n.d., accessed 29 May 2022,  \url{https://docs.opencv.org/3.4/de/d25/imgproc\_color\_conversions.html}.
 
@@ -1661,33 +1681,13 @@ John Wiley \& Sons, 1999.
 \emph{OpenCV: Image Thresholding}, n.d., accessed 29 May 2022,
 \url{https://docs.opencv.org/4.x/d7/d4d/tutorial\_py\_thresholding.html}.
 
-\bibitem{pytorch}
-\emph{Pytorch documentation}, n.d., accessed 30 May 2022,
-\url{https://pytorch.org/docs/stable/index.html}.
-
-\bibitem{Git}
-\emph{Git}, n.d., accessed 30 May 2022,
-\url{https://git-scm.com/}.
-
-\bibitem{FastAPI}
-\emph{FastAPI}, n.d., accessed 31 May 2022,
-\url{https://fastapi.tiangolo.com/}.
-
 \bibitem{open-api}
 \emph{OpenAPI Specification}, 20 February 2020, accessed 31 May 2022,
 \url{https://swagger.io/specification/}.
 
-\bibitem{nginx}
-\emph{Nginx}, n.d., accessed 1 June 2022, 
-\url{https://nginx.org/en/}.
-
-\bibitem{limesurveys}
-\emph{Lime Survey}, n.d., accessed 5 June 2022,
-\url{https://github.com/LimeSurvey/LimeSurvey}.
-
-\bibitem{docparser}
-\emph{Convert PDF Forms to Excel, CSV or Webhooks}, n.d., accessed 5 June 2022,
-\url{https://docparser.com/solutions/form-pdf-to-text/}.
+\bibitem{pytorch}
+\emph{Pytorch documentation}, n.d., accessed 30 May 2022,
+\url{https://pytorch.org/docs/stable/index.html}.
 
 \end{thebibliography}
 %\printbibliography
